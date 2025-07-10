@@ -1,2 +1,2 @@
-# JobMatch
-JobMatch is an AI-Powered Resume Matcher and Job Portal
+# HireWise
+HireWise is an AI-Powered Resume Matcher and Job Portal
