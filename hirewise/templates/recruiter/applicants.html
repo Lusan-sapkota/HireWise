@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Applicants</h2>
+<ul class="list-group">
+    {% for applicant in applicants %}
+    <li class="list-group-item">
+        <h5>{{ applicant.user.username }}</h5>
+        <p>Match Score: {{ applicant.match_score|floatformat:2 }}</p>
+        <a href="/applicants/{{ applicant.id }}/" class="btn btn-outline-primary btn-sm">View Profile</a>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No applicants found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Recommended Jobs</h2>
+<ul class="list-group">
+    {% for job in jobs %}
+    <li class="list-group-item">
+        <h5>{{ job.title }}</h5>
+        <p>{{ job.company_name }} | {{ job.location }}</p>
+        <p>{{ job.description|truncatewords:30 }}</p>
+        <a href="/jobs/{{ job.id }}/" class="btn btn-outline-primary btn-sm">View Details</a>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No job matches found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
