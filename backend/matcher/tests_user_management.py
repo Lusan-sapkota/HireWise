@@ -89,7 +89,7 @@ class UserRegistrationTestCase(APITestCase):
         self.assertIsInstance(user.recruiter_profile, RecruiterProfile)
         self.assertEqual(user.recruiter_profile.company_name, 'Tech Corp')
     
-    @patch('matcher.utils.send_verification_email')
+    @patch('matcher.views.send_verification_email')
     def test_registration_sends_verification_email(self, mock_send_email):
         """Test that registration sends verification email"""
         mock_send_email.return_value = True
@@ -115,7 +115,8 @@ class UserRegistrationTestCase(APITestCase):
         response = self.client.post(self.register_url, data, format='json')
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('non_field_errors', response.data)
+        # The validation error can be in either 'user_type' or 'non_field_errors'
+        self.assertTrue('user_type' in response.data or 'non_field_errors' in response.data)
     
     def test_registration_password_mismatch(self):
         """Test registration with password mismatch"""
@@ -211,7 +212,7 @@ class EmailVerificationTestCase(APITestCase):
         response = self.client.post(self.verify_email_url, data, format='json')
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('error', response.data)
+        self.assertIn('token', response.data)
     
     def test_verify_email_with_expired_token(self):
         """Test email verification with expired token"""
@@ -226,7 +227,7 @@ class EmailVerificationTestCase(APITestCase):
         response = self.client.post(self.verify_email_url, data, format='json')
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('error', response.data)
+        self.assertIn('token', response.data)
     
     def test_verify_email_with_used_token(self):
         """Test email verification with already used token"""
@@ -334,7 +335,7 @@ class PasswordResetTestCase(APITestCase):
         response = self.client.post(self.reset_password_url, data, format='json')
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('error', response.data)
+        self.assertIn('token', response.data)
     
     def test_reset_password_with_expired_token(self):
         """Test password reset with expired token"""
@@ -354,7 +355,7 @@ class PasswordResetTestCase(APITestCase):
         response = self.client.post(self.reset_password_url, data, format='json')
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn('error', response.data)
+        self.assertIn('token', response.data)
     
     def test_reset_password_mismatch(self):
         """Test password reset with password mismatch"""

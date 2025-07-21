@@ -232,3 +232,536 @@ django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. Y
 WARNING 2025-07-21 16:33:55,337 log 60636 129037057310976 Bad Request: /api/auth/jwt/logout/
 WARNING 2025-07-21 16:34:37,927 log 61035 132367853912320 Bad Request: /api/auth/jwt/logout/
 WARNING 2025-07-21 16:35:13,518 log 61400 131240713859328 Unauthorized: /api/auth/jwt/token/refresh/
+INFO 2025-07-21 16:49:37,626 utils 74261 136939048042752 Password reset email sent to test@example.com
+INFO 2025-07-21 16:49:37,850 utils 74261 136939048042752 Verification email sent to test@example.com
+INFO 2025-07-21 16:49:38,067 utils 74261 136939048042752 Welcome email sent to test@example.com
+INFO 2025-07-21 16:49:38,324 utils 74261 136939048042752 Verification email sent to test@example.com
+WARNING 2025-07-21 16:49:38,542 log 74261 136939048042752 Bad Request: /api/auth/request-email-verification/
+WARNING 2025-07-21 16:49:38,772 log 74261 136939048042752 Bad Request: /api/auth/request-email-verification/
+INFO 2025-07-21 16:49:38,991 utils 74261 136939048042752 Welcome email sent to test@example.com
+WARNING 2025-07-21 16:49:39,212 log 74261 136939048042752 Bad Request: /api/auth/verify-email/
+WARNING 2025-07-21 16:49:39,431 log 74261 136939048042752 Bad Request: /api/auth/verify-email/
+WARNING 2025-07-21 16:49:39,650 log 74261 136939048042752 Bad Request: /api/auth/verify-email/
+INFO 2025-07-21 16:49:39,867 utils 74261 136939048042752 Password reset email sent to test@example.com
+WARNING 2025-07-21 16:49:40,087 log 74261 136939048042752 Bad Request: /api/auth/request-password-reset/
+WARNING 2025-07-21 16:49:40,307 log 74261 136939048042752 Bad Request: /api/auth/request-password-reset/
+WARNING 2025-07-21 16:49:40,525 log 74261 136939048042752 Bad Request: /api/auth/reset-password/
+WARNING 2025-07-21 16:49:41,646 log 74261 136939048042752 Bad Request: /api/auth/reset-password/
+WARNING 2025-07-21 16:49:41,877 log 74261 136939048042752 Bad Request: /api/auth/reset-password/
+WARNING 2025-07-21 16:49:42,098 log 74261 136939048042752 Bad Request: /api/auth/reset-password/
+WARNING 2025-07-21 16:49:43,627 log 74261 136939048042752 Bad Request: /api/auth/change-password/
+WARNING 2025-07-21 16:49:45,363 log 74261 136939048042752 Unauthorized: /api/auth/change-password/
+WARNING 2025-07-21 16:49:46,016 log 74261 136939048042752 Bad Request: /api/auth/change-password/
+WARNING 2025-07-21 16:49:46,889 log 74261 136939048042752 Unauthorized: /api/auth/delete-account/
+WARNING 2025-07-21 16:49:47,832 log 74261 136939048042752 Bad Request: /api/auth/profile/
+INFO 2025-07-21 16:49:52,788 utils 74261 136939048042752 Verification email sent to jobseeker@example.com
+INFO 2025-07-21 16:49:53,006 utils 74261 136939048042752 Verification email sent to recruiter@example.com
+WARNING 2025-07-21 16:49:53,010 log 74261 136939048042752 Bad Request: /api/auth/jwt/register/
+INFO 2025-07-21 16:49:53,228 utils 74261 136939048042752 Verification email sent to jobseeker@example.com
+WARNING 2025-07-21 16:49:53,233 log 74261 136939048042752 Bad Request: /api/auth/jwt/register/
+INFO 2025-07-21 16:53:23,162 utils 75819 128847289737472 Password reset email sent to test@example.com
+INFO 2025-07-21 16:53:23,374 utils 75819 128847289737472 Verification email sent to test@example.com
+INFO 2025-07-21 16:53:23,584 utils 75819 128847289737472 Welcome email sent to test@example.com
+INFO 2025-07-21 16:53:23,826 utils 75819 128847289737472 Verification email sent to test@example.com
+WARNING 2025-07-21 16:53:24,039 log 75819 128847289737472 Bad Request: /api/auth/request-email-verification/
+WARNING 2025-07-21 16:53:24,252 log 75819 128847289737472 Bad Request: /api/auth/request-email-verification/
+INFO 2025-07-21 16:53:24,462 utils 75819 128847289737472 Welcome email sent to test@example.com
+WARNING 2025-07-21 16:53:24,672 log 75819 128847289737472 Bad Request: /api/auth/verify-email/
+WARNING 2025-07-21 16:53:24,881 log 75819 128847289737472 Bad Request: /api/auth/verify-email/
+WARNING 2025-07-21 16:53:25,093 log 75819 128847289737472 Bad Request: /api/auth/verify-email/
+INFO 2025-07-21 16:53:25,305 utils 75819 128847289737472 Password reset email sent to test@example.com
+WARNING 2025-07-21 16:53:25,513 log 75819 128847289737472 Bad Request: /api/auth/request-password-reset/
+WARNING 2025-07-21 16:53:25,721 log 75819 128847289737472 Bad Request: /api/auth/request-password-reset/
+WARNING 2025-07-21 16:53:25,929 log 75819 128847289737472 Bad Request: /api/auth/reset-password/
+WARNING 2025-07-21 16:53:26,979 log 75819 128847289737472 Bad Request: /api/auth/reset-password/
+WARNING 2025-07-21 16:53:27,193 log 75819 128847289737472 Bad Request: /api/auth/reset-password/
+WARNING 2025-07-21 16:53:27,401 log 75819 128847289737472 Bad Request: /api/auth/reset-password/
+WARNING 2025-07-21 16:53:28,859 log 75819 128847289737472 Bad Request: /api/auth/change-password/
+WARNING 2025-07-21 16:53:30,533 log 75819 128847289737472 Unauthorized: /api/auth/change-password/
+WARNING 2025-07-21 16:53:31,162 log 75819 128847289737472 Bad Request: /api/auth/change-password/
+WARNING 2025-07-21 16:53:32,006 log 75819 128847289737472 Unauthorized: /api/auth/delete-account/
+WARNING 2025-07-21 16:53:32,921 log 75819 128847289737472 Bad Request: /api/auth/profile/
+INFO 2025-07-21 16:53:37,746 utils 75819 128847289737472 Verification email sent to jobseeker@example.com
+INFO 2025-07-21 16:53:37,959 utils 75819 128847289737472 Verification email sent to recruiter@example.com
+WARNING 2025-07-21 16:53:37,963 log 75819 128847289737472 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:53:38,179 log 75819 128847289737472 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:54:42,181 log 76264 133622104363264 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:54:42,614 log 76264 133622104363264 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:54:43,042 log 76264 133622104363264 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:54:43,474 log 76264 133622104363264 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:54:44,131 log 76264 133622104363264 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:54:44,778 log 76264 133622104363264 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:54:45,207 log 76264 133622104363264 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:54:46,501 log 76264 133622104363264 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 16:54:47,154 log 76264 133622104363264 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 16:54:47,817 log 76264 133622104363264 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 16:54:48,455 log 76264 133622104363264 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 16:54:49,834 log 76264 133622104363264 Bad Request: /api/recommendations/
+INFO 2025-07-21 16:54:51,160 utils 76264 133622104363264 Verification email sent to jobseeker@example.com
+INFO 2025-07-21 16:54:51,804 utils 76264 133622104363264 Verification email sent to recruiter@example.com
+INFO 2025-07-21 16:54:52,442 utils 76264 133622104363264 Verification email sent to existing@jobseeker.com
+WARNING 2025-07-21 16:54:52,886 log 76264 133622104363264 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:54:53,310 log 76264 133622104363264 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:54:53,731 log 76264 133622104363264 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:54:57,333 log 76264 133622104363264 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 16:54:57,745 log 76264 133622104363264 Unauthorized: /api/dashboard/stats/
+INFO 2025-07-21 16:56:11,316 server 76714 129850099130624 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-21 16:56:11,316 server 76714 129850099130624 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-21 16:56:11,316 server 76714 129850099130624 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-21 16:56:32,855 utils 76714 129847786469056 Verification email sent to test@example.com
+INFO 2025-07-21 16:56:32,861 runserver 76714 129850099130624 [mHTTP POST /api/auth/jwt/register/ 201 [0.25, 127.0.0.1:55384][0m
+INFO 2025-07-21 16:58:12,863 server 76714 129850099130624 Killed 0 pending application instances
+ERROR 2025-07-21 17:14:35,726 log 90088 133254107410688 Internal Server Error: /api/job-posts/84bd0b92-b475-4298-a6f1-6ee9a17c1c2c/analytics/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/matcher/views.py", line 503, in analytics
+    viewed_at__gte=timezone.now() - timedelta(days=7)
+                   ^^^^^^^^
+NameError: name 'timezone' is not defined
+WARNING 2025-07-21 17:14:36,608 log 90088 133254107410688 Forbidden: /api/job-posts/
+WARNING 2025-07-21 17:14:37,489 log 90088 133254107410688 Bad Request: /api/job-posts/
+ERROR 2025-07-21 17:14:38,817 log 90088 133254107410688 Internal Server Error: /api/job-posts/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/mixins.py", line 43, in list
+    return self.get_paginated_response(serializer.data)
+                                       ^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 714, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 523, in to_representation
+    for field in fields:
+                 ^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 384, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1079, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1175, in get_field_names
+    assert field_name in fields, (
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: The field 'recruiter_name' was declared on serializer JobPostListSerializer, but has not been included in the 'fields' option.
+ERROR 2025-07-21 17:14:39,264 log 90088 133254107410688 Internal Server Error: /api/job-posts/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/mixins.py", line 43, in list
+    return self.get_paginated_response(serializer.data)
+                                       ^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 714, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 523, in to_representation
+    for field in fields:
+                 ^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 384, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1079, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1175, in get_field_names
+    assert field_name in fields, (
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: The field 'recruiter_name' was declared on serializer JobPostListSerializer, but has not been included in the 'fields' option.
+WARNING 2025-07-21 17:14:39,697 log 90088 133254107410688 Unauthorized: /api/job-posts/
+ERROR 2025-07-21 17:14:40,137 log 90088 133254107410688 Internal Server Error: /api/job-posts/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/mixins.py", line 43, in list
+    return self.get_paginated_response(serializer.data)
+                                       ^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 714, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 523, in to_representation
+    for field in fields:
+                 ^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 384, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1079, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1175, in get_field_names
+    assert field_name in fields, (
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: The field 'recruiter_name' was declared on serializer JobPostListSerializer, but has not been included in the 'fields' option.
+ERROR 2025-07-21 17:14:41,018 log 90088 133254107410688 Internal Server Error: /api/job-posts/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/mixins.py", line 43, in list
+    return self.get_paginated_response(serializer.data)
+                                       ^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 714, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 523, in to_representation
+    for field in fields:
+                 ^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 384, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1079, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1175, in get_field_names
+    assert field_name in fields, (
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: The field 'recruiter_name' was declared on serializer JobPostListSerializer, but has not been included in the 'fields' option.
+WARNING 2025-07-21 17:14:42,161 log 90088 133254107410688 Not Found: /api/job-posts/bb0a09b3-bff2-494b-b847-6ff75757887f/
+ERROR 2025-07-21 17:14:43,072 log 90088 133254107410688 Internal Server Error: /api/job-posts/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/mixins.py", line 43, in list
+    return self.get_paginated_response(serializer.data)
+                                       ^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 714, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 523, in to_representation
+    for field in fields:
+                 ^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 384, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1079, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1175, in get_field_names
+    assert field_name in fields, (
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: The field 'recruiter_name' was declared on serializer JobPostListSerializer, but has not been included in the 'fields' option.
+ERROR 2025-07-21 17:14:43,513 log 90088 133254107410688 Internal Server Error: /api/job-posts/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/mixins.py", line 43, in list
+    return self.get_paginated_response(serializer.data)
+                                       ^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 714, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 523, in to_representation
+    for field in fields:
+                 ^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 384, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1079, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1175, in get_field_names
+    assert field_name in fields, (
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: The field 'recruiter_name' was declared on serializer JobPostListSerializer, but has not been included in the 'fields' option.
+ERROR 2025-07-21 17:14:44,409 log 90088 133254107410688 Internal Server Error: /api/job-posts/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/mixins.py", line 43, in list
+    return self.get_paginated_response(serializer.data)
+                                       ^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 714, in to_representation
+    self.child.to_representation(item) for item in iterable
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 523, in to_representation
+    for field in fields:
+                 ^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 384, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/utils/functional.py", line 47, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ~~~~~~~~~^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+                      ~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1079, in get_fields
+    field_names = self.get_field_names(declared_fields, info)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 1175, in get_field_names
+    assert field_name in fields, (
+           ^^^^^^^^^^^^^^^^^^^^
+AssertionError: The field 'recruiter_name' was declared on serializer JobPostListSerializer, but has not been included in the 'fields' option.
+WARNING 2025-07-21 17:18:15,139 log 91366 139055199793408 Forbidden: /api/job-posts/
+WARNING 2025-07-21 17:18:16,119 log 91366 139055199793408 Bad Request: /api/job-posts/
+WARNING 2025-07-21 17:18:18,462 log 91366 139055199793408 Unauthorized: /api/job-posts/
+WARNING 2025-07-21 17:18:21,102 log 91366 139055199793408 Not Found: /api/job-posts/ea6e9fed-368c-44c1-aa6c-b59bbab4552f/
+WARNING 2025-07-21 17:24:34,587 log 93624 125141652746496 Forbidden: /api/job-posts/
+WARNING 2025-07-21 17:24:35,507 log 93624 125141652746496 Bad Request: /api/job-posts/
+WARNING 2025-07-21 17:24:35,510 log 93624 125141652746496 Bad Request: /api/job-posts/
+WARNING 2025-07-21 17:24:37,754 log 93624 125141652746496 Unauthorized: /api/job-posts/
+WARNING 2025-07-21 17:24:40,244 log 93624 125141652746496 Not Found: /api/job-posts/ad28241c-f391-4421-b2a2-7d76aa10d0e0/
+WARNING 2025-07-21 17:36:21,588 log 97745 139084272623872 Forbidden: /api/job-posts/
+WARNING 2025-07-21 17:36:22,426 log 97745 139084272623872 Bad Request: /api/job-posts/
+WARNING 2025-07-21 17:36:22,428 log 97745 139084272623872 Bad Request: /api/job-posts/
+WARNING 2025-07-21 17:36:22,429 log 97745 139084272623872 Bad Request: /api/job-posts/
+WARNING 2025-07-21 17:36:24,589 log 97745 139084272623872 Unauthorized: /api/job-posts/
+WARNING 2025-07-21 17:36:26,931 log 97745 139084272623872 Not Found: /api/job-posts/f50e9a51-49cc-45c5-80fd-7e6996024921/
+WARNING 2025-07-21 17:36:58,605 log 97949 137229712625920 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 17:36:59,045 log 97949 137229712625920 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 17:36:59,472 log 97949 137229712625920 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 17:36:59,892 log 97949 137229712625920 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 17:37:00,520 log 97949 137229712625920 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 17:37:01,151 log 97949 137229712625920 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 17:37:01,568 log 97949 137229712625920 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 17:37:02,816 log 97949 137229712625920 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 17:37:03,450 log 97949 137229712625920 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 17:37:04,083 log 97949 137229712625920 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 17:37:04,722 log 97949 137229712625920 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 17:37:05,981 log 97949 137229712625920 Bad Request: /api/recommendations/
+INFO 2025-07-21 17:37:07,280 utils 97949 137229712625920 Verification email sent to jobseeker@example.com
+INFO 2025-07-21 17:37:07,927 utils 97949 137229712625920 Verification email sent to recruiter@example.com
+INFO 2025-07-21 17:37:08,558 utils 97949 137229712625920 Verification email sent to existing@jobseeker.com
+WARNING 2025-07-21 17:37:08,975 log 97949 137229712625920 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 17:37:09,395 log 97949 137229712625920 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 17:37:09,811 log 97949 137229712625920 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 17:37:13,412 log 97949 137229712625920 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 17:37:13,827 log 97949 137229712625920 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 17:50:03,906 log 109819 125747315880192 Bad Request: /api/applications/
+WARNING 2025-07-21 17:50:04,523 log 109819 125747315880192 Bad Request: /api/applications/
+WARNING 2025-07-21 17:50:05,139 log 109819 125747315880192 Bad Request: /api/applications/
+WARNING 2025-07-21 17:50:05,756 log 109819 125747315880192 Bad Request: /api/applications/
+WARNING 2025-07-21 17:50:06,372 log 109819 125747315880192 Bad Request: /api/applications/
+WARNING 2025-07-21 17:50:06,985 log 109819 125747315880192 Bad Request: /api/applications/
+WARNING 2025-07-21 17:50:09,481 log 109819 125747315880192 Unauthorized: /api/applications/
+INFO 2025-07-21 17:50:15,528 views 109819 125747315880192 Application 28247b7b-c07b-4156-8274-32cf5f54de35 status changed from pending to reviewed by recruiter1
+INFO 2025-07-21 17:50:15,532 views 109819 125747315880192 Application 28247b7b-c07b-4156-8274-32cf5f54de35 status changed from reviewed to shortlisted by recruiter1
+INFO 2025-07-21 17:50:15,535 views 109819 125747315880192 Application 28247b7b-c07b-4156-8274-32cf5f54de35 status changed from shortlisted to interview_scheduled by recruiter1
+INFO 2025-07-21 17:50:15,538 views 109819 125747315880192 Application 28247b7b-c07b-4156-8274-32cf5f54de35 status changed from interview_scheduled to interviewed by recruiter1
+INFO 2025-07-21 17:50:15,542 views 109819 125747315880192 Application 28247b7b-c07b-4156-8274-32cf5f54de35 status changed from interviewed to hired by recruiter1
+INFO 2025-07-21 17:50:15,545 views 109819 125747315880192 Application 28247b7b-c07b-4156-8274-32cf5f54de35 status changed from hired to rejected by recruiter1
+WARNING 2025-07-21 17:50:16,180 log 109819 125747315880192 Bad Request: /api/applications/4ac44421-0e04-49ee-85c3-3d9503afd3e9/update_status/
+ERROR 2025-07-21 17:50:16,807 log 109819 125747315880192 Internal Server Error: /api/applications/41d0af2e-7361-4f46-8a51-5cea6bfab8b6/update_status/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/viewsets.py", line 124, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/matcher/views.py", line 734, in update_status
+    raise permissions.PermissionDenied("Access denied")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: module 'rest_framework.permissions' has no attribute 'PermissionDenied'
+INFO 2025-07-21 17:50:17,442 views 109819 125747315880192 Application 6847d5a6-b488-4824-a1fc-82ceab6dffb0 status changed from pending to reviewed by recruiter1
+WARNING 2025-07-21 17:50:18,067 log 109819 125747315880192 Not Found: /api/applications/6b879302-7ca9-4cf0-9136-d4d822ad96c9/update_status/
+WARNING 2025-07-21 17:50:18,487 log 109819 125747315880192 Bad Request: /api/applications/

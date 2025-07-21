@@ -5,11 +5,14 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.db.models import Q, Count, Avg
 from django.conf import settings
+from django.utils import timezone
+from datetime import timedelta
 
 from rest_framework import status, generics, viewsets, permissions
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
@@ -24,16 +27,16 @@ logger = logging.getLogger(__name__)
 from .models import (
     User, JobSeekerProfile, RecruiterProfile, Resume, JobPost,
     Application, AIAnalysisResult, InterviewSession, Skill, UserSkill,
-    EmailVerificationToken, PasswordResetToken
+    EmailVerificationToken, PasswordResetToken, JobAnalytics, JobView
 )
 from .serializers import (
     UserRegistrationSerializer, UserLoginSerializer, UserSerializer,
     JobSeekerProfileSerializer, RecruiterProfileSerializer, ResumeSerializer,
-    JobPostSerializer, ApplicationSerializer, AIAnalysisResultSerializer,
-    InterviewSessionSerializer, SkillSerializer, UserSkillSerializer,
+    JobPostSerializer, JobPostCreateSerializer, JobPostListSerializer, ApplicationSerializer, 
+    AIAnalysisResultSerializer, InterviewSessionSerializer, SkillSerializer, UserSkillSerializer,
     JobMatchSerializer, EmailVerificationSerializer, EmailVerificationConfirmSerializer,
     PasswordResetRequestSerializer, PasswordResetConfirmSerializer, ChangePasswordSerializer,
-    UserProfileUpdateSerializer
+    UserProfileUpdateSerializer, JobAnalyticsSerializer, JobViewSerializer
 )
 from .jwt_serializers import (
     CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer,
@@ -256,63 +259,341 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
 # Job Post Views
 class JobPostViewSet(viewsets.ModelViewSet):
-    serializer_class = JobPostSerializer
     permission_classes = [IsAuthenticated]
     
+    def get_serializer_class(self):
+        """Return appropriate serializer based on action"""
+        if self.action == 'list':
+            return JobPostListSerializer
+        elif self.action == 'create':
+            return JobPostCreateSerializer
+        return JobPostSerializer
+    
     def get_queryset(self):
-        queryset = JobPost.objects.filter(is_active=True)
+        """Enhanced queryset with advanced filtering and search"""
+        queryset = JobPost.objects.select_related(
+            'recruiter', 'recruiter__recruiter_profile'
+        ).prefetch_related('applications')
         
-        # Filter by user type
+        # Base filtering - only active jobs for non-owners
+        if self.request.user.user_type != 'recruiter' or self.action == 'list':
+            queryset = queryset.filter(is_active=True)
+        
+        # Recruiter can only modify their own jobs
         if self.request.user.user_type == 'recruiter':
             if self.action in ['update', 'partial_update', 'destroy']:
                 queryset = queryset.filter(recruiter=self.request.user)
+            elif self.action == 'list' and self.request.query_params.get('my_jobs') == 'true':
+                # For my_jobs, show all jobs (active and inactive) for the recruiter
+                queryset = JobPost.objects.select_related(
+                    'recruiter', 'recruiter__recruiter_profile'
+                ).prefetch_related('applications').filter(recruiter=self.request.user)
         
-        # Search and filter functionality
-        search = self.request.query_params.get('search', None)
+        # Advanced search functionality
+        search = self.request.query_params.get('search', '').strip()
         if search:
             queryset = queryset.filter(
                 Q(title__icontains=search) |
                 Q(description__icontains=search) |
                 Q(skills_required__icontains=search) |
-                Q(location__icontains=search)
+                Q(location__icontains=search) |
+                Q(recruiter__recruiter_profile__company_name__icontains=search)
             )
         
-        job_type = self.request.query_params.get('job_type', None)
+        # Filter by job type
+        job_type = self.request.query_params.get('job_type')
         if job_type:
-            queryset = queryset.filter(job_type=job_type)
+            job_types = job_type.split(',')
+            queryset = queryset.filter(job_type__in=job_types)
         
-        experience_level = self.request.query_params.get('experience_level', None)
+        # Filter by experience level
+        experience_level = self.request.query_params.get('experience_level')
         if experience_level:
-            queryset = queryset.filter(experience_level=experience_level)
+            experience_levels = experience_level.split(',')
+            queryset = queryset.filter(experience_level__in=experience_levels)
         
-        location = self.request.query_params.get('location', None)
+        # Location filtering with fuzzy matching
+        location = self.request.query_params.get('location', '').strip()
         if location:
-            queryset = queryset.filter(location__icontains=location)
+            # Only include remote jobs if specifically searching for "remote"
+            if location.lower() in ['remote', 'anywhere']:
+                queryset = queryset.filter(
+                    Q(location__icontains=location) |
+                    Q(remote_work_allowed=True)
+                )
+            else:
+                queryset = queryset.filter(location__icontains=location)
         
-        return queryset.order_by('-created_at')
+        # Salary range filtering
+        salary_min = self.request.query_params.get('salary_min')
+        salary_max = self.request.query_params.get('salary_max')
+        if salary_min:
+            try:
+                salary_min = int(salary_min)
+                # Jobs where the max salary is at least the requested minimum
+                queryset = queryset.filter(
+                    Q(salary_max__gte=salary_min) | Q(salary_max__isnull=True)
+                )
+            except ValueError:
+                pass
+        
+        if salary_max:
+            try:
+                salary_max = int(salary_max)
+                # Jobs where the min salary is at most the requested maximum
+                queryset = queryset.filter(
+                    Q(salary_min__lte=salary_max) | Q(salary_min__isnull=True)
+                )
+            except ValueError:
+                pass
+        
+        # Skills filtering
+        skills = self.request.query_params.get('skills', '').strip()
+        if skills:
+            skill_list = [skill.strip() for skill in skills.split(',') if skill.strip()]
+            for skill in skill_list:
+                queryset = queryset.filter(skills_required__icontains=skill)
+        
+        # Remote work filter
+        remote_only = self.request.query_params.get('remote_only')
+        if remote_only and remote_only.lower() == 'true':
+            queryset = queryset.filter(remote_work_allowed=True)
+        
+        # Featured jobs filter
+        featured_only = self.request.query_params.get('featured_only')
+        if featured_only and featured_only.lower() == 'true':
+            queryset = queryset.filter(is_featured=True)
+        
+        # Date range filtering
+        date_from = self.request.query_params.get('date_from')
+        date_to = self.request.query_params.get('date_to')
+        if date_from:
+            try:
+                from datetime import datetime
+                date_from = datetime.strptime(date_from, '%Y-%m-%d').date()
+                queryset = queryset.filter(created_at__date__gte=date_from)
+            except ValueError:
+                pass
+        
+        if date_to:
+            try:
+                from datetime import datetime
+                date_to = datetime.strptime(date_to, '%Y-%m-%d').date()
+                queryset = queryset.filter(created_at__date__lte=date_to)
+            except ValueError:
+                pass
+        
+        # Sorting
+        ordering = self.request.query_params.get('ordering', '-created_at')
+        valid_orderings = [
+            'created_at', '-created_at', 'title', '-title', 'salary_min', '-salary_min',
+            'salary_max', '-salary_max', 'views_count', '-views_count', 'applications_count', '-applications_count'
+        ]
+        if ordering in valid_orderings:
+            queryset = queryset.order_by(ordering)
+        else:
+            queryset = queryset.order_by('-created_at')
+        
+        return queryset
+    
+    def get_permissions(self):
+        """Set permissions based on action"""
+        if self.action == 'create':
+            permission_classes = [IsAuthenticated, IsRecruiter]
+        elif self.action in ['update', 'partial_update', 'destroy']:
+            permission_classes = [IsAuthenticated, IsRecruiterOwner]
+        else:
+            permission_classes = [IsAuthenticated]
+        
+        return [permission() for permission in permission_classes]
     
     def perform_create(self, serializer):
-        if self.request.user.user_type != 'recruiter':
-            raise permissions.PermissionDenied("Only recruiters can create job posts")
-        serializer.save(recruiter=self.request.user)
+        """Create job post with analytics initialization"""
+        job_post = serializer.save(recruiter=self.request.user)
+        
+        # Create analytics record
+        JobAnalytics.objects.create(job_post=job_post)
     
     def retrieve(self, request, *args, **kwargs):
+        """Enhanced retrieve with view tracking and analytics"""
         instance = self.get_object()
-        # Increment view count
-        instance.views_count += 1
-        instance.save()
+        
+        # Track job view
+        self._track_job_view(instance, request)
+        
+        # Increment view count atomically
+        instance.increment_view_count()
+        
+        # Update analytics
+        self._update_job_analytics(instance, request)
+        
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
     
+    def _track_job_view(self, job_post, request):
+        """Track individual job view"""
+        try:
+            # Get client IP
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            if x_forwarded_for:
+                ip_address = x_forwarded_for.split(',')[0]
+            else:
+                ip_address = request.META.get('REMOTE_ADDR', '127.0.0.1')
+            
+            # Create job view record
+            JobView.objects.create(
+                job_post=job_post,
+                viewer=request.user if request.user.is_authenticated else None,
+                ip_address=ip_address,
+                user_agent=request.META.get('HTTP_USER_AGENT', ''),
+                referrer=request.META.get('HTTP_REFERER', ''),
+                session_id=request.session.session_key or ''
+            )
+        except Exception as e:
+            logger.error(f"Error tracking job view: {str(e)}")
+    
+    def _update_job_analytics(self, job_post, request):
+        """Update job analytics"""
+        try:
+            analytics, created = JobAnalytics.objects.get_or_create(job_post=job_post)
+            
+            # Update view counts
+            analytics.total_views = job_post.views_count
+            analytics.unique_views = JobView.objects.filter(job_post=job_post).values('ip_address').distinct().count()
+            analytics.total_applications = job_post.applications.count()
+            
+            # Update conversion rate
+            analytics.update_conversion_rate()
+            
+            # Update geographic distribution
+            location_data = JobView.objects.filter(job_post=job_post).values_list('ip_address', flat=True)
+            # In a real implementation, you'd use a GeoIP service to get locations
+            
+            analytics.save()
+        except Exception as e:
+            logger.error(f"Error updating job analytics: {str(e)}")
+    
     @action(detail=True, methods=['get'])
     def applications(self, request, pk=None):
+        """Get applications for a job post (recruiter only)"""
         job_post = self.get_object()
         if job_post.recruiter != request.user:
-            raise permissions.PermissionDenied("Access denied")
+            raise PermissionDenied("Access denied")
         
-        applications = Application.objects.filter(job_post=job_post).order_by('-match_score')
+        applications = Application.objects.filter(job_post=job_post).select_related(
+            'job_seeker', 'resume'
+        ).order_by('-match_score', '-applied_at')
+        
+        # Pagination
+        from rest_framework.pagination import PageNumberPagination
+        paginator = PageNumberPagination()
+        paginator.page_size = 20
+        page = paginator.paginate_queryset(applications, request)
+        
+        if page is not None:
+            serializer = ApplicationSerializer(page, many=True)
+            return paginator.get_paginated_response(serializer.data)
+        
         serializer = ApplicationSerializer(applications, many=True)
         return Response(serializer.data)
+    
+    @action(detail=True, methods=['get'])
+    def analytics(self, request, pk=None):
+        """Get analytics for a job post (recruiter only)"""
+        job_post = self.get_object()
+        if job_post.recruiter != request.user:
+            raise PermissionDenied("Access denied")
+        
+        try:
+            analytics = job_post.analytics
+            serializer = JobAnalyticsSerializer(analytics)
+            
+            # Add additional analytics data
+            data = serializer.data
+            data['recent_views'] = JobView.objects.filter(
+                job_post=job_post,
+                viewed_at__gte=timezone.now() - timedelta(days=7)
+            ).count()
+            
+            data['top_skills_searched'] = self._get_top_skills_for_job(job_post)
+            
+            return Response(data)
+        except JobAnalytics.DoesNotExist:
+            return Response({'error': 'Analytics not available'}, status=404)
+    
+    def _get_top_skills_for_job(self, job_post):
+        """Get top skills that led to this job being viewed"""
+        # This is a simplified implementation
+        # In practice, you'd track search queries that led to job views
+        skills = job_post.skills_required.split(',') if job_post.skills_required else []
+        return [skill.strip() for skill in skills[:5]]
+    
+    @action(detail=True, methods=['post'])
+    def toggle_active(self, request, pk=None):
+        """Toggle job post active status (recruiter only)"""
+        job_post = self.get_object()
+        if job_post.recruiter != request.user:
+            raise PermissionDenied("Access denied")
+        
+        job_post.is_active = not job_post.is_active
+        job_post.save(update_fields=['is_active'])
+        
+        return Response({
+            'message': f'Job post {"activated" if job_post.is_active else "deactivated"}',
+            'is_active': job_post.is_active
+        })
+    
+    @action(detail=True, methods=['post'])
+    def duplicate(self, request, pk=None):
+        """Duplicate a job post (recruiter only)"""
+        job_post = self.get_object()
+        if job_post.recruiter != request.user:
+            raise PermissionDenied("Access denied")
+        
+        # Create a copy
+        job_post.pk = None
+        job_post.title = f"{job_post.title} (Copy)"
+        job_post.is_active = False  # Start as inactive
+        job_post.views_count = 0
+        job_post.applications_count = 0
+        job_post.slug = ''  # Will be regenerated on save
+        job_post.save()
+        
+        # Create analytics for the new job
+        JobAnalytics.objects.create(job_post=job_post)
+        
+        serializer = self.get_serializer(job_post)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    @action(detail=False, methods=['get'])
+    def search_suggestions(self, request):
+        """Get search suggestions based on existing job data"""
+        query = request.query_params.get('q', '').strip()
+        if not query or len(query) < 2:
+            return Response({'suggestions': []})
+        
+        # Get title suggestions
+        title_suggestions = JobPost.objects.filter(
+            title__icontains=query, is_active=True
+        ).values_list('title', flat=True).distinct()[:5]
+        
+        # Get location suggestions
+        location_suggestions = JobPost.objects.filter(
+            location__icontains=query, is_active=True
+        ).values_list('location', flat=True).distinct()[:5]
+        
+        # Get company suggestions
+        company_suggestions = JobPost.objects.filter(
+            recruiter__recruiter_profile__company_name__icontains=query, is_active=True
+        ).values_list('recruiter__recruiter_profile__company_name', flat=True).distinct()[:5]
+        
+        suggestions = {
+            'titles': list(title_suggestions),
+            'locations': list(location_suggestions),
+            'companies': list(company_suggestions)
+        }
+        
+        return Response({'suggestions': suggestions})
 
 
 # Application Views
@@ -321,15 +602,93 @@ class ApplicationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
+        """Enhanced queryset with filtering and search capabilities"""
         if self.request.user.user_type == 'job_seeker':
-            return Application.objects.filter(job_seeker=self.request.user)
+            queryset = Application.objects.filter(job_seeker=self.request.user)
         elif self.request.user.user_type == 'recruiter':
-            return Application.objects.filter(job_post__recruiter=self.request.user)
-        return Application.objects.none()
+            queryset = Application.objects.filter(job_post__recruiter=self.request.user)
+        else:
+            return Application.objects.none()
+        
+        # Add select_related and prefetch_related for performance
+        queryset = queryset.select_related(
+            'job_seeker', 'job_post', 'resume', 'job_post__recruiter'
+        ).prefetch_related('ai_analyses')
+        
+        # Filter by status
+        status_filter = self.request.query_params.get('status')
+        if status_filter:
+            status_list = status_filter.split(',')
+            queryset = queryset.filter(status__in=status_list)
+        
+        # Filter by job post
+        job_post_id = self.request.query_params.get('job_post')
+        if job_post_id:
+            queryset = queryset.filter(job_post_id=job_post_id)
+        
+        # Filter by date range
+        date_from = self.request.query_params.get('date_from')
+        date_to = self.request.query_params.get('date_to')
+        if date_from:
+            try:
+                from datetime import datetime
+                date_from = datetime.strptime(date_from, '%Y-%m-%d').date()
+                queryset = queryset.filter(applied_at__date__gte=date_from)
+            except ValueError:
+                pass
+        
+        if date_to:
+            try:
+                from datetime import datetime
+                date_to = datetime.strptime(date_to, '%Y-%m-%d').date()
+                queryset = queryset.filter(applied_at__date__lte=date_to)
+            except ValueError:
+                pass
+        
+        # Search functionality
+        search = self.request.query_params.get('search', '').strip()
+        if search:
+            queryset = queryset.filter(
+                Q(job_post__title__icontains=search) |
+                Q(job_post__recruiter__recruiter_profile__company_name__icontains=search) |
+                Q(cover_letter__icontains=search)
+            )
+        
+        # Sorting
+        ordering = self.request.query_params.get('ordering', '-applied_at')
+        valid_orderings = [
+            'applied_at', '-applied_at', 'status', '-status', 
+            'match_score', '-match_score', 'updated_at', '-updated_at'
+        ]
+        if ordering in valid_orderings:
+            queryset = queryset.order_by(ordering)
+        else:
+            queryset = queryset.order_by('-applied_at')
+        
+        return queryset
     
     def perform_create(self, serializer):
+        """Enhanced application creation with validation and analytics"""
         if self.request.user.user_type != 'job_seeker':
-            raise permissions.PermissionDenied("Only job seekers can apply for jobs")
+            raise PermissionDenied("Only job seekers can apply for jobs")
+        
+        job_post = serializer.validated_data['job_post']
+        
+        # Check if user already applied to this job
+        existing_application = Application.objects.filter(
+            job_seeker=self.request.user,
+            job_post=job_post
+        ).first()
+        
+        if existing_application:
+            raise ValidationError("You have already applied to this job")
+        
+        # Check if job is still active and not expired
+        if not job_post.is_active:
+            raise ValidationError("This job posting is no longer active")
+        
+        if job_post.is_expired:
+            raise ValidationError("The application deadline for this job has passed")
         
         # Get primary resume or first resume
         resume = Resume.objects.filter(
@@ -339,10 +698,9 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             resume = Resume.objects.filter(job_seeker=self.request.user).first()
         
         if not resume:
-            raise serializers.ValidationError("Please upload a resume first")
+            raise ValidationError("Please upload a resume first")
         
         # Calculate match score
-        job_post = serializer.validated_data['job_post']
         match_score = calculate_match_score(resume, job_post)
         
         application = serializer.save(
@@ -350,6 +708,9 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             resume=resume,
             match_score=match_score
         )
+        
+        # Update job post applications count
+        job_post.update_applications_count()
         
         # Create AI analysis for job matching
         try:
@@ -364,26 +725,219 @@ class ApplicationViewSet(viewsets.ModelViewSet):
                 confidence_score=match_score
             )
         except Exception as e:
-            print(f"Error analyzing job match: {e}")
+            logger.error(f"Error analyzing job match: {e}")
     
     @action(detail=True, methods=['patch'])
     def update_status(self, request, pk=None):
+        """Update application status (recruiter only)"""
         application = self.get_object()
         if application.job_post.recruiter != request.user:
-            raise permissions.PermissionDenied("Access denied")
+            raise PermissionDenied("Access denied")
         
         new_status = request.data.get('status')
         recruiter_notes = request.data.get('recruiter_notes', '')
         
-        if new_status in dict(Application.STATUS_CHOICES):
-            application.status = new_status
-            if recruiter_notes:
-                application.recruiter_notes = recruiter_notes
-            application.save()
-            
-            return Response(ApplicationSerializer(application).data)
+        if new_status not in dict(Application.STATUS_CHOICES):
+            return Response({'error': 'Invalid status'}, status=status.HTTP_400_BAD_REQUEST)
         
-        return Response({'error': 'Invalid status'}, status=status.HTTP_400_BAD_REQUEST)
+        old_status = application.status
+        application.status = new_status
+        if recruiter_notes:
+            application.recruiter_notes = recruiter_notes
+        application.save()
+        
+        # Log status change for analytics
+        logger.info(f"Application {application.id} status changed from {old_status} to {new_status} by {request.user.username}")
+        
+        return Response(ApplicationSerializer(application).data)
+    
+    @action(detail=False, methods=['get'])
+    def history(self, request):
+        """Get application history for job seekers"""
+        if request.user.user_type != 'job_seeker':
+            raise PermissionDenied("Only job seekers can view application history")
+        
+        # Get applications with status timeline
+        applications = self.get_queryset()
+        
+        # Group by status for summary
+        from django.db.models import Count
+        status_summary = applications.values('status').annotate(
+            count=Count('id')
+        ).order_by('status')
+        
+        # Get recent applications (last 30 days)
+        recent_applications = applications.filter(
+            applied_at__gte=timezone.now() - timedelta(days=30)
+        )
+        
+        # Pagination for all applications
+        from rest_framework.pagination import PageNumberPagination
+        paginator = PageNumberPagination()
+        paginator.page_size = 20
+        page = paginator.paginate_queryset(applications, request)
+        
+        if page is not None:
+            serializer = ApplicationSerializer(page, many=True)
+            return paginator.get_paginated_response({
+                'applications': serializer.data,
+                'status_summary': list(status_summary),
+                'recent_count': recent_applications.count(),
+                'total_count': applications.count()
+            })
+        
+        serializer = ApplicationSerializer(applications, many=True)
+        return Response({
+            'applications': serializer.data,
+            'status_summary': list(status_summary),
+            'recent_count': recent_applications.count(),
+            'total_count': applications.count()
+        })
+    
+    @action(detail=False, methods=['get'])
+    def analytics(self, request):
+        """Get application analytics for recruiters"""
+        if request.user.user_type != 'recruiter':
+            raise PermissionDenied("Only recruiters can view application analytics")
+        
+        applications = self.get_queryset()
+        
+        # Overall statistics
+        total_applications = applications.count()
+        
+        # Status distribution
+        from django.db.models import Count
+        status_distribution = applications.values('status').annotate(
+            count=Count('id')
+        ).order_by('status')
+        
+        # Applications over time (last 30 days)
+        from django.db.models import TruncDate
+        applications_over_time = applications.filter(
+            applied_at__gte=timezone.now() - timedelta(days=30)
+        ).extra(
+            select={'day': 'date(applied_at)'}
+        ).values('day').annotate(
+            count=Count('id')
+        ).order_by('day')
+        
+        # Top performing jobs (by application count)
+        top_jobs = applications.values(
+            'job_post__title', 'job_post__id'
+        ).annotate(
+            application_count=Count('id')
+        ).order_by('-application_count')[:10]
+        
+        # Average match scores
+        from django.db.models import Avg
+        avg_match_score = applications.aggregate(
+            avg_score=Avg('match_score')
+        )['avg_score'] or 0
+        
+        # Match score distribution
+        match_score_ranges = [
+            ('0-20', applications.filter(match_score__lt=0.2).count()),
+            ('20-40', applications.filter(match_score__gte=0.2, match_score__lt=0.4).count()),
+            ('40-60', applications.filter(match_score__gte=0.4, match_score__lt=0.6).count()),
+            ('60-80', applications.filter(match_score__gte=0.6, match_score__lt=0.8).count()),
+            ('80-100', applications.filter(match_score__gte=0.8).count()),
+        ]
+        
+        # Response time analytics (time from application to first status change)
+        response_times = []
+        for app in applications.exclude(status='pending'):
+            if app.updated_at and app.applied_at:
+                response_time = (app.updated_at - app.applied_at).total_seconds() / 3600  # in hours
+                response_times.append(response_time)
+        
+        avg_response_time = sum(response_times) / len(response_times) if response_times else 0
+        
+        return Response({
+            'total_applications': total_applications,
+            'status_distribution': list(status_distribution),
+            'applications_over_time': list(applications_over_time),
+            'top_jobs': list(top_jobs),
+            'average_match_score': round(avg_match_score, 2),
+            'match_score_distribution': match_score_ranges,
+            'average_response_time_hours': round(avg_response_time, 2),
+            'total_response_times': len(response_times)
+        })
+    
+    @action(detail=True, methods=['get'])
+    def timeline(self, request, pk=None):
+        """Get application timeline/history"""
+        application = self.get_object()
+        
+        # Build timeline from application data
+        timeline = [
+            {
+                'event': 'Application Submitted',
+                'timestamp': application.applied_at,
+                'status': 'pending',
+                'description': f'Applied to {application.job_post.title}',
+                'actor': application.job_seeker.username
+            }
+        ]
+        
+        # Add status changes (this would be enhanced with a proper audit log)
+        if application.status != 'pending':
+            timeline.append({
+                'event': 'Status Updated',
+                'timestamp': application.updated_at,
+                'status': application.status,
+                'description': f'Status changed to {application.get_status_display()}',
+                'actor': application.job_post.recruiter.username,
+                'notes': application.recruiter_notes
+            })
+        
+        # Add AI analysis results
+        for analysis in application.ai_analyses.all():
+            timeline.append({
+                'event': 'AI Analysis Completed',
+                'timestamp': analysis.processed_at,
+                'status': 'analysis',
+                'description': f'{analysis.get_analysis_type_display()} completed',
+                'confidence_score': analysis.confidence_score
+            })
+        
+        # Sort timeline by timestamp
+        timeline.sort(key=lambda x: x['timestamp'])
+        
+        return Response({
+            'application_id': application.id,
+            'timeline': timeline
+        })
+    
+    @action(detail=False, methods=['get'])
+    def export(self, request):
+        """Export applications data (CSV format)"""
+        import csv
+        from django.http import HttpResponse
+        
+        applications = self.get_queryset()
+        
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="applications.csv"'
+        
+        writer = csv.writer(response)
+        writer.writerow([
+            'Application ID', 'Job Title', 'Company', 'Applicant', 'Status',
+            'Applied Date', 'Match Score', 'Cover Letter Preview'
+        ])
+        
+        for app in applications:
+            writer.writerow([
+                str(app.id),
+                app.job_post.title,
+                app.job_post.recruiter.recruiter_profile.company_name,
+                app.job_seeker.username,
+                app.get_status_display(),
+                app.applied_at.strftime('%Y-%m-%d %H:%M'),
+                f"{app.match_score:.2f}",
+                app.cover_letter[:100] + '...' if len(app.cover_letter) > 100 else app.cover_letter
+            ])
+        
+        return response
 
 
 # AI-powered Job Matching
@@ -456,7 +1010,7 @@ class InterviewSessionViewSet(viewsets.ModelViewSet):
         interview = self.get_object()
         if (interview.application.job_post.recruiter != request.user and 
             interview.application.job_seeker != request.user):
-            raise permissions.PermissionDenied("Access denied")
+            raise PermissionDenied("Access denied")
         
         try:
             questions = generate_interview_questions(

@@ -90,6 +90,8 @@ class JobPost(models.Model):
         ('contract', 'Contract'),
         ('internship', 'Internship'),
         ('freelance', 'Freelance'),
+        ('remote', 'Remote'),
+        ('hybrid', 'Hybrid'),
     )
     
     EXPERIENCE_LEVELS = (
@@ -97,32 +99,84 @@ class JobPost(models.Model):
         ('mid', 'Mid Level (3-5 years)'),
         ('senior', 'Senior Level (6-10 years)'),
         ('lead', 'Lead Level (10+ years)'),
+        ('executive', 'Executive Level'),
+    )
+    
+    PRIORITY_LEVELS = (
+        ('low', 'Low'),
+        ('normal', 'Normal'),
+        ('high', 'High'),
+        ('urgent', 'Urgent'),
     )
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     recruiter = models.ForeignKey(User, on_delete=models.CASCADE, related_name='job_posts')
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, db_index=True)
     description = models.TextField()
     requirements = models.TextField()
     responsibilities = models.TextField(blank=True)
-    location = models.CharField(max_length=255)
-    job_type = models.CharField(max_length=20, choices=JOB_TYPES)
-    experience_level = models.CharField(max_length=20, choices=EXPERIENCE_LEVELS)
-    salary_min = models.IntegerField(blank=True, null=True)
-    salary_max = models.IntegerField(blank=True, null=True)
-    skills_required = models.TextField(help_text="Comma-separated skills")
+    location = models.CharField(max_length=255, db_index=True)
+    remote_work_allowed = models.BooleanField(default=False)
+    job_type = models.CharField(max_length=20, choices=JOB_TYPES, db_index=True)
+    experience_level = models.CharField(max_length=20, choices=EXPERIENCE_LEVELS, db_index=True)
+    salary_min = models.IntegerField(blank=True, null=True, db_index=True)
+    salary_max = models.IntegerField(blank=True, null=True, db_index=True)
+    salary_currency = models.CharField(max_length=3, default='USD')
+    skills_required = models.TextField(help_text="Comma-separated skills", db_index=True)
     benefits = models.TextField(blank=True)
-    application_deadline = models.DateTimeField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    application_deadline = models.DateTimeField(blank=True, null=True, db_index=True)
+    priority = models.CharField(max_length=10, choices=PRIORITY_LEVELS, default='normal')
+    is_active = models.BooleanField(default=True, db_index=True)
+    is_featured = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     views_count = models.IntegerField(default=0)
+    applications_count = models.IntegerField(default=0)
+    
+    # SEO and metadata fields
+    slug = models.SlugField(max_length=300, blank=True, db_index=True)
+    meta_description = models.CharField(max_length=160, blank=True)
     
     class Meta:
         ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['is_active', 'created_at']),
+            models.Index(fields=['location', 'is_active']),
+            models.Index(fields=['job_type', 'experience_level']),
+            models.Index(fields=['salary_min', 'salary_max']),
+        ]
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            base_slug = slugify(f"{self.title}-{self.recruiter.recruiter_profile.company_name}")
+            self.slug = base_slug[:300]
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return f"{self.title} at {self.recruiter.recruiter_profile.company_name}"
+    
+    @property
+    def is_expired(self):
+        """Check if job posting has expired"""
+        if self.application_deadline:
+            return timezone.now() > self.application_deadline
+        return False
+    
+    @property
+    def days_since_posted(self):
+        """Get number of days since job was posted"""
+        return (timezone.now() - self.created_at).days
+    
+    def increment_view_count(self):
+        """Increment view count atomically"""
+        from django.db.models import F
+        JobPost.objects.filter(id=self.id).update(views_count=F('views_count') + 1)
+    
+    def update_applications_count(self):
+        """Update applications count"""
+        self.applications_count = self.applications.count()
+        self.save(update_fields=['applications_count'])
 
 
 class Application(models.Model):
@@ -326,3 +380,60 @@ class PasswordResetToken(models.Model):
     
     def __str__(self):
         return f"Password reset token for {self.user.username}"
+
+
+class JobAnalytics(models.Model):
+    """
+    Model for tracking job posting analytics and metrics
+    """
+    job_post = models.OneToOneField(JobPost, on_delete=models.CASCADE, related_name='analytics')
+    total_views = models.IntegerField(default=0)
+    unique_views = models.IntegerField(default=0)
+    total_applications = models.IntegerField(default=0)
+    conversion_rate = models.FloatField(default=0.0)  # applications/views ratio
+    avg_time_on_page = models.FloatField(default=0.0)  # in seconds
+    bounce_rate = models.FloatField(default=0.0)  # percentage
+    top_referral_sources = models.JSONField(default=dict)  # source -> count mapping
+    geographic_distribution = models.JSONField(default=dict)  # location -> count mapping
+    skill_match_distribution = models.JSONField(default=dict)  # match_score_range -> count
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name_plural = "Job Analytics"
+    
+    def __str__(self):
+        return f"Analytics for {self.job_post.title}"
+    
+    def update_conversion_rate(self):
+        """Update conversion rate based on current views and applications"""
+        if self.total_views > 0:
+            self.conversion_rate = (self.total_applications / self.total_views) * 100
+        else:
+            self.conversion_rate = 0.0
+        self.save(update_fields=['conversion_rate'])
+
+
+class JobView(models.Model):
+    """
+    Model for tracking individual job post views
+    """
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE, related_name='job_views')
+    viewer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    ip_address = models.GenericIPAddressField()
+    user_agent = models.TextField(blank=True)
+    referrer = models.URLField(blank=True)
+    session_id = models.CharField(max_length=40, blank=True)
+    view_duration = models.IntegerField(default=0)  # in seconds
+    viewed_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['job_post', 'viewed_at']),
+            models.Index(fields=['viewer', 'viewed_at']),
+            models.Index(fields=['ip_address', 'viewed_at']),
+        ]
+    
+    def __str__(self):
+        viewer_info = self.viewer.username if self.viewer else self.ip_address
+        return f"{self.job_post.title} viewed by {viewer_info}"

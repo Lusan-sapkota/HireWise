@@ -2,10 +2,11 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 from .models import (
     User, JobSeekerProfile, RecruiterProfile, Resume, JobPost,
     Application, AIAnalysisResult, InterviewSession, Skill, UserSkill,
-    EmailVerificationToken, PasswordResetToken
+    EmailVerificationToken, PasswordResetToken, JobAnalytics, JobView
 )
 
 
@@ -87,15 +88,139 @@ class ResumeSerializer(serializers.ModelSerializer):
 class JobPostSerializer(serializers.ModelSerializer):
     recruiter_name = serializers.CharField(source='recruiter.username', read_only=True)
     company_name = serializers.CharField(source='recruiter.recruiter_profile.company_name', read_only=True)
+    company_logo = serializers.ImageField(source='recruiter.recruiter_profile.company_logo', read_only=True)
     applications_count = serializers.SerializerMethodField()
+    is_expired = serializers.ReadOnlyField()
+    days_since_posted = serializers.ReadOnlyField()
+    skills_list = serializers.SerializerMethodField()
     
     class Meta:
         model = JobPost
         fields = '__all__'
-        read_only_fields = ['id', 'recruiter', 'created_at', 'updated_at', 'views_count']
+        read_only_fields = [
+            'id', 'recruiter', 'created_at', 'updated_at', 'views_count', 
+            'applications_count', 'slug', 'is_expired', 'days_since_posted'
+        ]
     
     def get_applications_count(self, obj):
         return obj.applications.count()
+    
+    def get_skills_list(self, obj):
+        """Convert comma-separated skills to list"""
+        if obj.skills_required:
+            return [skill.strip() for skill in obj.skills_required.split(',') if skill.strip()]
+        return []
+    
+    def validate_salary_min(self, value):
+        """Validate minimum salary"""
+        if value is not None and value < 0:
+            raise serializers.ValidationError("Minimum salary cannot be negative")
+        return value
+    
+    def validate_salary_max(self, value):
+        """Validate maximum salary"""
+        if value is not None and value < 0:
+            raise serializers.ValidationError("Maximum salary cannot be negative")
+        return value
+    
+    def validate(self, data):
+        """Cross-field validation"""
+        salary_min = data.get('salary_min')
+        salary_max = data.get('salary_max')
+        
+        if salary_min and salary_max and salary_min > salary_max:
+            raise serializers.ValidationError({
+                'salary_max': 'Maximum salary must be greater than minimum salary'
+            })
+        
+        # Validate application deadline
+        application_deadline = data.get('application_deadline')
+        if application_deadline and application_deadline <= timezone.now():
+            raise serializers.ValidationError({
+                'application_deadline': 'Application deadline must be in the future'
+            })
+        
+        return data
+
+
+class JobPostCreateSerializer(JobPostSerializer):
+    """Serializer for creating job posts with additional validation"""
+    
+    def validate_title(self, value):
+        """Validate job title"""
+        if len(value.strip()) < 3:
+            raise serializers.ValidationError("Job title must be at least 3 characters long")
+        return value.strip()
+    
+    def validate_description(self, value):
+        """Validate job description"""
+        if len(value.strip()) < 50:
+            raise serializers.ValidationError("Job description must be at least 50 characters long")
+        return value.strip()
+    
+    def validate_requirements(self, value):
+        """Validate job requirements"""
+        if len(value.strip()) < 20:
+            raise serializers.ValidationError("Job requirements must be at least 20 characters long")
+        return value.strip()
+    
+    def validate(self, data):
+        """Cross-field validation for job post creation"""
+        # Call parent validation first
+        data = super().validate(data)
+        
+        # Additional validation for required fields during creation
+        required_fields = ['location', 'job_type', 'experience_level', 'skills_required']
+        for field in required_fields:
+            if not data.get(field):
+                raise serializers.ValidationError({field: 'This field is required.'})
+        
+        return data
+
+
+class JobPostListSerializer(serializers.ModelSerializer):
+    """Lightweight serializer for job post listings"""
+    recruiter_name = serializers.CharField(source='recruiter.username', read_only=True)
+    company_name = serializers.CharField(source='recruiter.recruiter_profile.company_name', read_only=True)
+    company_logo = serializers.ImageField(source='recruiter.recruiter_profile.company_logo', read_only=True)
+    is_expired = serializers.ReadOnlyField()
+    days_since_posted = serializers.ReadOnlyField()
+    skills_list = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = JobPost
+        fields = [
+            'id', 'title', 'company_name', 'company_logo', 'recruiter_name', 'location', 'job_type',
+            'experience_level', 'salary_min', 'salary_max', 'salary_currency',
+            'skills_list', 'is_active', 'is_featured', 'created_at', 'views_count',
+            'applications_count', 'is_expired', 'days_since_posted', 'slug'
+        ]
+    
+    def get_skills_list(self, obj):
+        """Convert comma-separated skills to list (limited to first 5)"""
+        if obj.skills_required:
+            skills = [skill.strip() for skill in obj.skills_required.split(',') if skill.strip()]
+            return skills[:5]  # Limit to first 5 skills for list view
+        return []
+
+
+class JobAnalyticsSerializer(serializers.ModelSerializer):
+    """Serializer for job analytics data"""
+    
+    class Meta:
+        model = JobAnalytics
+        fields = '__all__'
+        read_only_fields = ['job_post', 'created_at', 'updated_at']
+
+
+class JobViewSerializer(serializers.ModelSerializer):
+    """Serializer for job view tracking"""
+    viewer_name = serializers.CharField(source='viewer.username', read_only=True)
+    
+    class Meta:
+        model = JobView
+        fields = '__all__'
+        read_only_fields = ['viewed_at']
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
