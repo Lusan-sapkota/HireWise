@@ -9,6 +9,9 @@ import docx
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 import nltk
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.corpus import stopwords
@@ -16,6 +19,8 @@ from nltk.stem import WordNetLemmatizer
 import google.generativeai as genai
 from datetime import datetime
 import logging
+import secrets
+import string
 
 # Download required NLTK data
 try:
@@ -475,3 +480,200 @@ def get_ai_insights(text, context="resume"):
     except Exception as e:
         logger.error(f"Error getting AI insights: {str(e)}")
         return "AI insights temporarily unavailable"
+
+
+# Email and Authentication Utilities
+def generate_secure_token(length=32):
+    """
+    Generate a secure random token for email verification and password reset
+    """
+    alphabet = string.ascii_letters + string.digits
+    return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+
+def send_verification_email(user, token):
+    """
+    Send email verification email to user
+    """
+    try:
+        subject = 'Verify Your HireWise Account'
+        
+        # Create verification URL (you may need to adjust the domain)
+        verification_url = f"{getattr(settings, 'FRONTEND_URL', 'http://localhost:3000')}/verify-email?token={token}"
+        
+        # Email content
+        html_message = f"""
+        <html>
+        <body>
+            <h2>Welcome to HireWise!</h2>
+            <p>Hi {user.first_name or user.username},</p>
+            <p>Thank you for registering with HireWise. Please click the link below to verify your email address:</p>
+            <p><a href="{verification_url}" style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Verify Email</a></p>
+            <p>Or copy and paste this link in your browser:</p>
+            <p>{verification_url}</p>
+            <p>This link will expire in 24 hours.</p>
+            <p>If you didn't create an account with HireWise, please ignore this email.</p>
+            <br>
+            <p>Best regards,<br>The HireWise Team</p>
+        </body>
+        </html>
+        """
+        
+        plain_message = f"""
+        Welcome to HireWise!
+        
+        Hi {user.first_name or user.username},
+        
+        Thank you for registering with HireWise. Please visit the following link to verify your email address:
+        
+        {verification_url}
+        
+        This link will expire in 24 hours.
+        
+        If you didn't create an account with HireWise, please ignore this email.
+        
+        Best regards,
+        The HireWise Team
+        """
+        
+        send_mail(
+            subject=subject,
+            message=plain_message,
+            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@hirewise.com'),
+            recipient_list=[user.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+        
+        logger.info(f"Verification email sent to {user.email}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error sending verification email to {user.email}: {str(e)}")
+        return False
+
+
+def send_password_reset_email(user, token):
+    """
+    Send password reset email to user
+    """
+    try:
+        subject = 'Reset Your HireWise Password'
+        
+        # Create reset URL (you may need to adjust the domain)
+        reset_url = f"{getattr(settings, 'FRONTEND_URL', 'http://localhost:3000')}/reset-password?token={token}"
+        
+        # Email content
+        html_message = f"""
+        <html>
+        <body>
+            <h2>Password Reset Request</h2>
+            <p>Hi {user.first_name or user.username},</p>
+            <p>We received a request to reset your password for your HireWise account.</p>
+            <p>Click the link below to reset your password:</p>
+            <p><a href="{reset_url}" style="background-color: #dc3545; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a></p>
+            <p>Or copy and paste this link in your browser:</p>
+            <p>{reset_url}</p>
+            <p>This link will expire in 1 hour.</p>
+            <p>If you didn't request a password reset, please ignore this email. Your password will remain unchanged.</p>
+            <br>
+            <p>Best regards,<br>The HireWise Team</p>
+        </body>
+        </html>
+        """
+        
+        plain_message = f"""
+        Password Reset Request
+        
+        Hi {user.first_name or user.username},
+        
+        We received a request to reset your password for your HireWise account.
+        
+        Please visit the following link to reset your password:
+        
+        {reset_url}
+        
+        This link will expire in 1 hour.
+        
+        If you didn't request a password reset, please ignore this email. Your password will remain unchanged.
+        
+        Best regards,
+        The HireWise Team
+        """
+        
+        send_mail(
+            subject=subject,
+            message=plain_message,
+            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@hirewise.com'),
+            recipient_list=[user.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+        
+        logger.info(f"Password reset email sent to {user.email}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error sending password reset email to {user.email}: {str(e)}")
+        return False
+
+
+def send_welcome_email(user):
+    """
+    Send welcome email to newly verified users
+    """
+    try:
+        subject = 'Welcome to HireWise - Your Account is Ready!'
+        
+        # Email content
+        html_message = f"""
+        <html>
+        <body>
+            <h2>Welcome to HireWise!</h2>
+            <p>Hi {user.first_name or user.username},</p>
+            <p>Your email has been successfully verified and your HireWise account is now active!</p>
+            
+            {'<p>As a job seeker, you can now:</p><ul><li>Upload and manage your resumes</li><li>Search and apply for jobs</li><li>Get AI-powered job recommendations</li><li>Track your applications</li></ul>' if user.user_type == 'job_seeker' else ''}
+            
+            {'<p>As a recruiter, you can now:</p><ul><li>Post job openings</li><li>Review applications</li><li>Schedule interviews</li><li>Manage your company profile</li></ul>' if user.user_type == 'recruiter' else ''}
+            
+            <p>Get started by logging into your account:</p>
+            <p><a href="{getattr(settings, 'FRONTEND_URL', 'http://localhost:3000')}/login" style="background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Login to HireWise</a></p>
+            
+            <p>If you have any questions, feel free to contact our support team.</p>
+            <br>
+            <p>Best regards,<br>The HireWise Team</p>
+        </body>
+        </html>
+        """
+        
+        plain_message = f"""
+        Welcome to HireWise!
+        
+        Hi {user.first_name or user.username},
+        
+        Your email has been successfully verified and your HireWise account is now active!
+        
+        Get started by logging into your account at: {getattr(settings, 'FRONTEND_URL', 'http://localhost:3000')}/login
+        
+        If you have any questions, feel free to contact our support team.
+        
+        Best regards,
+        The HireWise Team
+        """
+        
+        send_mail(
+            subject=subject,
+            message=plain_message,
+            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@hirewise.com'),
+            recipient_list=[user.email],
+            html_message=html_message,
+            fail_silently=False,
+        )
+        
+        logger.info(f"Welcome email sent to {user.email}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error sending welcome email to {user.email}: {str(e)}")
+        return False

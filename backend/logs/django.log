@@ -1,0 +1,234 @@
+INFO 2025-07-21 16:13:18,868 server 45879 129520826638592 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-21 16:13:18,868 server 45879 129520826638592 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-21 16:13:18,869 server 45879 129520826638592 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-21 16:13:22,566 server 45879 129520826638592 Killed 0 pending application instances
+ERROR 2025-07-21 16:26:20,225 log 56836 138603229257984 Internal Server Error: /api/dashboard/stats/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 497, in dispatch
+    self.initial(request, *args, **kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 414, in initial
+    self.perform_authentication(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 324, in perform_authentication
+    request.user
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/request.py", line 231, in user
+    self._authenticate()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/request.py", line 384, in _authenticate
+    user_auth_tuple = authenticator.authenticate(self)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework_simplejwt/authentication.py", line 49, in authenticate
+    validated_token = self.get_validated_token(raw_token)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework_simplejwt/authentication.py", line 103, in get_validated_token
+    return AuthToken(raw_token)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework_simplejwt/tokens.py", line 61, in __init__
+    self.verify()
+    ~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework_simplejwt/tokens.py", line 107, in verify
+    self.check_exp()
+    ~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/unittest/mock.py", line 1169, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/unittest/mock.py", line 1173, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/unittest/mock.py", line 1228, in _execute_mock_call
+    raise effect
+Exception: Token has expired
+WARNING 2025-07-21 16:26:20,697 log 56836 138603229257984 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:26:21,158 log 56836 138603229257984 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:26:21,621 log 56836 138603229257984 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:26:22,300 log 56836 138603229257984 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:26:23,006 log 56836 138603229257984 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:26:23,482 log 56836 138603229257984 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:26:24,909 log 56836 138603229257984 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 16:26:25,612 log 56836 138603229257984 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 16:26:27,021 log 56836 138603229257984 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 16:26:28,436 log 56836 138603229257984 Bad Request: /api/recommendations/
+WARNING 2025-07-21 16:26:31,758 log 56836 138603229257984 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:26:32,218 log 56836 138603229257984 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:26:32,675 log 56836 138603229257984 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:26:36,683 log 56836 138603229257984 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 16:26:37,114 log 56836 138603229257984 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:28:55,787 log 57955 128404709134592 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:28:56,279 log 57955 128404709134592 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:28:56,762 log 57955 128404709134592 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:28:57,269 log 57955 128404709134592 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:28:58,003 log 57955 128404709134592 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:28:58,761 log 57955 128404709134592 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:28:59,262 log 57955 128404709134592 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:29:00,714 log 57955 128404709134592 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 16:29:01,420 log 57955 128404709134592 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 16:29:02,130 log 57955 128404709134592 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 16:29:02,834 log 57955 128404709134592 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 16:29:04,260 log 57955 128404709134592 Bad Request: /api/recommendations/
+WARNING 2025-07-21 16:29:07,640 log 57955 128404709134592 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:29:08,102 log 57955 128404709134592 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:29:08,567 log 57955 128404709134592 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:29:12,568 log 57955 128404709134592 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 16:29:13,036 log 57955 128404709134592 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:29:53,304 log 58400 123546242117888 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:29:53,787 log 58400 123546242117888 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:29:54,267 log 58400 123546242117888 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:29:54,748 log 58400 123546242117888 Unauthorized: /api/dashboard/stats/
+WARNING 2025-07-21 16:29:55,449 log 58400 123546242117888 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:29:56,198 log 58400 123546242117888 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:29:56,648 log 58400 123546242117888 Bad Request: /api/auth/jwt/login/
+WARNING 2025-07-21 16:29:58,102 log 58400 123546242117888 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 16:29:58,825 log 58400 123546242117888 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 16:29:59,545 log 58400 123546242117888 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 16:30:00,257 log 58400 123546242117888 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 16:30:01,682 log 58400 123546242117888 Bad Request: /api/recommendations/
+WARNING 2025-07-21 16:30:05,025 log 58400 123546242117888 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:30:05,515 log 58400 123546242117888 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:30:06,003 log 58400 123546242117888 Bad Request: /api/auth/jwt/register/
+WARNING 2025-07-21 16:30:10,197 log 58400 123546242117888 Unauthorized: /api/auth/jwt/token/refresh/
+WARNING 2025-07-21 16:30:10,675 log 58400 123546242117888 Unauthorized: /api/dashboard/stats/
+INFO 2025-07-21 16:30:32,257 server 58747 139999188742400 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-21 16:30:32,257 server 58747 139999188742400 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-21 16:30:32,257 server 58747 139999188742400 Listening on TCP address 127.0.0.1:8000
+ERROR 2025-07-21 16:30:59,688 log 58747 139996868634304 Internal Server Error: /api/auth/jwt/register/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: matcher_user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/concurrent/futures/thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/generics.py", line 194, in post
+    return self.create(request, *args, **kwargs)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/matcher/views.py", line 71, in create
+    if serializer.is_valid():
+       ~~~~~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 223, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 442, in run_validation
+    value = self.to_internal_value(data)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/serializers.py", line 499, in to_internal_value
+    validated_value = field.run_validation(primitive_value)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/fields.py", line 757, in run_validation
+    return super().run_validation(data)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/fields.py", line 539, in run_validation
+    self.run_validators(value)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/fields.py", line 551, in run_validators
+    validator(value, self)
+    ~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/validators.py", line 73, in __call__
+    if qs_exists(queryset):
+       ~~~~~~~~~^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/validators.py", line 21, in qs_exists
+    return queryset.exists()
+           ~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1296, in exists
+    return self.query.has_results(using=self.db)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 674, in has_results
+    return compiler.has_results()
+           ~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1591, in has_results
+    return bool(self.execute_sql(SINGLE))
+                ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/sql/compiler.py", line 1623, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: matcher_user
+ERROR 2025-07-21 16:30:59,697 runserver 58747 139999188742400 [35;1mHTTP POST /api/auth/jwt/register/ 500 [0.05, 127.0.0.1:51782][0m
+INFO 2025-07-21 16:31:30,085 server 58747 139999188742400 Killed 0 pending application instances
+ERROR 2025-07-21 16:33:29,662 log 60414 134223369392384 Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+WARNING 2025-07-21 16:33:55,337 log 60636 129037057310976 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 16:34:37,927 log 61035 132367853912320 Bad Request: /api/auth/jwt/logout/
+WARNING 2025-07-21 16:35:13,518 log 61400 131240713859328 Unauthorized: /api/auth/jwt/token/refresh/

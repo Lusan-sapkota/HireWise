@@ -9,41 +9,75 @@ from django.conf import settings
 from rest_framework import status, generics, viewsets, permissions
 from rest_framework.decorators import api_view, permission_classes, action
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 
 import json
 import os
+import logging
 from datetime import datetime, timedelta
+
+logger = logging.getLogger(__name__)
 
 from .models import (
     User, JobSeekerProfile, RecruiterProfile, Resume, JobPost,
-    Application, AIAnalysisResult, InterviewSession, Skill, UserSkill
+    Application, AIAnalysisResult, InterviewSession, Skill, UserSkill,
+    EmailVerificationToken, PasswordResetToken
 )
 from .serializers import (
     UserRegistrationSerializer, UserLoginSerializer, UserSerializer,
     JobSeekerProfileSerializer, RecruiterProfileSerializer, ResumeSerializer,
     JobPostSerializer, ApplicationSerializer, AIAnalysisResultSerializer,
     InterviewSessionSerializer, SkillSerializer, UserSkillSerializer,
-    JobMatchSerializer
+    JobMatchSerializer, EmailVerificationSerializer, EmailVerificationConfirmSerializer,
+    PasswordResetRequestSerializer, PasswordResetConfirmSerializer, ChangePasswordSerializer,
+    UserProfileUpdateSerializer
+)
+from .jwt_serializers import (
+    CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer,
+    JWTRegistrationSerializer, JWTLoginSerializer
+)
+from .permissions import (
+    IsJobSeeker, IsRecruiter, IsOwnerOrReadOnly, IsJobSeekerOwner,
+    IsRecruiterOwner, IsApplicationOwner, CustomJWTAuthentication
 )
 from .utils import (
     parse_resume, analyze_job_match, extract_skills_from_text,
-    generate_interview_questions, calculate_match_score
+    generate_interview_questions, calculate_match_score,
+    generate_secure_token, send_verification_email, send_password_reset_email,
+    send_welcome_email
 )
 
 
-# Authentication Views
-class RegisterView(generics.CreateAPIView):
+# JWT Authentication Views
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """
+    Custom JWT token obtain view with user role information
+    """
+    serializer_class = CustomTokenObtainPairSerializer
+
+
+class CustomTokenRefreshView(TokenRefreshView):
+    """
+    Custom JWT token refresh view
+    """
+    serializer_class = CustomTokenRefreshSerializer
+
+
+class JWTRegisterView(generics.CreateAPIView):
+    """
+    JWT-based user registration view
+    """
     queryset = User.objects.all()
-    serializer_class = UserRegistrationSerializer
+    serializer_class = JWTRegistrationSerializer
     permission_classes = [AllowAny]
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            token, created = Token.objects.get_or_create(user=user)
             
             # Create corresponding profile based on user type
             if user.user_type == 'job_seeker':
@@ -54,42 +88,95 @@ class RegisterView(generics.CreateAPIView):
                     company_name=request.data.get('company_name', '')
                 )
             
-            return Response({
-                'token': token.key,
-                'user': UserSerializer(user).data,
-                'message': 'Registration successful'
-            }, status=status.HTTP_201_CREATED)
+            # Generate and send email verification token
+            try:
+                token = generate_secure_token()
+                EmailVerificationToken.objects.create(user=user, token=token)
+                send_verification_email(user, token)
+            except Exception as e:
+                logger.error(f"Error sending verification email during registration: {str(e)}")
+            
+            # Return JWT tokens and user data
+            response_data = serializer.to_representation(user)
+            response_data['verification_email_sent'] = True
+            return Response(response_data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class LoginView(generics.GenericAPIView):
-    serializer_class = UserLoginSerializer
+class JWTLoginView(generics.GenericAPIView):
+    """
+    JWT-based user login view
+    """
+    serializer_class = JWTLoginSerializer
     permission_classes = [AllowAny]
     
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.validated_data['user']
-            token, created = Token.objects.get_or_create(user=user)
-            
-            return Response({
-                'token': token.key,
-                'user': UserSerializer(user).data,
-                'message': 'Login successful'
-            }, status=status.HTTP_200_OK)
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def logout_view(request):
+def jwt_logout_view(request):
+    """
+    JWT logout view - blacklists the refresh token
+    """
     try:
-        request.user.auth_token.delete()
-        return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
-    except:
-        return Response({'message': 'Error during logout'}, status=status.HTTP_400_BAD_REQUEST)
+        refresh_token = request.data.get("refresh")
+        if refresh_token:
+            try:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+                return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
+            except TokenError as e:
+                return Response({'error': f'Invalid token: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'error': 'Refresh token required'}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'error': f'Error during logout: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Legacy Token Authentication Views (for backward compatibility)
+class RegisterView(generics.CreateAPIView):
+    """
+    Legacy token-based registration (deprecated - use JWTRegisterView)
+    """
+    queryset = User.objects.all()
+    serializer_class = UserRegistrationSerializer
+    permission_classes = [AllowAny]
+    
+    def create(self, request, *args, **kwargs):
+        # Redirect to JWT registration
+        jwt_view = JWTRegisterView()
+        jwt_view.request = request
+        return jwt_view.create(request, *args, **kwargs)
+
+
+class LoginView(generics.GenericAPIView):
+    """
+    Legacy token-based login (deprecated - use JWTLoginView)
+    """
+    serializer_class = UserLoginSerializer
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        # Redirect to JWT login
+        jwt_view = JWTLoginView()
+        jwt_view.request = request
+        return jwt_view.post(request)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def logout_view(request):
+    """
+    Legacy logout view (deprecated - use jwt_logout_view)
+    """
+    return jwt_logout_view(request)
 
 
 # Profile Views
@@ -476,3 +563,220 @@ class UserSkillViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+# Email Verification Views
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def request_email_verification(request):
+    """
+    Request email verification for a user
+    """
+    serializer = EmailVerificationSerializer(data=request.data)
+    if serializer.is_valid():
+        email = serializer.validated_data['email']
+        user = User.objects.get(email=email)
+        
+        # Generate verification token
+        token = generate_secure_token()
+        
+        # Create or update verification token
+        EmailVerificationToken.objects.filter(user=user, is_used=False).delete()
+        EmailVerificationToken.objects.create(user=user, token=token)
+        
+        # Send verification email
+        if send_verification_email(user, token):
+            return Response({
+                'message': 'Verification email sent successfully',
+                'email': email
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'error': 'Failed to send verification email'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def verify_email(request):
+    """
+    Verify email using verification token
+    """
+    serializer = EmailVerificationConfirmSerializer(data=request.data)
+    if serializer.is_valid():
+        token = serializer.validated_data['token']
+        
+        try:
+            verification_token = EmailVerificationToken.objects.get(token=token, is_used=False)
+            
+            if verification_token.is_expired():
+                return Response({
+                    'error': 'Verification token has expired'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Mark user as verified
+            user = verification_token.user
+            user.is_verified = True
+            user.save()
+            
+            # Mark token as used
+            verification_token.is_used = True
+            verification_token.save()
+            
+            # Send welcome email
+            send_welcome_email(user)
+            
+            return Response({
+                'message': 'Email verified successfully',
+                'user': UserSerializer(user).data
+            }, status=status.HTTP_200_OK)
+            
+        except EmailVerificationToken.DoesNotExist:
+            return Response({
+                'error': 'Invalid verification token'
+            }, status=status.HTTP_400_BAD_REQUEST)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Password Reset Views
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def request_password_reset(request):
+    """
+    Request password reset for a user
+    """
+    serializer = PasswordResetRequestSerializer(data=request.data)
+    if serializer.is_valid():
+        email = serializer.validated_data['email']
+        user = User.objects.get(email=email, is_active=True)
+        
+        # Generate reset token
+        token = generate_secure_token()
+        
+        # Create or update reset token
+        PasswordResetToken.objects.filter(user=user, is_used=False).delete()
+        PasswordResetToken.objects.create(user=user, token=token)
+        
+        # Send reset email
+        if send_password_reset_email(user, token):
+            return Response({
+                'message': 'Password reset email sent successfully',
+                'email': email
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'error': 'Failed to send password reset email'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def reset_password(request):
+    """
+    Reset password using reset token
+    """
+    serializer = PasswordResetConfirmSerializer(data=request.data)
+    if serializer.is_valid():
+        token = serializer.validated_data['token']
+        new_password = serializer.validated_data['new_password']
+        
+        try:
+            reset_token = PasswordResetToken.objects.get(token=token, is_used=False)
+            
+            if reset_token.is_expired():
+                return Response({
+                    'error': 'Reset token has expired'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Reset user password
+            user = reset_token.user
+            user.set_password(new_password)
+            user.save()
+            
+            # Mark token as used
+            reset_token.is_used = True
+            reset_token.save()
+            
+            return Response({
+                'message': 'Password reset successfully'
+            }, status=status.HTTP_200_OK)
+            
+        except PasswordResetToken.DoesNotExist:
+            return Response({
+                'error': 'Invalid reset token'
+            }, status=status.HTTP_400_BAD_REQUEST)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# User Profile Management Views
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    """
+    Change password for authenticated user
+    """
+    serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
+    if serializer.is_valid():
+        new_password = serializer.validated_data['new_password']
+        
+        # Change user password
+        user = request.user
+        user.set_password(new_password)
+        user.save()
+        
+        return Response({
+            'message': 'Password changed successfully'
+        }, status=status.HTTP_200_OK)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'PATCH'])
+@permission_classes([IsAuthenticated])
+def user_profile(request):
+    """
+    Get or update user profile information
+    """
+    user = request.user
+    
+    if request.method == 'GET':
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    
+    elif request.method in ['PUT', 'PATCH']:
+        serializer = UserProfileUpdateSerializer(
+            user, 
+            data=request.data, 
+            partial=(request.method == 'PATCH')
+        )
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'message': 'Profile updated successfully',
+                'user': UserSerializer(user).data
+            }, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_account(request):
+    """
+    Delete user account (soft delete by deactivating)
+    """
+    user = request.user
+    
+    # Soft delete by deactivating the account
+    user.is_active = False
+    user.save()
+    
+    return Response({
+        'message': 'Account deactivated successfully'
+    }, status=status.HTTP_200_OK)

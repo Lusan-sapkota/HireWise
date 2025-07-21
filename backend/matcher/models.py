@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import FileExtensionValidator
+from django.utils import timezone
+from datetime import timedelta
 import uuid
 
 class User(AbstractUser):
@@ -280,3 +282,47 @@ class UserSkill(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.skill.name} ({self.proficiency_level})"
+
+
+class EmailVerificationToken(models.Model):
+    """
+    Model for email verification tokens
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='email_verification_tokens')
+    token = models.CharField(max_length=64, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    is_used = models.BooleanField(default=False)
+    
+    def save(self, *args, **kwargs):
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timedelta(hours=24)  # Token expires in 24 hours
+        super().save(*args, **kwargs)
+    
+    def is_expired(self):
+        return timezone.now() > self.expires_at
+    
+    def __str__(self):
+        return f"Email verification token for {self.user.username}"
+
+
+class PasswordResetToken(models.Model):
+    """
+    Model for password reset tokens
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='password_reset_tokens')
+    token = models.CharField(max_length=64, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    is_used = models.BooleanField(default=False)
+    
+    def save(self, *args, **kwargs):
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timedelta(hours=1)  # Token expires in 1 hour
+        super().save(*args, **kwargs)
+    
+    def is_expired(self):
+        return timezone.now() > self.expires_at
+    
+    def __str__(self):
+        return f"Password reset token for {self.user.username}"

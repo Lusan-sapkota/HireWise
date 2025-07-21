@@ -1,0 +1,2 @@
+# This directory will contain ML models for job matching
+# Models will be loaded here during deployment

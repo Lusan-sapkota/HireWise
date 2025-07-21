@@ -1,8 +1,11 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from .models import (
     User, JobSeekerProfile, RecruiterProfile, Resume, JobPost,
-    Application, AIAnalysisResult, InterviewSession, Skill, UserSkill
+    Application, AIAnalysisResult, InterviewSession, Skill, UserSkill,
+    EmailVerificationToken, PasswordResetToken
 )
 
 
@@ -146,3 +149,120 @@ class JobMatchSerializer(serializers.Serializer):
     matching_skills = serializers.ListField(child=serializers.CharField())
     missing_skills = serializers.ListField(child=serializers.CharField())
     recommendations = serializers.CharField()
+
+
+class EmailVerificationSerializer(serializers.Serializer):
+    """
+    Serializer for email verification request
+    """
+    email = serializers.EmailField()
+    
+    def validate_email(self, value):
+        try:
+            user = User.objects.get(email=value)
+            if user.is_verified:
+                raise serializers.ValidationError("Email is already verified")
+        except User.DoesNotExist:
+            raise serializers.ValidationError("User with this email does not exist")
+        return value
+
+
+class EmailVerificationConfirmSerializer(serializers.Serializer):
+    """
+    Serializer for email verification confirmation
+    """
+    token = serializers.CharField(max_length=64)
+    
+    def validate_token(self, value):
+        try:
+            verification_token = EmailVerificationToken.objects.get(token=value, is_used=False)
+            if verification_token.is_expired():
+                raise serializers.ValidationError("Verification token has expired")
+        except EmailVerificationToken.DoesNotExist:
+            raise serializers.ValidationError("Invalid verification token")
+        return value
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    """
+    Serializer for password reset request
+    """
+    email = serializers.EmailField()
+    
+    def validate_email(self, value):
+        try:
+            User.objects.get(email=value, is_active=True)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("User with this email does not exist")
+        return value
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    """
+    Serializer for password reset confirmation
+    """
+    token = serializers.CharField(max_length=64)
+    new_password = serializers.CharField(write_only=True, min_length=8)
+    confirm_password = serializers.CharField(write_only=True)
+    
+    def validate_token(self, value):
+        try:
+            reset_token = PasswordResetToken.objects.get(token=value, is_used=False)
+            if reset_token.is_expired():
+                raise serializers.ValidationError("Reset token has expired")
+        except PasswordResetToken.DoesNotExist:
+            raise serializers.ValidationError("Invalid reset token")
+        return value
+    
+    def validate(self, data):
+        if data['new_password'] != data['confirm_password']:
+            raise serializers.ValidationError({"confirm_password": "Passwords don't match"})
+        
+        # Validate password strength
+        try:
+            validate_password(data['new_password'])
+        except ValidationError as e:
+            raise serializers.ValidationError({"new_password": e.messages})
+        
+        return data
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializer for changing password while authenticated
+    """
+    current_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True, min_length=8)
+    confirm_password = serializers.CharField(write_only=True)
+    
+    def validate_current_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Current password is incorrect")
+        return value
+    
+    def validate(self, data):
+        if data['new_password'] != data['confirm_password']:
+            raise serializers.ValidationError({"confirm_password": "Passwords don't match"})
+        
+        # Validate password strength
+        try:
+            validate_password(data['new_password'])
+        except ValidationError as e:
+            raise serializers.ValidationError({"new_password": e.messages})
+        
+        return data
+
+
+class UserProfileUpdateSerializer(serializers.ModelSerializer):
+    """
+    Serializer for updating user profile information
+    """
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'phone_number', 'profile_picture']
+    
+    def validate_phone_number(self, value):
+        if value and len(value) < 10:
+            raise serializers.ValidationError("Phone number must be at least 10 digits")
+        return value

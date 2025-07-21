@@ -138,6 +138,8 @@
 /backend/.pytype/
 /backend/.ruff_cache/
 
+/.kiro/*
+
 # SageMath
 /backend/*.sage.py
 
