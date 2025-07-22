@@ -52,6 +52,7 @@ from .utils import (
     generate_secure_token, send_verification_email, send_password_reset_email,
     send_welcome_email
 )
+from .services import GeminiResumeParser, FileValidator, GeminiAPIError
 
 
 # JWT Authentication Views
@@ -255,6 +256,777 @@ class ResumeViewSet(viewsets.ModelViewSet):
         resume.is_primary = True
         resume.save()
         return Response({'message': 'Resume set as primary'})
+
+
+# Job Match Score API Views
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def calculate_match_score_view(request):
+    """
+    Calculate match score between a resume and job posting
+    """
+    resume_id = request.data.get('resume_id')
+    job_id = request.data.get('job_id')
+    
+    if not resume_id or not job_id:
+        return Response(
+            {'error': 'Both resume_id and job_id are required'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        # Get resume
+        if request.user.user_type == 'job_seeker':
+            resume = Resume.objects.get(id=resume_id, job_seeker=request.user)
+        else:
+            # Recruiters can calculate scores for any resume
+            resume = Resume.objects.get(id=resume_id)
+    except Resume.DoesNotExist:
+        return Response(
+            {'error': 'Resume not found'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    try:
+        # Get job post
+        job_post = JobPost.objects.get(id=job_id, is_active=True)
+    except JobPost.DoesNotExist:
+        return Response(
+            {'error': 'Job post not found'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    try:
+        from .ml_services import get_ml_model, FeatureExtractor, MatchScoreCache
+        
+        # Check cache first
+        cached_score = MatchScoreCache.get_cached_score(str(resume_id), str(job_id))
+        if cached_score:
+            logger.info(f"Returning cached match score for resume {resume_id} and job {job_id}")
+            return Response(cached_score, status=status.HTTP_200_OK)
+        
+        # Extract features
+        resume_features = FeatureExtractor.extract_resume_features({
+            'parsed_text': resume.parsed_text,
+            'skills': resume.job_seeker.job_seeker_profile.skills if hasattr(resume.job_seeker, 'job_seeker_profile') else '',
+            'structured_data': None  # Will be populated from AI analysis if available
+        })
+        
+        # Get structured data from latest AI analysis if available
+        latest_analysis = AIAnalysisResult.objects.filter(
+            resume=resume, 
+            analysis_type='resume_parse'
+        ).order_by('-processed_at').first()
+        
+        if latest_analysis and latest_analysis.analysis_result:
+            resume_features['structured_data'] = latest_analysis.analysis_result
+            resume_features = FeatureExtractor.extract_resume_features(resume_features)
+        
+        job_features = FeatureExtractor.extract_job_features({
+            'title': job_post.title,
+            'description': job_post.description,
+            'requirements': job_post.requirements,
+            'skills_required': job_post.skills_required,
+            'experience_level': job_post.experience_level,
+            'location': job_post.location,
+            'remote_work_allowed': job_post.remote_work_allowed,
+            'salary_min': job_post.salary_min,
+            'salary_max': job_post.salary_max
+        })
+        
+        # Calculate match score
+        ml_model = get_ml_model()
+        score_result = ml_model.calculate_match_score(resume_features, job_features)
+        
+        if not score_result['success']:
+            return Response(
+                {'error': 'Match score calculation failed', 'details': score_result.get('error', 'Unknown error')}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+        # Prepare response
+        response_data = {
+            'success': True,
+            'resume_id': str(resume_id),
+            'job_id': str(job_id),
+            'match_score': score_result['match_score'],
+            'confidence': score_result['confidence'],
+            'method': score_result['method'],
+            'analysis': score_result['analysis'],
+            'processing_time': score_result['processing_time'],
+            'cached': False
+        }
+        
+        # Cache the result
+        MatchScoreCache.cache_score(str(resume_id), str(job_id), response_data)
+        
+        # Create AI analysis result for match score
+        AIAnalysisResult.objects.create(
+            resume=resume,
+            job_post=job_post,
+            analysis_type='job_match',
+            input_data=f"Resume: {resume.original_filename}, Job: {job_post.title}",
+            analysis_result={
+                'match_score': score_result['match_score'],
+                'analysis': score_result['analysis'],
+                'method': score_result['method']
+            },
+            confidence_score=score_result['confidence'] / 100,  # Convert to 0-1 scale
+            processing_time=score_result['processing_time']
+        )
+        
+        logger.info(f"Match score calculated: {score_result['match_score']} for resume {resume_id} and job {job_id}")
+        
+        return Response(response_data, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        logger.error(f"Unexpected error calculating match score: {str(e)}")
+        return Response(
+            {'error': 'Internal server error', 'details': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def calculate_match_score_async_view(request):
+    """
+    Queue match score calculation as a background task
+    """
+    resume_id = request.data.get('resume_id')
+    job_id = request.data.get('job_id')
+    
+    if not resume_id or not job_id:
+        return Response(
+            {'error': 'Both resume_id and job_id are required'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        # Verify resume exists and user has access
+        if request.user.user_type == 'job_seeker':
+            resume = Resume.objects.get(id=resume_id, job_seeker=request.user)
+        else:
+            resume = Resume.objects.get(id=resume_id)
+    except Resume.DoesNotExist:
+        return Response(
+            {'error': 'Resume not found'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    try:
+        # Verify job post exists
+        job_post = JobPost.objects.get(id=job_id, is_active=True)
+    except JobPost.DoesNotExist:
+        return Response(
+            {'error': 'Job post not found'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    try:
+        from .tasks import calculate_match_score_task
+        
+        # Queue the match score calculation task
+        task = calculate_match_score_task.apply_async(args=[str(resume_id), str(job_id)])
+        
+        logger.info(f"Match score calculation task queued for resume {resume_id} and job {job_id}, task ID: {task.id}")
+        
+        return Response({
+            'success': True,
+            'task_id': task.id,
+            'resume_id': str(resume_id),
+            'job_id': str(job_id),
+            'status': 'queued',
+            'message': 'Match score calculation task has been queued'
+        }, status=status.HTTP_202_ACCEPTED)
+        
+    except Exception as e:
+        logger.error(f"Error queuing match score calculation task: {str(e)}")
+        return Response(
+            {'error': 'Failed to queue calculation task', 'details': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def batch_calculate_match_scores_view(request):
+    """
+    Calculate match scores for multiple resume-job combinations
+    """
+    resume_ids = request.data.get('resume_ids', [])
+    job_ids = request.data.get('job_ids', [])
+    
+    if not resume_ids or not job_ids:
+        return Response(
+            {'error': 'Both resume_ids and job_ids must be provided as non-empty lists'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    if not isinstance(resume_ids, list) or not isinstance(job_ids, list):
+        return Response(
+            {'error': 'resume_ids and job_ids must be lists'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Verify resumes exist and user has access
+    try:
+        if request.user.user_type == 'job_seeker':
+            resumes = Resume.objects.filter(id__in=resume_ids, job_seeker=request.user)
+        else:
+            resumes = Resume.objects.filter(id__in=resume_ids)
+        
+        if len(resumes) != len(resume_ids):
+            return Response(
+                {'error': 'Some resumes not found or access denied'}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+    except Exception as e:
+        return Response(
+            {'error': 'Error validating resumes', 'details': str(e)}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Verify job posts exist
+    try:
+        job_posts = JobPost.objects.filter(id__in=job_ids, is_active=True)
+        if len(job_posts) != len(job_ids):
+            return Response(
+                {'error': 'Some job posts not found or inactive'}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+    except Exception as e:
+        return Response(
+            {'error': 'Error validating job posts', 'details': str(e)}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        from .tasks import batch_calculate_match_scores_task
+        
+        # Queue the batch calculation task
+        task = batch_calculate_match_scores_task.apply_async(args=[resume_ids, job_ids])
+        
+        total_combinations = len(resume_ids) * len(job_ids)
+        
+        logger.info(f"Batch match score calculation task queued for {total_combinations} combinations, task ID: {task.id}")
+        
+        return Response({
+            'success': True,
+            'batch_task_id': task.id,
+            'resume_count': len(resume_ids),
+            'job_count': len(job_ids),
+            'total_combinations': total_combinations,
+            'status': 'queued',
+            'message': f'Batch calculation task queued for {total_combinations} resume-job combinations'
+        }, status=status.HTTP_202_ACCEPTED)
+        
+    except Exception as e:
+        logger.error(f"Error queuing batch match score calculation task: {str(e)}")
+        return Response(
+            {'error': 'Failed to queue batch calculation task', 'details': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_match_scores_for_resume_view(request, resume_id):
+    """
+    Get all match scores for a specific resume
+    """
+    try:
+        # Verify resume exists and user has access
+        if request.user.user_type == 'job_seeker':
+            resume = Resume.objects.get(id=resume_id, job_seeker=request.user)
+        else:
+            resume = Resume.objects.get(id=resume_id)
+    except Resume.DoesNotExist:
+        return Response(
+            {'error': 'Resume not found'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    try:
+        # Get all match score analyses for this resume
+        match_analyses = AIAnalysisResult.objects.filter(
+            resume=resume,
+            analysis_type='job_match'
+        ).select_related('job_post').order_by('-processed_at')
+        
+        # Prepare response data
+        match_scores = []
+        for analysis in match_analyses:
+            if analysis.job_post:
+                match_data = {
+                    'job_id': str(analysis.job_post.id),
+                    'job_title': analysis.job_post.title,
+                    'company': analysis.job_post.recruiter.recruiter_profile.company_name if hasattr(analysis.job_post.recruiter, 'recruiter_profile') else 'Unknown',
+                    'match_score': analysis.analysis_result.get('match_score', 0),
+                    'confidence': analysis.confidence_score * 100,  # Convert to percentage
+                    'analysis': analysis.analysis_result.get('analysis', {}),
+                    'method': analysis.analysis_result.get('method', 'unknown'),
+                    'calculated_at': analysis.processed_at.isoformat(),
+                    'processing_time': analysis.processing_time
+                }
+                match_scores.append(match_data)
+        
+        # Sort by match score descending
+        match_scores.sort(key=lambda x: x['match_score'], reverse=True)
+        
+        return Response({
+            'success': True,
+            'resume_id': str(resume_id),
+            'resume_filename': resume.original_filename,
+            'total_matches': len(match_scores),
+            'match_scores': match_scores
+        }, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        logger.error(f"Error getting match scores for resume {resume_id}: {str(e)}")
+        return Response(
+            {'error': 'Internal server error', 'details': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_match_scores_for_job_view(request, job_id):
+    """
+    Get all match scores for a specific job posting (recruiter only)
+    """
+    if request.user.user_type != 'recruiter':
+        return Response(
+            {'error': 'Only recruiters can view job match scores'}, 
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    try:
+        # Verify job post exists and belongs to recruiter
+        job_post = JobPost.objects.get(id=job_id, recruiter=request.user)
+    except JobPost.DoesNotExist:
+        return Response(
+            {'error': 'Job post not found'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    try:
+        # Get all match score analyses for this job
+        match_analyses = AIAnalysisResult.objects.filter(
+            job_post=job_post,
+            analysis_type='job_match'
+        ).select_related('resume', 'resume__job_seeker').order_by('-processed_at')
+        
+        # Prepare response data
+        match_scores = []
+        for analysis in match_analyses:
+            if analysis.resume:
+                match_data = {
+                    'resume_id': str(analysis.resume.id),
+                    'candidate_name': analysis.resume.job_seeker.get_full_name() or analysis.resume.job_seeker.username,
+                    'resume_filename': analysis.resume.original_filename,
+                    'match_score': analysis.analysis_result.get('match_score', 0),
+                    'confidence': analysis.confidence_score * 100,  # Convert to percentage
+                    'analysis': analysis.analysis_result.get('analysis', {}),
+                    'method': analysis.analysis_result.get('method', 'unknown'),
+                    'calculated_at': analysis.processed_at.isoformat(),
+                    'processing_time': analysis.processing_time
+                }
+                match_scores.append(match_data)
+        
+        # Sort by match score descending
+        match_scores.sort(key=lambda x: x['match_score'], reverse=True)
+        
+        return Response({
+            'success': True,
+            'job_id': str(job_id),
+            'job_title': job_post.title,
+            'total_candidates': len(match_scores),
+            'match_scores': match_scores
+        }, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        logger.error(f"Error getting match scores for job {job_id}: {str(e)}")
+        return Response(
+            {'error': 'Internal server error', 'details': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+# Resume Parsing API Views
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def parse_resume_view(request):
+    """
+    Parse resume using Google Gemini API
+    Supports PDF, DOCX, and TXT file formats
+    """
+    if request.user.user_type != 'job_seeker':
+        return Response(
+            {'error': 'Only job seekers can parse resumes'}, 
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    if 'file' not in request.FILES:
+        return Response(
+            {'error': 'No file provided'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    uploaded_file = request.FILES['file']
+    
+    try:
+        # Validate file
+        validation_result = FileValidator.validate_file(uploaded_file)
+        if not validation_result['is_valid']:
+            return Response(
+                {'error': 'File validation failed', 'details': validation_result['errors']}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Initialize Gemini parser
+        try:
+            parser = GeminiResumeParser()
+        except GeminiAPIError as e:
+            logger.error(f"Gemini API initialization error: {str(e)}")
+            return Response(
+                {'error': 'AI service temporarily unavailable', 'details': str(e)}, 
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        
+        # Read file content
+        uploaded_file.seek(0)
+        file_content = uploaded_file.read()
+        
+        # Create temporary file path for processing
+        sanitized_filename = FileValidator.sanitize_filename(uploaded_file.name)
+        temp_file_path = f"/tmp/{sanitized_filename}"
+        
+        # Parse resume
+        try:
+            parsing_result = parser.parse_resume(temp_file_path, file_content)
+        except GeminiAPIError as e:
+            logger.error(f"Resume parsing error: {str(e)}")
+            return Response(
+                {'error': 'Resume parsing failed', 'details': str(e)}, 
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        
+        if not parsing_result['success']:
+            return Response(
+                {'error': 'Resume parsing failed', 'details': parsing_result.get('error', 'Unknown error')}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Create or update resume record if requested
+        save_resume = request.data.get('save_resume', 'false').lower() == 'true'
+        resume_id = None
+        
+        if save_resume:
+            try:
+                # Save the file
+                resume = Resume.objects.create(
+                    job_seeker=request.user,
+                    file=uploaded_file,
+                    original_filename=uploaded_file.name,
+                    file_size=uploaded_file.size,
+                    parsed_text=parsing_result['parsed_text']
+                )
+                resume_id = str(resume.id)
+                
+                # Create AI analysis result
+                AIAnalysisResult.objects.create(
+                    resume=resume,
+                    analysis_type='resume_parse',
+                    input_data=parsing_result['parsed_text'][:1000],  # Truncate for storage
+                    analysis_result=parsing_result['structured_data'],
+                    confidence_score=parsing_result['confidence_score'],
+                    processing_time=parsing_result['processing_time']
+                )
+                
+                logger.info(f"Resume parsed and saved for user {request.user.username}")
+                
+            except Exception as e:
+                logger.error(f"Error saving resume: {str(e)}")
+                # Continue without saving if there's an error
+        
+        # Prepare response
+        response_data = {
+            'success': True,
+            'parsed_text': parsing_result['parsed_text'],
+            'structured_data': parsing_result['structured_data'],
+            'confidence_score': parsing_result['confidence_score'],
+            'processing_time': parsing_result['processing_time'],
+            'file_info': {
+                'original_filename': uploaded_file.name,
+                'file_size': uploaded_file.size,
+                'file_type': validation_result['file_extension']
+            }
+        }
+        
+        if resume_id:
+            response_data['resume_id'] = resume_id
+        
+        return Response(response_data, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        logger.error(f"Unexpected error in resume parsing: {str(e)}")
+        return Response(
+            {'error': 'Internal server error', 'details': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def parse_resume_by_id_view(request, resume_id):
+    """
+    Re-parse an existing resume by ID using Google Gemini API
+    """
+    if request.user.user_type != 'job_seeker':
+        return Response(
+            {'error': 'Only job seekers can parse resumes'}, 
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    try:
+        resume = Resume.objects.get(id=resume_id, job_seeker=request.user)
+    except Resume.DoesNotExist:
+        return Response(
+            {'error': 'Resume not found'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    try:
+        # Initialize Gemini parser
+        try:
+            parser = GeminiResumeParser()
+        except GeminiAPIError as e:
+            logger.error(f"Gemini API initialization error: {str(e)}")
+            return Response(
+                {'error': 'AI service temporarily unavailable', 'details': str(e)}, 
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        
+        # Parse resume
+        try:
+            parsing_result = parser.parse_resume(resume.file.path)
+        except GeminiAPIError as e:
+            logger.error(f"Resume parsing error: {str(e)}")
+            return Response(
+                {'error': 'Resume parsing failed', 'details': str(e)}, 
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )
+        
+        if not parsing_result['success']:
+            return Response(
+                {'error': 'Resume parsing failed', 'details': parsing_result.get('error', 'Unknown error')}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Update resume with new parsed data
+        resume.parsed_text = parsing_result['parsed_text']
+        resume.save()
+        
+        # Create new AI analysis result
+        AIAnalysisResult.objects.create(
+            resume=resume,
+            analysis_type='resume_parse',
+            input_data=parsing_result['parsed_text'][:1000],  # Truncate for storage
+            analysis_result=parsing_result['structured_data'],
+            confidence_score=parsing_result['confidence_score'],
+            processing_time=parsing_result['processing_time']
+        )
+        
+        logger.info(f"Resume {resume_id} re-parsed for user {request.user.username}")
+        
+        # Prepare response
+        response_data = {
+            'success': True,
+            'resume_id': str(resume.id),
+            'parsed_text': parsing_result['parsed_text'],
+            'structured_data': parsing_result['structured_data'],
+            'confidence_score': parsing_result['confidence_score'],
+            'processing_time': parsing_result['processing_time'],
+            'file_info': {
+                'original_filename': resume.original_filename,
+                'file_size': resume.file_size,
+                'uploaded_at': resume.uploaded_at.isoformat()
+            }
+        }
+        
+        return Response(response_data, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        logger.error(f"Unexpected error in resume re-parsing: {str(e)}")
+        return Response(
+            {'error': 'Internal server error', 'details': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def parse_resume_async_view(request):
+    """
+    Queue resume parsing as a background task
+    """
+    if request.user.user_type != 'job_seeker':
+        return Response(
+            {'error': 'Only job seekers can parse resumes'}, 
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    resume_id = request.data.get('resume_id')
+    if not resume_id:
+        return Response(
+            {'error': 'resume_id is required'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        # Verify resume exists and belongs to user
+        resume = Resume.objects.get(id=resume_id, job_seeker=request.user)
+    except Resume.DoesNotExist:
+        return Response(
+            {'error': 'Resume not found'}, 
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    try:
+        from .tasks import parse_resume_task
+        
+        # Queue the parsing task
+        task = parse_resume_task.apply_async(args=[str(resume_id)])
+        
+        logger.info(f"Resume parsing task queued for resume {resume_id}, task ID: {task.id}")
+        
+        return Response({
+            'success': True,
+            'task_id': task.id,
+            'resume_id': str(resume_id),
+            'status': 'queued',
+            'message': 'Resume parsing task has been queued'
+        }, status=status.HTTP_202_ACCEPTED)
+        
+    except Exception as e:
+        logger.error(f"Error queuing resume parsing task: {str(e)}")
+        return Response(
+            {'error': 'Failed to queue parsing task', 'details': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def parse_task_status_view(request, task_id):
+    """
+    Check the status of a resume parsing task
+    """
+    try:
+        from celery.result import AsyncResult
+        
+        # Get task result
+        task_result = AsyncResult(task_id)
+        
+        if task_result.state == 'PENDING':
+            response_data = {
+                'task_id': task_id,
+                'status': 'pending',
+                'message': 'Task is waiting to be processed'
+            }
+        elif task_result.state == 'PROGRESS':
+            response_data = {
+                'task_id': task_id,
+                'status': 'in_progress',
+                'message': 'Task is being processed',
+                'progress': task_result.info
+            }
+        elif task_result.state == 'SUCCESS':
+            response_data = {
+                'task_id': task_id,
+                'status': 'completed',
+                'result': task_result.result
+            }
+        elif task_result.state == 'FAILURE':
+            response_data = {
+                'task_id': task_id,
+                'status': 'failed',
+                'error': str(task_result.info)
+            }
+        else:
+            response_data = {
+                'task_id': task_id,
+                'status': task_result.state.lower(),
+                'info': str(task_result.info) if task_result.info else None
+            }
+        
+        return Response(response_data, status=status.HTTP_200_OK)
+        
+    except Exception as e:
+        logger.error(f"Error checking task status for {task_id}: {str(e)}")
+        return Response(
+            {'error': 'Failed to check task status', 'details': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def batch_parse_resumes_view(request):
+    """
+    Queue multiple resumes for parsing as background tasks
+    """
+    if request.user.user_type != 'job_seeker':
+        return Response(
+            {'error': 'Only job seekers can parse resumes'}, 
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    resume_ids = request.data.get('resume_ids', [])
+    if not resume_ids or not isinstance(resume_ids, list):
+        return Response(
+            {'error': 'resume_ids must be a non-empty list'}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Verify all resumes exist and belong to user
+    try:
+        resumes = Resume.objects.filter(id__in=resume_ids, job_seeker=request.user)
+        if len(resumes) != len(resume_ids):
+            return Response(
+                {'error': 'Some resumes not found or do not belong to you'}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
+    except Exception as e:
+        return Response(
+            {'error': 'Error validating resumes', 'details': str(e)}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        from .tasks import batch_parse_resumes_task
+        
+        # Queue the batch parsing task
+        task = batch_parse_resumes_task.apply_async(args=[resume_ids])
+        
+        logger.info(f"Batch resume parsing task queued for {len(resume_ids)} resumes, task ID: {task.id}")
+        
+        return Response({
+            'success': True,
+            'batch_task_id': task.id,
+            'resume_count': len(resume_ids),
+            'status': 'queued',
+            'message': f'Batch parsing task queued for {len(resume_ids)} resumes'
+        }, status=status.HTTP_202_ACCEPTED)
+        
+    except Exception as e:
+        logger.error(f"Error queuing batch resume parsing task: {str(e)}")
+        return Response(
+            {'error': 'Failed to queue batch parsing task', 'details': str(e)}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 
 # Job Post Views

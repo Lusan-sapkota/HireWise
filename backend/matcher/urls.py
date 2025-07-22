@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from . import file_views
 
 # Create a router and register our viewsets
 router = DefaultRouter()
@@ -42,6 +43,29 @@ urlpatterns = [
     # Dashboard and recommendations
     path('dashboard/stats/', views.dashboard_stats, name='dashboard-stats'),
     path('recommendations/', views.job_recommendations, name='job-recommendations'),
+    
+    # Resume parsing endpoints
+    path('parse-resume/', views.parse_resume_view, name='parse-resume'),
+    path('parse-resume/<int:resume_id>/', views.parse_resume_by_id_view, name='parse-resume-by-id'),
+    path('parse-resume-async/', views.parse_resume_async_view, name='parse-resume-async'),
+    path('parse-task-status/<str:task_id>/', views.parse_task_status_view, name='parse-task-status'),
+    path('batch-parse-resumes/', views.batch_parse_resumes_view, name='batch-parse-resumes'),
+    
+    # Match score calculation endpoints
+    path('calculate-match-score/', views.calculate_match_score_view, name='calculate-match-score'),
+    path('calculate-match-score-async/', views.calculate_match_score_async_view, name='calculate-match-score-async'),
+    path('batch-calculate-match-scores/', views.batch_calculate_match_scores_view, name='batch-calculate-match-scores'),
+    path('match-scores/resume/<uuid:resume_id>/', views.get_match_scores_for_resume_view, name='match-scores-for-resume'),
+    path('match-scores/job/<uuid:job_id>/', views.get_match_scores_for_job_view, name='match-scores-for-job'),
+    
+    # Secure file upload and management endpoints
+    path('files/upload/', file_views.secure_file_upload, name='secure-file-upload'),
+    path('files/upload-resume/', file_views.upload_resume, name='upload-resume'),
+    path('files/secure/<path:file_path>/', file_views.serve_secure_file, name='serve-secure-file'),
+    path('files/delete/<int:file_id>/', file_views.delete_file, name='delete-file'),
+    path('files/list/', file_views.list_user_files, name='list-user-files'),
+    path('files/cleanup/', file_views.cleanup_old_files, name='cleanup-old-files'),
+    path('files/validation-info/', file_views.file_validation_info, name='file-validation-info'),
     
     # Include router URLs
     path('', include(router.urls)),

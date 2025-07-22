@@ -765,3 +765,583 @@ AttributeError: module 'rest_framework.permissions' has no attribute 'Permission
 INFO 2025-07-21 17:50:17,442 views 109819 125747315880192 Application 6847d5a6-b488-4824-a1fc-82ceab6dffb0 status changed from pending to reviewed by recruiter1
 WARNING 2025-07-21 17:50:18,067 log 109819 125747315880192 Not Found: /api/applications/6b879302-7ca9-4cf0-9136-d4d822ad96c9/update_status/
 WARNING 2025-07-21 17:50:18,487 log 109819 125747315880192 Bad Request: /api/applications/
+ERROR 2025-07-22 02:44:14,166 services 20829 124006887461120 Error parsing resume /fake/path/resume.pdf: No text content could be extracted from the file
+ERROR 2025-07-22 02:44:14,169 services 20829 124006887461120 Failed to initialize Gemini model: API configuration failed
+WARNING 2025-07-22 02:44:14,687 log 20829 124006887461120 Bad Request: /api/batch-parse-resumes/
+WARNING 2025-07-22 02:44:15,145 log 20829 124006887461120 Bad Request: /api/batch-parse-resumes/
+WARNING 2025-07-22 02:44:16,096 log 20829 124006887461120 Bad Request: /api/parse-resume-async/
+WARNING 2025-07-22 02:44:17,019 log 20829 124006887461120 Not Found: /api/parse-resume/d2fd9399-79b3-4b93-93ed-67ebe8f56b8b/
+ERROR 2025-07-22 02:44:17,997 views 20829 124006887461120 Gemini API initialization error: API not available
+ERROR 2025-07-22 02:44:17,997 log 20829 124006887461120 Service Unavailable: /api/parse-resume/
+WARNING 2025-07-22 02:44:18,500 log 20829 124006887461120 Bad Request: /api/parse-resume/
+WARNING 2025-07-22 02:44:18,968 log 20829 124006887461120 Bad Request: /api/parse-resume/
+WARNING 2025-07-22 02:44:19,422 log 20829 124006887461120 Forbidden: /api/parse-resume/
+INFO 2025-07-22 02:44:20,577 views 20829 124006887461120 Resume parsed and saved for user jobseeker
+ERROR 2025-07-22 02:47:22,046 services 22067 128138466296064 Error parsing resume /fake/path/resume.pdf: No text content could be extracted from the file
+ERROR 2025-07-22 02:47:22,048 services 22067 128138466296064 Failed to initialize Gemini model: API configuration failed
+WARNING 2025-07-22 02:47:22,669 log 22067 128138466296064 Bad Request: /api/batch-parse-resumes/
+WARNING 2025-07-22 02:47:23,288 log 22067 128138466296064 Bad Request: /api/batch-parse-resumes/
+WARNING 2025-07-22 02:47:23,960 log 22067 128138466296064 Bad Request: /api/batch-parse-resumes/
+WARNING 2025-07-22 02:47:24,637 log 22067 128138466296064 Bad Request: /api/parse-resume-async/
+INFO 2025-07-22 02:47:25,370 views 22067 128138466296064 Resume parsing task queued for resume 1, task ID: test-task-id
+WARNING 2025-07-22 02:47:26,122 log 22067 128138466296064 Not Found: /api/parse-resume/5b54db84-b9d1-4c94-90c5-1e434c8634e5/
+ERROR 2025-07-22 02:47:27,497 views 22067 128138466296064 Gemini API initialization error: API not available
+ERROR 2025-07-22 02:47:27,497 log 22067 128138466296064 Service Unavailable: /api/parse-resume/
+WARNING 2025-07-22 02:47:28,219 log 22067 128138466296064 Bad Request: /api/parse-resume/
+WARNING 2025-07-22 02:47:28,913 log 22067 128138466296064 Bad Request: /api/parse-resume/
+WARNING 2025-07-22 02:47:29,587 log 22067 128138466296064 Forbidden: /api/parse-resume/
+INFO 2025-07-22 02:47:31,297 views 22067 128138466296064 Resume parsed and saved for user jobseeker
+ERROR 2025-07-22 02:50:18,580 services 23009 136312818966784 Error parsing resume /fake/path/resume.pdf: No text content could be extracted from the file
+ERROR 2025-07-22 02:50:18,582 services 23009 136312818966784 Failed to initialize Gemini model: API configuration failed
+INFO 2025-07-22 02:50:25,746 views 23009 136312818966784 Resume parsed and saved for user jobseeker
+ERROR 2025-07-22 02:51:22,645 services 23444 136542097928448 Error parsing resume /fake/path/resume.pdf: No text content could be extracted from the file
+ERROR 2025-07-22 02:51:22,648 services 23444 136542097928448 Failed to initialize Gemini model: API configuration failed
+WARNING 2025-07-22 02:51:23,199 log 23444 136542097928448 Bad Request: /api/batch-parse-resumes/
+WARNING 2025-07-22 02:51:23,692 log 23444 136542097928448 Bad Request: /api/batch-parse-resumes/
+INFO 2025-07-22 02:51:24,163 views 23444 136542097928448 Batch resume parsing task queued for 2 resumes, task ID: batch-task-id
+WARNING 2025-07-22 02:51:24,619 log 23444 136542097928448 Bad Request: /api/parse-resume-async/
+INFO 2025-07-22 02:51:25,087 views 23444 136542097928448 Resume parsing task queued for resume 1, task ID: test-task-id
+WARNING 2025-07-22 02:51:25,558 log 23444 136542097928448 Not Found: /api/parse-resume/c12ba63c-db77-4a17-9541-49966cc75105/
+ERROR 2025-07-22 02:51:26,510 views 23444 136542097928448 Gemini API initialization error: API not available
+ERROR 2025-07-22 02:51:26,510 log 23444 136542097928448 Service Unavailable: /api/parse-resume/
+WARNING 2025-07-22 02:51:26,972 log 23444 136542097928448 Bad Request: /api/parse-resume/
+WARNING 2025-07-22 02:51:27,436 log 23444 136542097928448 Bad Request: /api/parse-resume/
+WARNING 2025-07-22 02:51:27,880 log 23444 136542097928448 Forbidden: /api/parse-resume/
+INFO 2025-07-22 02:51:29,036 views 23444 136542097928448 Resume parsed and saved for user jobseeker
+ERROR 2025-07-22 02:54:05,418 services 24236 137072290844928 Error parsing resume /fake/path/resume.pdf: No text content could be extracted from the file
+ERROR 2025-07-22 02:54:05,420 services 24236 137072290844928 Failed to initialize Gemini model: API configuration failed
+WARNING 2025-07-22 02:54:05,940 log 24236 137072290844928 Bad Request: /api/batch-parse-resumes/
+WARNING 2025-07-22 02:54:06,452 log 24236 137072290844928 Bad Request: /api/batch-parse-resumes/
+INFO 2025-07-22 02:54:06,978 views 24236 137072290844928 Batch resume parsing task queued for 2 resumes, task ID: batch-task-id
+WARNING 2025-07-22 02:54:07,467 log 24236 137072290844928 Bad Request: /api/parse-resume-async/
+INFO 2025-07-22 02:54:07,957 views 24236 137072290844928 Resume parsing task queued for resume 1, task ID: test-task-id
+INFO 2025-07-22 02:54:08,939 views 24236 137072290844928 Resume 1 re-parsed for user jobseeker
+ERROR 2025-07-22 02:54:09,429 views 24236 137072290844928 Gemini API initialization error: API not available
+ERROR 2025-07-22 02:54:09,430 log 24236 137072290844928 Service Unavailable: /api/parse-resume/
+WARNING 2025-07-22 02:54:09,926 log 24236 137072290844928 Bad Request: /api/parse-resume/
+WARNING 2025-07-22 02:54:10,411 log 24236 137072290844928 Bad Request: /api/parse-resume/
+WARNING 2025-07-22 02:54:10,923 log 24236 137072290844928 Forbidden: /api/parse-resume/
+INFO 2025-07-22 02:54:12,274 views 24236 137072290844928 Resume parsed and saved for user jobseeker
+INFO 2025-07-22 02:54:12,278 views 24236 137072290844928 Resume 1 re-parsed for user jobseeker
+INFO 2025-07-22 02:54:12,282 views 24236 137072290844928 Resume parsing task queued for resume 1, task ID: async-task-123
+ERROR 2025-07-22 02:56:55,864 services 25216 133151998435584 Error parsing resume /fake/path/resume.pdf: No text content could be extracted from the file
+ERROR 2025-07-22 02:56:55,866 services 25216 133151998435584 Failed to initialize Gemini model: API configuration failed
+WARNING 2025-07-22 02:56:56,360 log 25216 133151998435584 Bad Request: /api/batch-parse-resumes/
+WARNING 2025-07-22 02:56:56,811 log 25216 133151998435584 Not Found: /api/batch-parse-resumes/
+INFO 2025-07-22 02:56:57,274 views 25216 133151998435584 Batch resume parsing task queued for 2 resumes, task ID: batch-task-id
+WARNING 2025-07-22 02:56:57,732 log 25216 133151998435584 Bad Request: /api/parse-resume-async/
+INFO 2025-07-22 02:56:58,186 views 25216 133151998435584 Resume parsing task queued for resume 1, task ID: test-task-id
+WARNING 2025-07-22 02:56:58,642 log 25216 133151998435584 Not Found: /api/parse-resume/99999/
+INFO 2025-07-22 02:56:59,109 views 25216 133151998435584 Resume 1 re-parsed for user jobseeker
+ERROR 2025-07-22 02:56:59,556 views 25216 133151998435584 Gemini API initialization error: API not available
+ERROR 2025-07-22 02:56:59,557 log 25216 133151998435584 Service Unavailable: /api/parse-resume/
+WARNING 2025-07-22 02:57:00,014 log 25216 133151998435584 Bad Request: /api/parse-resume/
+WARNING 2025-07-22 02:57:00,470 log 25216 133151998435584 Bad Request: /api/parse-resume/
+WARNING 2025-07-22 02:57:00,921 log 25216 133151998435584 Forbidden: /api/parse-resume/
+INFO 2025-07-22 02:57:02,065 views 25216 133151998435584 Resume parsed and saved for user jobseeker
+INFO 2025-07-22 02:57:02,069 views 25216 133151998435584 Resume 1 re-parsed for user jobseeker
+INFO 2025-07-22 02:57:02,071 views 25216 133151998435584 Resume parsing task queued for resume 1, task ID: async-task-123
+INFO 2025-07-22 03:13:22,243 ml_services 46773 132863094587648 Loaded existing ML model components
+INFO 2025-07-22 03:13:22,246 ml_services 46773 132863094587648 ML model loaded successfully
+INFO 2025-07-22 03:14:08,143 ml_services 47069 124982058590464 Loaded existing ML model components
+INFO 2025-07-22 03:14:08,143 ml_services 47069 124982058590464 ML model loaded successfully
+ERROR 2025-07-22 03:14:08,144 ml_services 47069 124982058590464 Error in ML-based scoring: Expected 2D array, got 1D array instead:
+array=[].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.
+ERROR 2025-07-22 03:14:08,144 ml_services 47069 124982058590464 Error calculating match score: ML scoring failed: Expected 2D array, got 1D array instead:
+array=[].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.
+INFO 2025-07-22 03:14:08,146 ml_services 47069 124982058590464 No existing model found, creating new model
+INFO 2025-07-22 03:14:08,916 ml_services 47069 124982058590464 Model trained - MSE: 0.0043, R2: 0.5382
+INFO 2025-07-22 03:14:08,917 ml_services 47069 124982058590464 ML model components saved successfully
+WARNING 2025-07-22 03:14:08,917 ml_services 47069 124982058590464 ML model not available, using rule-based scoring
+INFO 2025-07-22 03:14:08,919 ml_services 47069 124982058590464 No existing model found, creating new model
+INFO 2025-07-22 03:14:09,676 ml_services 47069 124982058590464 Model trained - MSE: 0.0046, R2: 0.5295
+INFO 2025-07-22 03:14:09,693 ml_services 47069 124982058590464 ML model components saved successfully
+INFO 2025-07-22 03:14:09,708 ml_services 47069 124982058590464 Loaded existing ML model components
+INFO 2025-07-22 03:14:09,708 ml_services 47069 124982058590464 ML model loaded successfully
+INFO 2025-07-22 03:14:09,730 ml_services 47069 124982058590464 Loaded existing ML model components
+INFO 2025-07-22 03:14:09,730 ml_services 47069 124982058590464 ML model loaded successfully
+INFO 2025-07-22 03:14:09,732 ml_services 47069 124982058590464 No existing model found, creating new model
+INFO 2025-07-22 03:14:10,504 ml_services 47069 124982058590464 Model trained - MSE: 0.0049, R2: 0.5461
+INFO 2025-07-22 03:14:10,504 ml_services 47069 124982058590464 ML model components saved successfully
+INFO 2025-07-22 03:14:10,505 ml_services 47069 124982058590464 Loaded existing ML model components
+INFO 2025-07-22 03:14:10,505 ml_services 47069 124982058590464 ML model loaded successfully
+INFO 2025-07-22 03:14:10,521 ml_services 47069 124982058590464 Loaded existing ML model components
+INFO 2025-07-22 03:14:10,521 ml_services 47069 124982058590464 ML model loaded successfully
+INFO 2025-07-22 03:14:10,537 ml_services 47069 124982058590464 Loaded existing ML model components
+INFO 2025-07-22 03:14:10,537 ml_services 47069 124982058590464 ML model loaded successfully
+INFO 2025-07-22 03:15:26,114 ml_services 48093 123839577452800 Loaded existing ML model components
+INFO 2025-07-22 03:15:26,114 ml_services 48093 123839577452800 ML model loaded successfully
+WARNING 2025-07-22 03:15:26,115 ml_services 48093 123839577452800 Error calculating text similarity: Expected 2D array, got 1D array instead:
+array=[].
+Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.
+INFO 2025-07-22 03:17:41,488 views 49094 133818426405120 Match score calculated: 87.5 for resume 1 and job a726ee54-0e18-454a-8b5c-c9aba0312ff4
+INFO 2025-07-22 03:18:13,487 views 49270 134221232615680 Batch match score calculation task queued for 4 combinations, task ID: batch-task-id
+INFO 2025-07-22 03:18:13,956 views 49270 134221232615680 Match score calculation task queued for resume 1 and job b67faac3-7233-42a4-b06a-41b0311188dd, task ID: test-task-id
+WARNING 2025-07-22 03:18:14,896 log 49270 134221232615680 Not Found: /api/calculate-match-score/
+WARNING 2025-07-22 03:18:15,367 log 49270 134221232615680 Bad Request: /api/calculate-match-score/
+ERROR 2025-07-22 03:18:15,847 log 49270 134221232615680 Internal Server Error: /api/calculate-match-score/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 2128, in get_prep_value
+    return int(value)
+ValueError: invalid literal for int() with base 10: '12345678-1234-5678-9012-123456789012'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/matcher/views.py", line 280, in calculate_match_score_view
+    resume = Resume.objects.get(id=resume_id, job_seeker=request.user)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 619, in get
+    clone = self._chain() if self.query.combinator else self.filter(*args, **kwargs)
+                                                        ~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/sql/query.py", line 1415, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/lookups.py", line 38, in __init__
+    self.rhs = self.get_prep_lookup()
+               ~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/lookups.py", line 410, in get_prep_lookup
+    return super().get_prep_lookup()
+           ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/lookups.py", line 96, in get_prep_lookup
+    return self.lhs.output_field.get_prep_value(self.rhs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/fields/__init__.py", line 2130, in get_prep_value
+    raise e.__class__(
+        "Field '%s' expected a number but got %r." % (self.name, value),
+    ) from e
+ValueError: Field 'id' expected a number but got '12345678-1234-5678-9012-123456789012'.
+INFO 2025-07-22 03:18:16,327 views 49270 134221232615680 Match score calculated: 87.5 for resume 1 and job 29fad22f-71b5-4876-81be-6d3680390363
+WARNING 2025-07-22 03:18:16,797 log 49270 134221232615680 Forbidden: /api/match-scores/job/e4e84f8c-dacb-434a-b680-ab596cc6e95f/
+INFO 2025-07-22 03:19:15,907 ml_services 49642 137769799934208 No existing model found, creating new model
+INFO 2025-07-22 03:19:16,612 ml_services 49642 137769799934208 Model trained - MSE: 0.0051, R2: 0.4330
+INFO 2025-07-22 03:19:16,612 ml_services 49642 137769799934208 ML model components saved successfully
+WARNING 2025-07-22 03:19:16,612 ml_services 49642 137769799934208 ML model not available, using rule-based scoring
+INFO 2025-07-22 03:32:56,713 notification_utils 63854 139881311260928 Notification sent to group user_474e584d-feff-4926-9e99-abbe713ac888: notification_message
+INFO 2025-07-22 03:32:56,716 notification_utils 63854 139881311260928 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:36:16,261 notification_utils 66033 123846903288064 Notification sent to group user_474e584d-feff-4926-9e99-abbe713ac888: notification_message
+INFO 2025-07-22 03:36:16,263 notification_utils 66033 123846903288064 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:18,998 signals 79508 127521529639168 Created notification preferences for user 95942f9c-c9b6-4637-a504-ab37027bec2c
+INFO 2025-07-22 03:53:18,999 signals 79508 127521529639168 Created notification preferences for user e0af4602-88c8-46b3-9ce7-b27eaf1e5f88
+INFO 2025-07-22 03:53:19,000 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,001 signals 79508 127521529639168 Created notification preferences for user dfc47147-8cb3-4921-9298-b5c40f941356
+INFO 2025-07-22 03:53:19,001 signals 79508 127521529639168 Created notification preferences for user ac4abb22-b63d-46b2-bd91-663660c6073e
+INFO 2025-07-22 03:53:19,002 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: notification_message
+INFO 2025-07-22 03:53:19,003 signals 79508 127521529639168 Created notification preferences for user 940c5a84-b974-4d2e-a7ab-2e4aa4b63a83
+INFO 2025-07-22 03:53:19,003 signals 79508 127521529639168 Created notification preferences for user dec6b324-ef9b-4b65-ba8b-40685e7d5126
+INFO 2025-07-22 03:53:19,004 notification_utils 79508 127521529639168 Notification sent to group user_940c5a84-b974-4d2e-a7ab-2e4aa4b63a83: notification_message
+INFO 2025-07-22 03:53:19,005 signals 79508 127521529639168 Created notification preferences for user 48189c26-22b0-40bb-a244-99499197b40d
+INFO 2025-07-22 03:53:19,005 signals 79508 127521529639168 Created notification preferences for user 55d9459d-f209-4156-93c1-c8ac2f7e3ec2
+INFO 2025-07-22 03:53:19,009 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,009 signals 79508 127521529639168 Job posted notification sent for job 5be7c91a-3ed1-4d3c-9b5e-ef98df99ad22: Software Engineer
+INFO 2025-07-22 03:53:19,011 signals 79508 127521529639168 Application received notification sent for application 1f08fc5e-fd4d-4468-aec3-014329dd022b
+INFO 2025-07-22 03:53:19,012 signals 79508 127521529639168 Created application received notification for recruiter 55d9459d-f209-4156-93c1-c8ac2f7e3ec2
+INFO 2025-07-22 03:53:19,013 signals 79508 127521529639168 Created notification preferences for user 93c69950-ce88-4173-8118-f488fc699ea3
+INFO 2025-07-22 03:53:19,014 signals 79508 127521529639168 Created notification preferences for user 34d4b078-8c66-4cf2-a7aa-0dc5b2c99590
+INFO 2025-07-22 03:53:19,020 signals 79508 127521529639168 Created notification preferences for user ee0a4fd6-ac68-4b75-9d04-eed1871b62bb
+INFO 2025-07-22 03:53:19,020 signals 79508 127521529639168 Created notification preferences for user 77e77297-95df-435f-a700-1bd45e1c8e2e
+INFO 2025-07-22 03:53:19,023 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,026 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,026 signals 79508 127521529639168 Job posted notification sent for job 65e79d7c-4732-4ebc-a32a-0d6d26da3cdb: Software Engineer
+INFO 2025-07-22 03:53:19,028 signals 79508 127521529639168 Created notification preferences for user 0f714fdf-a3b0-4449-ab27-4201aa0429dd
+INFO 2025-07-22 03:53:19,028 signals 79508 127521529639168 Created notification preferences for user 5b9311f7-2d27-45cf-a9b7-f0a4cd775007
+INFO 2025-07-22 03:53:19,030 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,033 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,033 signals 79508 127521529639168 Job posted notification sent for job 75b10a36-0319-44ef-b3eb-e5fbdc623277: Software Engineer
+INFO 2025-07-22 03:53:19,034 signals 79508 127521529639168 Created notification preferences for user 9c5ac64f-3708-49b4-8a08-186dda2ccc30
+INFO 2025-07-22 03:53:19,035 signals 79508 127521529639168 Created notification preferences for user 24eed777-4671-49a0-9519-9f56e825ca14
+INFO 2025-07-22 03:53:19,037 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,039 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,040 signals 79508 127521529639168 Job posted notification sent for job 1bedaae7-2c13-4e69-b9f1-604c9b268f7c: Software Engineer
+INFO 2025-07-22 03:53:19,041 signals 79508 127521529639168 Created notification preferences for user bfd69fc2-2626-4336-9e1d-c74e3d3ee04f
+INFO 2025-07-22 03:53:19,041 signals 79508 127521529639168 Created notification preferences for user 35cbbf78-80ce-4ac3-a508-e81be1f61190
+INFO 2025-07-22 03:53:19,043 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,045 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,045 signals 79508 127521529639168 Job posted notification sent for job 4a3b2c19-7d2f-400b-b3ca-ce43b7dde737: Software Engineer
+INFO 2025-07-22 03:53:19,047 signals 79508 127521529639168 Created notification preferences for user 067633cb-a0a9-4171-a2e8-130570bb8c54
+INFO 2025-07-22 03:53:19,047 signals 79508 127521529639168 Created notification preferences for user 704daee8-9816-41bb-b126-bd26d2195a58
+INFO 2025-07-22 03:53:19,049 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,051 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,051 signals 79508 127521529639168 Job posted notification sent for job 8026885c-1416-4188-a7e4-9a3732d34f4b: Software Engineer
+INFO 2025-07-22 03:53:19,053 signals 79508 127521529639168 Created notification preferences for user 8075d410-7bcf-4874-82bf-8d69b53ee65a
+INFO 2025-07-22 03:53:19,053 signals 79508 127521529639168 Created notification preferences for user 46e6007a-1e7b-437a-bfa4-165e17ab2c36
+INFO 2025-07-22 03:53:19,055 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,057 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,057 signals 79508 127521529639168 Job posted notification sent for job dd6b04ab-a63b-476b-871e-b9f0b9944c24: Software Engineer
+INFO 2025-07-22 03:53:19,060 signals 79508 127521529639168 Created notification preferences for user f1a00b37-1fd9-40f5-9644-667b6606ae18
+INFO 2025-07-22 03:53:19,060 signals 79508 127521529639168 Created notification preferences for user eebea449-7cb6-4146-bd08-1fa0fa4865a0
+INFO 2025-07-22 03:53:19,062 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,064 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,064 signals 79508 127521529639168 Job posted notification sent for job eb5c9e30-f520-4314-8df6-d2b836690401: Software Engineer
+INFO 2025-07-22 03:53:19,065 signals 79508 127521529639168 Created notification preferences for user a48c5042-7630-4ccc-b4ab-1dc110f58a51
+INFO 2025-07-22 03:53:19,066 signals 79508 127521529639168 Created notification preferences for user d16d36d2-9daf-41c5-9867-445c4d1860b7
+INFO 2025-07-22 03:53:19,068 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,070 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,070 signals 79508 127521529639168 Job posted notification sent for job 3d547d97-fb08-4d99-9433-f0c2c722721b: Software Engineer
+INFO 2025-07-22 03:53:19,071 signals 79508 127521529639168 Created notification preferences for user 6d44765e-4514-434a-a583-ff63ce29b26a
+INFO 2025-07-22 03:53:19,072 signals 79508 127521529639168 Created notification preferences for user 905f7454-8821-49ec-bf00-53f1ad1119ae
+INFO 2025-07-22 03:53:19,074 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,077 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,077 signals 79508 127521529639168 Job posted notification sent for job 526c9739-c8e7-4ab8-9fe1-e198f20d56b6: Software Engineer
+INFO 2025-07-22 03:53:19,078 signals 79508 127521529639168 Application received notification sent for application d1987a47-c17e-4ef2-8b3d-567ea70ad430
+INFO 2025-07-22 03:53:19,079 signals 79508 127521529639168 Created application received notification for recruiter 905f7454-8821-49ec-bf00-53f1ad1119ae
+INFO 2025-07-22 03:53:19,080 signals 79508 127521529639168 Created notification preferences for user 0ffc5907-4429-49ff-a8dd-34a17b457ff9
+INFO 2025-07-22 03:53:19,081 signals 79508 127521529639168 Created notification preferences for user 0e7aadc6-59f7-4175-a30a-4ba5c2dd31d6
+INFO 2025-07-22 03:53:19,083 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,086 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,086 signals 79508 127521529639168 Job posted notification sent for job a738a801-bdee-41aa-857d-bc1dcfb60022: Software Engineer
+INFO 2025-07-22 03:53:19,089 notification_utils 79508 127521529639168 Notification sent to group user_0e7aadc6-59f7-4175-a30a-4ba5c2dd31d6: application_received_notification
+INFO 2025-07-22 03:53:19,089 signals 79508 127521529639168 Application received notification sent for application 5ed202f2-ae6d-4cf6-b54f-32e63a6bf235
+INFO 2025-07-22 03:53:19,090 signals 79508 127521529639168 Created application received notification for recruiter 0e7aadc6-59f7-4175-a30a-4ba5c2dd31d6
+INFO 2025-07-22 03:53:19,091 signals 79508 127521529639168 Application status change notification sent for application 5ed202f2-ae6d-4cf6-b54f-32e63a6bf235: pending -> reviewed
+INFO 2025-07-22 03:53:19,092 signals 79508 127521529639168 Created application status notification for job seeker 0ffc5907-4429-49ff-a8dd-34a17b457ff9
+INFO 2025-07-22 03:53:19,093 signals 79508 127521529639168 Created notification preferences for user f231acc5-ff1e-492c-b211-2a43c2e20e6a
+INFO 2025-07-22 03:53:19,094 signals 79508 127521529639168 Created notification preferences for user 81532af9-6068-448b-b67f-1ddce072bf95
+INFO 2025-07-22 03:53:19,096 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,096 signals 79508 127521529639168 Job posted notification sent for job 5b902940-ac6b-4955-87c2-bfc162a0c5c8: Software Engineer
+INFO 2025-07-22 03:53:19,097 signals 79508 127521529639168 Created notification preferences for user 4a2916d4-2e67-4db8-aa83-222c5a75076f
+INFO 2025-07-22 03:53:19,098 signals 79508 127521529639168 Created notification preferences for user c130474d-f5f2-448c-9ec8-c76e9740e97d
+INFO 2025-07-22 03:53:19,100 signals 79508 127521529639168 Created 1 job posted notifications
+INFO 2025-07-22 03:53:19,103 notification_utils 79508 127521529639168 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:53:19,103 signals 79508 127521529639168 Job posted notification sent for job 2e047585-903a-4cf5-b358-b64b33888717: Software Engineer
+INFO 2025-07-22 03:53:19,105 signals 79508 127521529639168 Created match score notification for job seeker 4a2916d4-2e67-4db8-aa83-222c5a75076f
+INFO 2025-07-22 03:53:19,106 signals 79508 127521529639168 Match score notification sent for job seeker 4a2916d4-2e67-4db8-aa83-222c5a75076f, job 2e047585-903a-4cf5-b358-b64b33888717: 85.5%
+INFO 2025-07-22 03:53:19,107 signals 79508 127521529639168 Created notification preferences for user 88b5272a-81f7-4fbd-a254-bb7d4da649d0
+INFO 2025-07-22 03:53:19,107 signals 79508 127521529639168 Created notification preferences for user 1ec7ad58-df20-41df-af10-f53193e96e9d
+INFO 2025-07-22 03:53:19,108 signals 79508 127521529639168 Created notification preferences for user 82a8dc98-9fb3-4bf9-9f4d-525aaec8c577
+INFO 2025-07-22 03:53:19,110 signals 79508 127521529639168 Created notification preferences for user 25e7a3a4-67e8-4ac1-ac7e-2be1a26be5a0
+WARNING 2025-07-22 03:53:19,112 consumers 79508 127519207454400 WebSocket connection rejected: Authentication failed
+INFO 2025-07-22 03:53:19,112 consumers 79508 127519207454400 WebSocket disconnected for user None (code: 1000)
+INFO 2025-07-22 03:53:19,127 signals 79508 127521529639168 Created notification preferences for user bb73f7a3-577f-4825-8a72-3f0623da8db9
+INFO 2025-07-22 03:53:19,129 signals 79508 127521529639168 Created notification preferences for user b89eecde-b2cf-48b1-ae79-97ce16335dcd
+INFO 2025-07-22 03:53:19,131 consumers 79508 127519088948928 WebSocket connected for user b89eecde-b2cf-48b1-ae79-97ce16335dcd (job_seeker)
+INFO 2025-07-22 03:53:19,151 signals 79508 127521529639168 Created notification preferences for user e42701a8-25ca-4597-8ed4-a16800871794
+INFO 2025-07-22 03:53:19,152 signals 79508 127521529639168 Created notification preferences for user ce377d48-47c7-4807-b6bc-40d12c115586
+INFO 2025-07-22 03:53:19,154 consumers 79508 127519072163520 WebSocket connected for user ce377d48-47c7-4807-b6bc-40d12c115586 (job_seeker)
+INFO 2025-07-22 03:55:45,360 signals 80917 125623767105792 Created notification preferences for user 2d71d50b-5e63-4596-8812-425fdb156ad3
+INFO 2025-07-22 03:55:45,361 signals 80917 125623767105792 Created notification preferences for user 21c7f185-170c-4f1c-ba6a-8fdded9e5a47
+INFO 2025-07-22 03:55:45,361 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,362 signals 80917 125623767105792 Created notification preferences for user 5119683d-7022-479b-be2a-c602580e5a9e
+INFO 2025-07-22 03:55:45,362 signals 80917 125623767105792 Created notification preferences for user e0f98560-9c48-4df9-9ea9-fa01dca63ef4
+INFO 2025-07-22 03:55:45,363 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: notification_message
+INFO 2025-07-22 03:55:45,364 signals 80917 125623767105792 Created notification preferences for user 85e7a23b-3c4c-4539-905a-b91bf69917f3
+INFO 2025-07-22 03:55:45,364 signals 80917 125623767105792 Created notification preferences for user 06c804fe-930f-4a33-be7f-0d343c9a43b0
+INFO 2025-07-22 03:55:45,365 notification_utils 80917 125623767105792 Notification sent to group user_85e7a23b-3c4c-4539-905a-b91bf69917f3: notification_message
+INFO 2025-07-22 03:55:45,365 signals 80917 125623767105792 Created notification preferences for user 0746aa0a-36f3-4660-bc84-8914af37cb1c
+INFO 2025-07-22 03:55:45,366 signals 80917 125623767105792 Created notification preferences for user 6e98e77a-9e6e-4f15-a7a9-d461ba6d2cc6
+INFO 2025-07-22 03:55:45,369 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,369 signals 80917 125623767105792 Job posted notification sent for job 1b234137-58ce-4cbb-b1a0-7575e1acf752: Software Engineer
+INFO 2025-07-22 03:55:45,371 signals 80917 125623767105792 Application received notification sent for application 0177bfaa-db5e-4f56-aa19-347c249087e4
+INFO 2025-07-22 03:55:45,372 signals 80917 125623767105792 Created application received notification for recruiter 6e98e77a-9e6e-4f15-a7a9-d461ba6d2cc6
+INFO 2025-07-22 03:55:45,373 signals 80917 125623767105792 Created notification preferences for user 1f6ec52d-f1f4-4aed-adfb-e67822f4bcc7
+INFO 2025-07-22 03:55:45,374 signals 80917 125623767105792 Created notification preferences for user 9303d541-d13c-40f9-aa02-f5630493425a
+INFO 2025-07-22 03:55:45,380 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,380 signals 80917 125623767105792 Job posted notification sent for job dcfd35b2-7f10-4df4-a17f-cf156355982e: Software Engineer
+INFO 2025-07-22 03:55:45,381 signals 80917 125623767105792 Created notification preferences for user fd1442f6-ddbb-448c-a0eb-6e52770c8359
+INFO 2025-07-22 03:55:45,382 signals 80917 125623767105792 Created notification preferences for user b5851523-df07-468e-9790-fe5cc5f231df
+INFO 2025-07-22 03:55:45,384 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,386 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,387 signals 80917 125623767105792 Job posted notification sent for job bd3ab219-1829-4629-9f31-ac201517ccba: Software Engineer
+INFO 2025-07-22 03:55:45,388 signals 80917 125623767105792 Created notification preferences for user 749962fb-25c5-4954-9d4b-b635d7ce07a1
+INFO 2025-07-22 03:55:45,389 signals 80917 125623767105792 Created notification preferences for user eb6d3641-5ad9-4ae2-aebe-a7962263e0ed
+INFO 2025-07-22 03:55:45,390 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,393 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,393 signals 80917 125623767105792 Job posted notification sent for job 04f4d241-642c-4b09-8e3f-fa6f3ee2ad7e: Software Engineer
+INFO 2025-07-22 03:55:45,394 signals 80917 125623767105792 Created notification preferences for user e0a29065-8647-4c29-8fbe-5b135f414696
+INFO 2025-07-22 03:55:45,395 signals 80917 125623767105792 Created notification preferences for user c28088d4-3293-48fa-84ae-e88586279c30
+INFO 2025-07-22 03:55:45,397 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,399 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,399 signals 80917 125623767105792 Job posted notification sent for job f23b956d-6f6a-4588-bc1a-a3bb59194e4a: Software Engineer
+INFO 2025-07-22 03:55:45,401 signals 80917 125623767105792 Created notification preferences for user e9b0c040-0b4a-4edd-9ca4-22064f08b3fd
+INFO 2025-07-22 03:55:45,401 signals 80917 125623767105792 Created notification preferences for user e9d3dfaa-9ead-461e-bcca-f784850cea0c
+INFO 2025-07-22 03:55:45,403 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,406 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,406 signals 80917 125623767105792 Job posted notification sent for job d4f09f13-a830-43d3-91be-48defb08fe5d: Software Engineer
+INFO 2025-07-22 03:55:45,407 signals 80917 125623767105792 Created notification preferences for user aeeca466-015e-48eb-8fe3-e95c56e6547b
+INFO 2025-07-22 03:55:45,407 signals 80917 125623767105792 Created notification preferences for user 4f2b8600-7e73-432e-aa90-fe5b3019bd93
+INFO 2025-07-22 03:55:45,409 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,412 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,412 signals 80917 125623767105792 Job posted notification sent for job 2a5abfd3-9ce2-4c75-8eb4-d8195c648496: Software Engineer
+INFO 2025-07-22 03:55:45,413 signals 80917 125623767105792 Created notification preferences for user dcca1678-0117-430c-b917-d58530d710b8
+INFO 2025-07-22 03:55:45,413 signals 80917 125623767105792 Created notification preferences for user cf299931-69fd-4fdc-8bde-45873b1ca86a
+INFO 2025-07-22 03:55:45,415 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,418 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,418 signals 80917 125623767105792 Job posted notification sent for job 2781ff2c-4328-44a2-9e8c-8e772aac7b76: Software Engineer
+INFO 2025-07-22 03:55:45,419 signals 80917 125623767105792 Created notification preferences for user 7f630df8-3d51-49d6-a56d-0469b5658024
+INFO 2025-07-22 03:55:45,420 signals 80917 125623767105792 Created notification preferences for user 26d3ffe6-25c9-4b3f-976f-ab883f52fc73
+INFO 2025-07-22 03:55:45,421 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,423 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,423 signals 80917 125623767105792 Job posted notification sent for job 85782b35-8b0e-42ef-bb36-0a1a906b69ac: Software Engineer
+INFO 2025-07-22 03:55:45,424 signals 80917 125623767105792 Created notification preferences for user 699ef3e0-73bb-4d20-9973-e433b6f3edaf
+INFO 2025-07-22 03:55:45,425 signals 80917 125623767105792 Created notification preferences for user 7f5a40c1-1cb2-4bd6-8f0d-8ff5d7070d9b
+INFO 2025-07-22 03:55:45,427 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,429 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,430 signals 80917 125623767105792 Job posted notification sent for job 42559fe1-388d-47ce-a12e-335b512f6012: Software Engineer
+INFO 2025-07-22 03:55:45,431 signals 80917 125623767105792 Created notification preferences for user aa6fe5d5-6dd3-4c99-a3ec-c3c7c737ca08
+INFO 2025-07-22 03:55:45,431 signals 80917 125623767105792 Created notification preferences for user a11fbb85-0884-4735-aba6-45bcdeb22c4c
+INFO 2025-07-22 03:55:45,433 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,436 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,436 signals 80917 125623767105792 Job posted notification sent for job 55a2afd0-3df5-424d-8dfc-2c47c8867e38: Software Engineer
+INFO 2025-07-22 03:55:45,437 signals 80917 125623767105792 Application received notification sent for application 11e0fd2f-b11c-4fa5-8839-2f2c1ffe35a0
+INFO 2025-07-22 03:55:45,438 signals 80917 125623767105792 Created application received notification for recruiter a11fbb85-0884-4735-aba6-45bcdeb22c4c
+INFO 2025-07-22 03:55:45,439 signals 80917 125623767105792 Created notification preferences for user cb068ee8-75c4-4f11-9b64-b3a6ecdd1aee
+INFO 2025-07-22 03:55:45,440 signals 80917 125623767105792 Created notification preferences for user 75ef2ff8-10ca-4295-a3a9-d11c3b083e3c
+INFO 2025-07-22 03:55:45,442 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,444 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,444 signals 80917 125623767105792 Job posted notification sent for job 0a3712d2-8b0e-4af4-8b93-702f185d3058: Software Engineer
+INFO 2025-07-22 03:55:45,447 notification_utils 80917 125623767105792 Notification sent to group user_75ef2ff8-10ca-4295-a3a9-d11c3b083e3c: application_received_notification
+INFO 2025-07-22 03:55:45,447 signals 80917 125623767105792 Application received notification sent for application b9103194-341c-4fd0-ab84-fd6aca580b37
+INFO 2025-07-22 03:55:45,448 signals 80917 125623767105792 Created application received notification for recruiter 75ef2ff8-10ca-4295-a3a9-d11c3b083e3c
+INFO 2025-07-22 03:55:45,448 signals 80917 125623767105792 Application status change notification sent for application b9103194-341c-4fd0-ab84-fd6aca580b37: pending -> reviewed
+INFO 2025-07-22 03:55:45,449 signals 80917 125623767105792 Created application status notification for job seeker cb068ee8-75c4-4f11-9b64-b3a6ecdd1aee
+INFO 2025-07-22 03:55:45,451 signals 80917 125623767105792 Created notification preferences for user cac659d7-22e1-44bd-82c7-0dcbfa7f7932
+INFO 2025-07-22 03:55:45,451 signals 80917 125623767105792 Created notification preferences for user bb286637-3e25-49ca-baba-777e47157bfc
+INFO 2025-07-22 03:55:45,454 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,454 signals 80917 125623767105792 Job posted notification sent for job cbb094e7-212a-4efc-8609-52faea8abe97: Software Engineer
+INFO 2025-07-22 03:55:45,455 signals 80917 125623767105792 Created notification preferences for user c7ed3caf-3634-43ea-9723-c9fe022e83f6
+INFO 2025-07-22 03:55:45,455 signals 80917 125623767105792 Created notification preferences for user a4c3b587-abd7-480d-97c3-301351804df9
+INFO 2025-07-22 03:55:45,457 signals 80917 125623767105792 Created 1 job posted notifications
+INFO 2025-07-22 03:55:45,461 notification_utils 80917 125623767105792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:55:45,461 signals 80917 125623767105792 Job posted notification sent for job 9d2a4815-3792-42f2-a225-7cb81fc6b213: Software Engineer
+INFO 2025-07-22 03:55:45,463 signals 80917 125623767105792 Created match score notification for job seeker c7ed3caf-3634-43ea-9723-c9fe022e83f6
+INFO 2025-07-22 03:55:45,463 signals 80917 125623767105792 Match score notification sent for job seeker c7ed3caf-3634-43ea-9723-c9fe022e83f6, job 9d2a4815-3792-42f2-a225-7cb81fc6b213: 85.5%
+INFO 2025-07-22 03:55:45,465 signals 80917 125623767105792 Created notification preferences for user 8836c43a-3ccb-460a-b1ed-e4b2b34ca489
+INFO 2025-07-22 03:55:45,465 signals 80917 125623767105792 Created notification preferences for user 0ffecdfc-7b65-424a-8824-1e31fe6b6e82
+INFO 2025-07-22 03:55:45,466 signals 80917 125623767105792 Created notification preferences for user e37f9e3e-e2b9-483c-9a46-c61bd34dbcbe
+INFO 2025-07-22 03:55:45,468 signals 80917 125623767105792 Created notification preferences for user 80aaae24-cbbc-4a90-943f-c3bc7acfcb64
+WARNING 2025-07-22 03:55:45,469 consumers 80917 125621446375104 WebSocket connection rejected: Authentication failed
+INFO 2025-07-22 03:55:45,469 consumers 80917 125621446375104 WebSocket disconnected for user None (code: 1000)
+INFO 2025-07-22 03:55:45,485 signals 80917 125623767105792 Created notification preferences for user c97fb425-9413-4e38-a555-ccc97bd0ea52
+INFO 2025-07-22 03:55:45,487 signals 80917 125623767105792 Created notification preferences for user ee86953a-a189-4f32-b13f-e7933a8161ca
+INFO 2025-07-22 03:55:45,488 consumers 80917 125621199951552 WebSocket connected for user ee86953a-a189-4f32-b13f-e7933a8161ca (job_seeker)
+INFO 2025-07-22 03:55:45,489 consumers 80917 125621199951552 WebSocket disconnected for user ee86953a-a189-4f32-b13f-e7933a8161ca (code: 1000)
+INFO 2025-07-22 03:55:45,502 signals 80917 125623767105792 Created notification preferences for user c4395d06-3f82-4fa8-ba99-b2d55d0edb42
+INFO 2025-07-22 03:55:45,503 signals 80917 125623767105792 Created notification preferences for user 4b0a202a-f775-41e9-85d2-a354558a6644
+INFO 2025-07-22 03:55:45,505 consumers 80917 125621446375104 WebSocket connected for user 4b0a202a-f775-41e9-85d2-a354558a6644 (job_seeker)
+INFO 2025-07-22 03:55:45,506 consumers 80917 125621446375104 WebSocket disconnected for user 4b0a202a-f775-41e9-85d2-a354558a6644 (code: 1000)
+INFO 2025-07-22 03:56:45,884 signals 81242 131956279873792 Created notification preferences for user 96b6da4f-9612-471d-89d5-1c5af29a5b39
+INFO 2025-07-22 03:56:45,889 signals 81242 131956279873792 Created notification preferences for user eb5ea4e7-d7fc-4be6-97cd-2da9726b8a0d
+INFO 2025-07-22 03:56:45,901 signals 81242 131956279873792 Created 2 job posted notifications
+INFO 2025-07-22 03:56:45,906 notification_utils 81242 131956279873792 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-22 03:56:45,906 signals 81242 131956279873792 Job posted notification sent for job 726e433f-ef59-4e6f-9003-b65a7c769f9f: Test Job
+INFO 2025-07-22 03:56:45,911 signals 81242 131956279873792 Created match score notification for job seeker 96b6da4f-9612-471d-89d5-1c5af29a5b39
+INFO 2025-07-22 03:56:45,913 notification_utils 81242 131956279873792 Notification sent to group user_96b6da4f-9612-471d-89d5-1c5af29a5b39: match_score_calculated_notification
+INFO 2025-07-22 03:56:45,913 signals 81242 131956279873792 Match score notification sent for job seeker 96b6da4f-9612-471d-89d5-1c5af29a5b39, job 726e433f-ef59-4e6f-9003-b65a7c769f9f: 92.5%
+INFO 2025-07-22 04:07:45,508 file_utils 95781 136610666496256 File validation passed: test_resume.pdf
+INFO 2025-07-22 04:08:46,253 file_utils 96056 127183614992640 File validation passed: resume.docx
+WARNING 2025-07-22 04:08:46,254 file_utils 96056 127183614992640 File validation failed: empty.pdf, errors: ['File is empty', "File content doesn't match expected pdf format (magic bytes mismatch)"]
+WARNING 2025-07-22 04:08:46,260 file_utils 96056 127183614992640 File validation failed: large_file.pdf, errors: ['File size (11534336 bytes) exceeds maximum allowed size (10485760 bytes) for pdf files', "File content doesn't match expected pdf format (magic bytes mismatch)"]
+WARNING 2025-07-22 04:08:46,261 file_utils 96056 127183614992640 File validation failed: malware.exe, errors: ['Dangerous file extension: .exe', "File content doesn't match expected pdf format (magic bytes mismatch)", "File extension '.exe' not allowed for pdf files. Allowed extensions: .pdf"]
+WARNING 2025-07-22 04:08:46,261 file_utils 96056 127183614992640 File validation failed: fake.pdf, errors: ["File content doesn't match expected pdf format (magic bytes mismatch)"]
+WARNING 2025-07-22 04:08:46,261 file_utils 96056 127183614992640 File validation failed: malicious.pdf, errors: ["File content doesn't match expected pdf format (magic bytes mismatch)", 'Suspicious content pattern detected: <script']
+WARNING 2025-07-22 04:08:46,261 file_utils 96056 127183614992640 File validation failed: malicious.pdf, errors: ["File content doesn't match expected pdf format (magic bytes mismatch)", 'Suspicious content pattern detected: <?php']
+WARNING 2025-07-22 04:08:46,261 file_utils 96056 127183614992640 File validation failed: malicious.pdf, errors: ["File content doesn't match expected pdf format (magic bytes mismatch)", 'Suspicious content pattern detected: MZ']
+INFO 2025-07-22 04:08:46,262 file_utils 96056 127183614992640 File validation passed: passwd.pdf
+WARNING 2025-07-22 04:08:46,262 file_utils 96056 127183614992640 File validation failed: file<script>.pdf, errors: ['Suspicious filename pattern detected: [<>:"|?*]']
+WARNING 2025-07-22 04:08:46,262 file_utils 96056 127183614992640 File validation failed: CON.pdf, errors: ['Suspicious filename pattern detected: ^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\.|$)']
+WARNING 2025-07-22 04:08:46,262 file_utils 96056 127183614992640 File validation failed: .hidden.pdf, errors: ['Suspicious filename pattern detected: ^\\.']
+INFO 2025-07-22 04:08:46,263 file_utils 96056 127183614992640 File validation passed: resume.txt
+INFO 2025-07-22 04:08:46,263 file_utils 96056 127183614992640 File validation passed: test_resume.pdf
+INFO 2025-07-22 04:09:21,359 file_utils 96295 136262844600576 File validation passed: passwd.pdf
+WARNING 2025-07-22 04:09:21,360 file_utils 96295 136262844600576 File validation failed: file<script>.pdf, errors: ['Suspicious filename pattern detected: [<>:"|?*]']
+WARNING 2025-07-22 04:09:21,360 file_utils 96295 136262844600576 File validation failed: CON.pdf, errors: ['Suspicious filename pattern detected: ^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\.|$)']
+WARNING 2025-07-22 04:09:21,360 file_utils 96295 136262844600576 File validation failed: .hidden.pdf, errors: ['Suspicious filename pattern detected: ^\\.']
+INFO 2025-07-22 04:10:17,529 file_utils 96862 126857982292224 File validation passed: passwd.pdf
+WARNING 2025-07-22 04:10:17,530 file_utils 96862 126857982292224 File validation failed: file<script>.pdf, errors: ['Suspicious filename pattern detected: [<>:"|?*]']
+WARNING 2025-07-22 04:10:17,530 file_utils 96862 126857982292224 File validation failed: CON.pdf, errors: ['Suspicious filename pattern detected: ^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\.|$)']
+WARNING 2025-07-22 04:10:17,530 file_utils 96862 126857982292224 File validation failed: .hidden.pdf, errors: ['Suspicious filename pattern detected: ^\\.']
+INFO 2025-07-22 04:11:16,192 file_utils 97359 126230766498048 File validation passed: passwd.pdf
+WARNING 2025-07-22 04:11:16,193 file_utils 97359 126230766498048 File validation failed: file<script>.pdf, errors: ['Suspicious filename pattern detected: [<>:"|?*]']
+WARNING 2025-07-22 04:11:16,193 file_utils 97359 126230766498048 File validation failed: CON.pdf, errors: ['Suspicious filename pattern detected: ^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\.|$)']
+WARNING 2025-07-22 04:11:16,193 file_utils 97359 126230766498048 File validation failed: .hidden.pdf, errors: ['Suspicious filename pattern detected: ^\\.']
+INFO 2025-07-22 04:13:06,171 file_utils 98106 134356269187328 File validation passed: passwd.pdf
+WARNING 2025-07-22 04:13:06,172 file_utils 98106 134356269187328 File validation failed: file<script>.pdf, errors: ['Suspicious filename pattern detected: [<>:"|?*]']
+WARNING 2025-07-22 04:13:06,172 file_utils 98106 134356269187328 File validation failed: CON.pdf, errors: ['Suspicious filename pattern detected: ^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\.|$)']
+WARNING 2025-07-22 04:13:06,172 file_utils 98106 134356269187328 File validation failed: .hidden.pdf, errors: ['Suspicious filename pattern detected: ^\\.']
+INFO 2025-07-22 04:13:37,905 file_utils 98360 139278151799040 File validation passed: passwd.pdf
+WARNING 2025-07-22 04:13:37,906 file_utils 98360 139278151799040 File validation failed: file<script>.pdf, errors: ['Suspicious filename pattern detected: [<>:"|?*]']
+WARNING 2025-07-22 04:13:37,906 file_utils 98360 139278151799040 File validation failed: CON.pdf, errors: ['Suspicious filename pattern detected: ^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\.|$)']
+WARNING 2025-07-22 04:13:37,906 file_utils 98360 139278151799040 File validation failed: .hidden.pdf, errors: ['Suspicious filename pattern detected: ^\\.']
+INFO 2025-07-22 04:14:26,536 file_utils 98664 123589978280192 File validation passed: passwd.pdf
+WARNING 2025-07-22 04:14:26,536 file_utils 98664 123589978280192 File validation failed: file<script>.pdf, errors: ['Suspicious filename pattern detected: [<>:"|?*]']
+WARNING 2025-07-22 04:14:26,537 file_utils 98664 123589978280192 File validation failed: CON.pdf, errors: ['Suspicious filename pattern detected: ^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\.|$)']
+WARNING 2025-07-22 04:14:26,537 file_utils 98664 123589978280192 File validation failed: .hidden.pdf, errors: ['Suspicious filename pattern detected: ^\\.']
+INFO 2025-07-22 04:16:02,586 file_utils 99205 133466457927936 File validation passed: passwd.pdf
+WARNING 2025-07-22 04:16:02,587 file_utils 99205 133466457927936 File validation failed: file<script>.pdf, errors: ['Suspicious filename pattern detected: [<>:"|?*]']
+WARNING 2025-07-22 04:16:02,587 file_utils 99205 133466457927936 File validation failed: CON.pdf, errors: ['Suspicious filename pattern detected: ^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\.|$)']
+WARNING 2025-07-22 04:16:02,587 file_utils 99205 133466457927936 File validation failed: .hidden.pdf, errors: ['Suspicious filename pattern detected: ^\\.']
+WARNING 2025-07-22 04:16:07,948 file_utils 99593 125055535096064 File validation failed: file<script>.pdf, errors: ['Suspicious filename pattern detected: [<>:"|?*]']
+WARNING 2025-07-22 04:16:07,948 file_utils 99593 125055535096064 File validation failed: CON.pdf, errors: ['Suspicious filename pattern detected: ^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\.|$)']
+WARNING 2025-07-22 04:16:07,948 file_utils 99593 125055535096064 File validation failed: .hidden.pdf, errors: ['Suspicious filename pattern detected: ^\\.']
+INFO 2025-07-22 04:16:47,646 file_utils 99854 127278567186688 File validation passed: resume.docx
+WARNING 2025-07-22 04:16:47,646 file_utils 99854 127278567186688 File validation failed: empty.pdf, errors: ['File is empty', "File content doesn't match expected pdf format (magic bytes mismatch)"]
+WARNING 2025-07-22 04:16:47,652 file_utils 99854 127278567186688 File validation failed: large_file.pdf, errors: ['File size (11534336 bytes) exceeds maximum allowed size (10485760 bytes) for pdf files', "File content doesn't match expected pdf format (magic bytes mismatch)"]
+WARNING 2025-07-22 04:16:47,654 file_utils 99854 127278567186688 File validation failed: malware.exe, errors: ['Dangerous file extension: .exe', "File content doesn't match expected pdf format (magic bytes mismatch)", "File extension '.exe' not allowed for pdf files. Allowed extensions: .pdf"]
+WARNING 2025-07-22 04:16:47,654 file_utils 99854 127278567186688 File validation failed: fake.pdf, errors: ["File content doesn't match expected pdf format (magic bytes mismatch)"]
+WARNING 2025-07-22 04:16:47,654 file_utils 99854 127278567186688 File validation failed: malicious.pdf, errors: ["File content doesn't match expected pdf format (magic bytes mismatch)", 'Suspicious content pattern detected: <script']
+WARNING 2025-07-22 04:16:47,654 file_utils 99854 127278567186688 File validation failed: malicious.pdf, errors: ["File content doesn't match expected pdf format (magic bytes mismatch)", 'Suspicious content pattern detected: <?php']
+WARNING 2025-07-22 04:16:47,654 file_utils 99854 127278567186688 File validation failed: malicious.pdf, errors: ["File content doesn't match expected pdf format (magic bytes mismatch)", 'Suspicious content pattern detected: MZ']
+WARNING 2025-07-22 04:16:47,655 file_utils 99854 127278567186688 File validation failed: file<script>.pdf, errors: ['Suspicious filename pattern detected: [<>:"|?*]']
+WARNING 2025-07-22 04:16:47,655 file_utils 99854 127278567186688 File validation failed: CON.pdf, errors: ['Suspicious filename pattern detected: ^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\\.|$)']
+WARNING 2025-07-22 04:16:47,655 file_utils 99854 127278567186688 File validation failed: .hidden.pdf, errors: ['Suspicious filename pattern detected: ^\\.']
+INFO 2025-07-22 04:16:47,655 file_utils 99854 127278567186688 File validation passed: resume.txt
+INFO 2025-07-22 04:16:47,655 file_utils 99854 127278567186688 File validation passed: test_resume.pdf
+INFO 2025-07-22 04:17:13,316 signals 100021 130261490589952 Created notification preferences for user 5130c29b-2b95-4c44-915d-fdc37ebc0f14
+INFO 2025-07-22 04:17:13,326 file_utils 100021 130261490589952 Cleanup completed: {'files_scanned': 6, 'files_deleted': 0, 'space_freed': 0, 'errors': []}
+INFO 2025-07-22 04:17:13,573 signals 100021 130261490589952 Created notification preferences for user 2c1594f6-810b-49f4-8d15-d2f69b3d7438
+ERROR 2025-07-22 04:17:13,573 file_utils 100021 130261490589952 Error calculating file hash: [Errno 2] No such file or directory: '/home/lusan/Documents/HireWise/backend/media/resume/738dc646380ba9a3/2025/07/738dc646_1753157833_d4ae2d70.pdf'
+INFO 2025-07-22 04:17:13,573 file_utils 100021 130261490589952 File stored successfully: resume/738dc646380ba9a3/2025/07/738dc646_1753157833_d4ae2d70.pdf for user testuser
+INFO 2025-07-22 04:17:13,573 file_utils 100021 130261490589952 File deleted: resume/738dc646380ba9a3/2025/07/738dc646_1753157833_d4ae2d70.pdf
+INFO 2025-07-22 04:17:13,810 signals 100021 130261490589952 Created notification preferences for user 135750b2-5728-435d-acdf-e72b75bed396
+INFO 2025-07-22 04:17:14,039 signals 100021 130261490589952 Created notification preferences for user 975d2ab1-b202-4bf5-a476-a8d8346cae63
+ERROR 2025-07-22 04:17:14,040 file_utils 100021 130261490589952 Error calculating file hash: [Errno 2] No such file or directory: '/home/lusan/Documents/HireWise/backend/media/resume/7bdc9a09453a4fc6/2025/07/7bdc9a09_1753157834_f0cef7a0.pdf'
+INFO 2025-07-22 04:17:14,040 file_utils 100021 130261490589952 File stored successfully: resume/7bdc9a09453a4fc6/2025/07/7bdc9a09_1753157834_f0cef7a0.pdf for user testuser
+INFO 2025-07-22 04:17:14,262 signals 100021 130261490589952 Created notification preferences for user 811eeb85-ad9d-4d22-807a-1fe7e9d50e3c
+INFO 2025-07-22 04:17:14,476 signals 100021 130261490589952 Created notification preferences for user 8f23b070-97c4-454b-ad02-1b867c3bda7d
+INFO 2025-07-22 04:17:39,239 signals 100124 128381811798272 Created notification preferences for user 83af3793-45a1-4779-b36c-7eb802df7f34
+INFO 2025-07-22 04:17:39,485 signals 100124 128381811798272 Created notification preferences for user 402dd1db-3e82-4518-8b19-9f184dd5634f
+INFO 2025-07-22 04:17:39,494 file_utils 100124 128381811798272 File validation passed: delete_me.pdf
+INFO 2025-07-22 04:17:39,494 file_utils 100124 128381811798272 File stored successfully: resume/73b22c08b17c9e5e/2025/07/73b22c08_1753157859_cbe32225.pdf for user jobseeker
+INFO 2025-07-22 04:17:39,495 file_views 100124 128381811798272 Resume uploaded successfully by user jobseeker: 1
+WARNING 2025-07-22 04:17:39,499 log 100124 128381811798272 Not Found: /api/files/delete/1/
+INFO 2025-07-22 04:17:39,742 signals 100124 128381811798272 Created notification preferences for user fe1dcdc0-6ca3-4239-829a-519b066441be
+INFO 2025-07-22 04:17:39,976 signals 100124 128381811798272 Created notification preferences for user 04439b84-d402-472a-92ba-42e2244ff732
+WARNING 2025-07-22 04:17:39,978 file_utils 100124 128381811798272 File validation failed: malware.exe, errors: ['Dangerous file extension: .exe', "File content doesn't match expected pdf format (magic bytes mismatch)", "File extension '.exe' not allowed for pdf files. Allowed extensions: .pdf"]
+WARNING 2025-07-22 04:17:39,978 file_views 100124 128381811798272 File upload rejected for user jobseeker: ['Dangerous file extension: .exe', "File content doesn't match expected pdf format (magic bytes mismatch)", "File extension '.exe' not allowed for pdf files. Allowed extensions: .pdf"]
+WARNING 2025-07-22 04:17:39,979 log 100124 128381811798272 Bad Request: /api/files/upload/
+INFO 2025-07-22 04:17:40,204 signals 100124 128381811798272 Created notification preferences for user c9fd7d06-7369-40bb-b443-146a1262c808
+INFO 2025-07-22 04:17:40,420 signals 100124 128381811798272 Created notification preferences for user 40877ff6-e44b-49e7-a8df-dcd2fb21ec6b
+WARNING 2025-07-22 04:17:40,421 log 100124 128381811798272 Unauthorized: /api/files/upload/
+INFO 2025-07-22 04:17:40,631 signals 100124 128381811798272 Created notification preferences for user 12d773d5-5a5f-4adb-ac78-9b192fec1915
+INFO 2025-07-22 04:17:40,836 signals 100124 128381811798272 Created notification preferences for user 0a5eb69e-e5a2-4b73-9bfd-2c77586455f9
+INFO 2025-07-22 04:17:41,038 signals 100124 128381811798272 Created notification preferences for user 946d20e7-0450-4353-a3d5-aab5eb56898a
+INFO 2025-07-22 04:17:41,239 signals 100124 128381811798272 Created notification preferences for user d3d4103e-6559-4773-94d3-f7f5c9e07fab
+INFO 2025-07-22 04:17:41,242 file_utils 100124 128381811798272 File validation passed: resume.pdf
+INFO 2025-07-22 04:17:41,242 file_utils 100124 128381811798272 File stored successfully: resume/b4b819a5437e86d6/2025/07/b4b819a5_1753157861_955465b5.pdf for user jobseeker
+INFO 2025-07-22 04:17:41,242 file_views 100124 128381811798272 Resume uploaded successfully by user jobseeker: 1
+INFO 2025-07-22 04:17:41,466 signals 100124 128381811798272 Created notification preferences for user c7be31e2-197c-44fa-abd9-dfc49b3f168c
+INFO 2025-07-22 04:17:41,692 signals 100124 128381811798272 Created notification preferences for user 4151cbc3-fa68-4916-b44a-d13bba146bc8
+WARNING 2025-07-22 04:17:41,694 log 100124 128381811798272 Forbidden: /api/files/upload-resume/
+INFO 2025-07-22 04:17:41,912 signals 100124 128381811798272 Created notification preferences for user 2d521ee5-ac46-4c30-8f9b-8686f3582d7f
+INFO 2025-07-22 04:17:42,124 signals 100124 128381811798272 Created notification preferences for user 2061e5f6-2a1b-497d-a082-a97a1e913c37
+INFO 2025-07-22 04:17:42,126 file_utils 100124 128381811798272 File validation passed: my_resume.pdf
+INFO 2025-07-22 04:17:42,126 file_utils 100124 128381811798272 File stored successfully: resume/7134f3eb2c0f161d/2025/07/7134f3eb_1753157862_622695ca.pdf for user jobseeker
+INFO 2025-07-22 04:17:42,126 file_views 100124 128381811798272 Resume uploaded successfully by user jobseeker: 1
+INFO 2025-07-22 04:17:42,338 signals 100124 128381811798272 Created notification preferences for user 6da78833-9f4d-46c8-bb85-76b2d57aa3af
+INFO 2025-07-22 04:17:42,544 signals 100124 128381811798272 Created notification preferences for user c27f5111-1ca1-453a-ad55-e0d36092f2b4
+INFO 2025-07-22 04:17:42,546 file_views 100124 128381811798272 File served successfully: resume/test.pdf to user jobseeker
+INFO 2025-07-22 04:17:42,748 signals 100124 128381811798272 Created notification preferences for user fe34cbbd-26d2-422f-b18f-027f42344c1e
+INFO 2025-07-22 04:17:42,965 signals 100124 128381811798272 Created notification preferences for user 0a1f435c-6280-463e-ad7c-e987e1be7023
+INFO 2025-07-22 04:17:42,967 file_utils 100124 128381811798272 File validation passed: resume.pdf
+INFO 2025-07-22 04:17:42,968 file_utils 100124 128381811798272 File stored successfully: pdf/dcd7eda1a2dfe89a/2025/07/dcd7eda1_1753157862_bf2c3d3a.pdf for user jobseeker
+INFO 2025-07-22 04:17:42,968 file_views 100124 128381811798272 File uploaded successfully by user jobseeker: pdf/dcd7eda1a2dfe89a/2025/07/dcd7eda1_1753157862_bf2c3d3a.pdf
+INFO 2025-07-22 04:17:43,199 signals 100124 128381811798272 Created notification preferences for user 11ff6e48-4db4-473d-8e91-bcc2cbd64863
+INFO 2025-07-22 04:17:43,421 signals 100124 128381811798272 Created notification preferences for user aab3e664-3ae3-4977-8241-854de0c59015
+INFO 2025-07-22 04:17:43,423 file_utils 100124 128381811798272 File validation passed: protected.pdf
+INFO 2025-07-22 04:17:43,423 file_utils 100124 128381811798272 File stored successfully: resume/e03c1d22e9d72ff0/2025/07/e03c1d22_1753157863_64a39a42.pdf for user jobseeker
+INFO 2025-07-22 04:17:43,424 file_views 100124 128381811798272 Resume uploaded successfully by user jobseeker: 1
+WARNING 2025-07-22 04:17:43,424 log 100124 128381811798272 Not Found: /api/files/delete/1/
+INFO 2025-07-22 04:19:48,154 signals 100807 140692553412864 Created notification preferences for user 07be5c53-2b25-4d96-a399-e011708d6a14
+INFO 2025-07-22 04:19:48,368 signals 100807 140692553412864 Created notification preferences for user 8cc128a9-96c4-4ce4-ac00-0ebe6a05b898
+INFO 2025-07-22 04:19:48,375 file_utils 100807 140692553412864 File validation passed: delete_me.pdf
+INFO 2025-07-22 04:19:48,376 file_utils 100807 140692553412864 File stored successfully: resume/ea3529c7d33c0ba4/2025/07/ea3529c7_1753157988_7171648f.pdf for user jobseeker
+INFO 2025-07-22 04:19:48,376 file_views 100807 140692553412864 Resume uploaded successfully by user jobseeker: 1
+INFO 2025-07-22 04:19:48,378 file_utils 100807 140692553412864 File deleted: resume/ea3529c7d33c0ba4/2025/07/ea3529c7_1753157988_7171648f.pdf
+INFO 2025-07-22 04:19:48,379 file_views 100807 140692553412864 Resume deleted successfully: 1 by user jobseeker
+INFO 2025-07-22 04:20:12,905 signals 100979 140419377148160 Created notification preferences for user e5337464-2bbd-42ad-bd1c-16aff32d2467
+INFO 2025-07-22 04:20:13,141 signals 100979 140419377148160 Created notification preferences for user f19f0ae1-53b4-4218-a59d-370eb7836f39
+INFO 2025-07-22 04:20:13,149 file_utils 100979 140419377148160 File validation passed: protected.pdf
+INFO 2025-07-22 04:20:13,149 file_utils 100979 140419377148160 File stored successfully: resume/1f8181de40e29c12/2025/07/1f8181de_1753158013_c69fe7ce.pdf for user jobseeker
+INFO 2025-07-22 04:20:13,150 file_views 100979 140419377148160 Resume uploaded successfully by user jobseeker: 1
+WARNING 2025-07-22 04:20:13,152 log 100979 140419377148160 Forbidden: /api/files/delete/1/
+INFO 2025-07-22 04:20:35,668 signals 101088 134737923760384 Created notification preferences for user 7f9b430d-1fea-4331-b563-f08e013fb369
+INFO 2025-07-22 04:20:35,904 signals 101088 134737923760384 Created notification preferences for user 6c87cda2-9b65-4862-9d82-9918fd28d816
+INFO 2025-07-22 04:20:35,912 file_utils 101088 134737923760384 File validation passed: delete_me.pdf
+INFO 2025-07-22 04:20:35,912 file_utils 101088 134737923760384 File stored successfully: resume/f873a3b953b7989d/2025/07/f873a3b9_1753158035_f528e16e.pdf for user jobseeker
+INFO 2025-07-22 04:20:35,913 file_views 101088 134737923760384 Resume uploaded successfully by user jobseeker: 1
+INFO 2025-07-22 04:20:35,915 file_utils 101088 134737923760384 File deleted: resume/f873a3b953b7989d/2025/07/f873a3b9_1753158035_f528e16e.pdf
+INFO 2025-07-22 04:20:35,916 file_views 101088 134737923760384 Resume deleted successfully: 1 by user jobseeker
+INFO 2025-07-22 04:20:36,147 signals 101088 134737923760384 Created notification preferences for user 01b5d7b9-d3be-4cfb-afa3-cd02b22de33e
+INFO 2025-07-22 04:20:36,370 signals 101088 134737923760384 Created notification preferences for user d134ca61-105e-434f-abf4-0fddc117a029
+WARNING 2025-07-22 04:20:36,372 file_utils 101088 134737923760384 File validation failed: malware.exe, errors: ['Dangerous file extension: .exe', "File content doesn't match expected pdf format (magic bytes mismatch)", "File extension '.exe' not allowed for pdf files. Allowed extensions: .pdf"]
+WARNING 2025-07-22 04:20:36,372 file_views 101088 134737923760384 File upload rejected for user jobseeker: ['Dangerous file extension: .exe', "File content doesn't match expected pdf format (magic bytes mismatch)", "File extension '.exe' not allowed for pdf files. Allowed extensions: .pdf"]
+WARNING 2025-07-22 04:20:36,372 log 101088 134737923760384 Bad Request: /api/files/upload/
+INFO 2025-07-22 04:20:36,592 signals 101088 134737923760384 Created notification preferences for user 88fe2168-c934-4400-b477-f65c4748417f
+INFO 2025-07-22 04:20:36,807 signals 101088 134737923760384 Created notification preferences for user e81a9ec9-6172-438a-a324-9e8f48f48894
+WARNING 2025-07-22 04:20:36,809 log 101088 134737923760384 Unauthorized: /api/files/upload/
+INFO 2025-07-22 04:20:37,022 signals 101088 134737923760384 Created notification preferences for user 08ab18f2-7123-45dd-befb-ded9bfc9ba34
+INFO 2025-07-22 04:20:37,229 signals 101088 134737923760384 Created notification preferences for user 16a18357-9f7a-4a5d-a94c-ad813cb397d8
+INFO 2025-07-22 04:20:37,440 signals 101088 134737923760384 Created notification preferences for user b370768d-91c0-4024-990f-b0815ad79e48
+INFO 2025-07-22 04:20:37,657 signals 101088 134737923760384 Created notification preferences for user 14b868d9-3660-4ed7-acd3-acf64b6db48b
+INFO 2025-07-22 04:20:37,659 file_utils 101088 134737923760384 File validation passed: resume.pdf
+INFO 2025-07-22 04:20:37,659 file_utils 101088 134737923760384 File stored successfully: resume/a13bdfb10e202ec8/2025/07/a13bdfb1_1753158037_bfa1e895.pdf for user jobseeker
+INFO 2025-07-22 04:20:37,660 file_views 101088 134737923760384 Resume uploaded successfully by user jobseeker: 1
+INFO 2025-07-22 04:20:37,887 signals 101088 134737923760384 Created notification preferences for user d3230c43-930e-46ba-afa7-b7be1445cfd1
+INFO 2025-07-22 04:20:38,114 signals 101088 134737923760384 Created notification preferences for user 7d8e1fca-be71-43c3-a583-3642049ed823
+WARNING 2025-07-22 04:20:38,117 log 101088 134737923760384 Forbidden: /api/files/upload-resume/
+INFO 2025-07-22 04:20:38,344 signals 101088 134737923760384 Created notification preferences for user 3f14f0b4-6690-4259-8346-0e162856e857
+INFO 2025-07-22 04:20:38,566 signals 101088 134737923760384 Created notification preferences for user 2889addd-3d38-4f95-8eaa-845786791fe3
+INFO 2025-07-22 04:20:38,568 file_utils 101088 134737923760384 File validation passed: my_resume.pdf
+INFO 2025-07-22 04:20:38,568 file_utils 101088 134737923760384 File stored successfully: resume/508da94aa78fc8d5/2025/07/508da94a_1753158038_2fc12b16.pdf for user jobseeker
+INFO 2025-07-22 04:20:38,568 file_views 101088 134737923760384 Resume uploaded successfully by user jobseeker: 1
+INFO 2025-07-22 04:20:38,787 signals 101088 134737923760384 Created notification preferences for user 22f0134a-a032-48f1-a88d-611873518e5e
+INFO 2025-07-22 04:20:38,999 signals 101088 134737923760384 Created notification preferences for user 48a973c5-ed5a-4997-ad12-275372f01c6a
+INFO 2025-07-22 04:20:39,002 file_views 101088 134737923760384 File served successfully: resume/test.pdf to user jobseeker
+INFO 2025-07-22 04:20:39,212 signals 101088 134737923760384 Created notification preferences for user c58db343-1062-4145-af46-cad5934ef3cf
+INFO 2025-07-22 04:20:39,417 signals 101088 134737923760384 Created notification preferences for user 3c96bef8-4c1e-46d3-a83e-3249f92e634f
+INFO 2025-07-22 04:20:39,419 file_utils 101088 134737923760384 File validation passed: resume.pdf
+INFO 2025-07-22 04:20:39,419 file_utils 101088 134737923760384 File stored successfully: pdf/2cf5492370c0d742/2025/07/2cf54923_1753158039_38aca609.pdf for user jobseeker
+INFO 2025-07-22 04:20:39,419 file_views 101088 134737923760384 File uploaded successfully by user jobseeker: pdf/2cf5492370c0d742/2025/07/2cf54923_1753158039_38aca609.pdf
+INFO 2025-07-22 04:20:39,624 signals 101088 134737923760384 Created notification preferences for user 75f7f760-3a93-4632-8e18-8539f8b4319a
+INFO 2025-07-22 04:20:39,824 signals 101088 134737923760384 Created notification preferences for user 21c9fff8-7a54-4fb4-ab83-fc7d939bed0f
+INFO 2025-07-22 04:20:39,826 file_utils 101088 134737923760384 File validation passed: protected.pdf
+INFO 2025-07-22 04:20:39,826 file_utils 101088 134737923760384 File stored successfully: resume/5cea88fae596a424/2025/07/5cea88fa_1753158039_0dc3f6fa.pdf for user jobseeker
+INFO 2025-07-22 04:20:39,826 file_views 101088 134737923760384 Resume uploaded successfully by user jobseeker: 1
+WARNING 2025-07-22 04:20:39,828 log 101088 134737923760384 Forbidden: /api/files/delete/1/

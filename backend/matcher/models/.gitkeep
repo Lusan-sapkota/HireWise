@@ -1,2 +1,5 @@
-# This directory will contain ML models for job matching
-# Models will be loaded here during deployment
+# This file ensures the models directory is tracked by git
+# ML model files will be stored here:
+# - job_matcher.pkl (trained ML model)
+# - tfidf_vectorizer.pkl (TF-IDF vectorizer)
+# - feature_scaler.pkl (feature scaler)

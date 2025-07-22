@@ -437,3 +437,267 @@ class JobView(models.Model):
     def __str__(self):
         viewer_info = self.viewer.username if self.viewer else self.ip_address
         return f"{self.job_post.title} viewed by {viewer_info}"
+
+
+class Notification(models.Model):
+    """
+    Model for storing notification history and persistence.
+    """
+    NOTIFICATION_TYPES = (
+        ('job_posted', 'Job Posted'),
+        ('application_received', 'Application Received'),
+        ('application_status_changed', 'Application Status Changed'),
+        ('match_score_calculated', 'Match Score Calculated'),
+        ('interview_scheduled', 'Interview Scheduled'),
+        ('system_message', 'System Message'),
+        ('reminder', 'Reminder'),
+    )
+    
+    PRIORITY_LEVELS = (
+        ('low', 'Low'),
+        ('normal', 'Normal'),
+        ('high', 'High'),
+        ('urgent', 'Urgent'),
+    )
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(max_length=30, choices=NOTIFICATION_TYPES)
+    title = models.CharField(max_length=255)
+    message = models.TextField()
+    priority = models.CharField(max_length=10, choices=PRIORITY_LEVELS, default='normal')
+    
+    # Related objects for context
+    job_post = models.ForeignKey(JobPost, on_delete=models.CASCADE, null=True, blank=True)
+    application = models.ForeignKey(Application, on_delete=models.CASCADE, null=True, blank=True)
+    
+    # Additional data as JSON
+    data = models.JSONField(default=dict, blank=True)
+    
+    # Status tracking
+    is_read = models.BooleanField(default=False)
+    is_sent = models.BooleanField(default=False)
+    sent_at = models.DateTimeField(null=True, blank=True)
+    read_at = models.DateTimeField(null=True, blank=True)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    # Expiration for temporary notifications
+    expires_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['recipient', 'is_read', 'created_at']),
+            models.Index(fields=['notification_type', 'created_at']),
+            models.Index(fields=['priority', 'is_read']),
+            models.Index(fields=['expires_at']),
+        ]
+    
+    def __str__(self):
+        return f"{self.get_notification_type_display()} for {self.recipient.username}"
+    
+    def mark_as_read(self):
+        """Mark notification as read"""
+        if not self.is_read:
+            self.is_read = True
+            self.read_at = timezone.now()
+            self.save(update_fields=['is_read', 'read_at'])
+    
+    def mark_as_sent(self):
+        """Mark notification as sent"""
+        if not self.is_sent:
+            self.is_sent = True
+            self.sent_at = timezone.now()
+            self.save(update_fields=['is_sent', 'sent_at'])
+    
+    @property
+    def is_expired(self):
+        """Check if notification has expired"""
+        if self.expires_at:
+            return timezone.now() > self.expires_at
+        return False
+    
+    @property
+    def age_in_hours(self):
+        """Get notification age in hours"""
+        return (timezone.now() - self.created_at).total_seconds() / 3600
+
+
+class NotificationPreference(models.Model):
+    """
+    Model for user notification preferences and settings.
+    """
+    DELIVERY_METHODS = (
+        ('websocket', 'Real-time WebSocket'),
+        ('email', 'Email'),
+        ('both', 'Both WebSocket and Email'),
+        ('none', 'Disabled'),
+    )
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='notification_preferences')
+    
+    # Notification type preferences
+    job_posted_enabled = models.BooleanField(default=True)
+    job_posted_delivery = models.CharField(max_length=20, choices=DELIVERY_METHODS, default='websocket')
+    
+    application_received_enabled = models.BooleanField(default=True)
+    application_received_delivery = models.CharField(max_length=20, choices=DELIVERY_METHODS, default='websocket')
+    
+    application_status_changed_enabled = models.BooleanField(default=True)
+    application_status_changed_delivery = models.CharField(max_length=20, choices=DELIVERY_METHODS, default='both')
+    
+    match_score_calculated_enabled = models.BooleanField(default=True)
+    match_score_calculated_delivery = models.CharField(max_length=20, choices=DELIVERY_METHODS, default='websocket')
+    
+    interview_scheduled_enabled = models.BooleanField(default=True)
+    interview_scheduled_delivery = models.CharField(max_length=20, choices=DELIVERY_METHODS, default='both')
+    
+    system_message_enabled = models.BooleanField(default=True)
+    system_message_delivery = models.CharField(max_length=20, choices=DELIVERY_METHODS, default='websocket')
+    
+    # General preferences
+    quiet_hours_enabled = models.BooleanField(default=False)
+    quiet_hours_start = models.TimeField(default='22:00')
+    quiet_hours_end = models.TimeField(default='08:00')
+    
+    # Frequency settings
+    digest_frequency = models.CharField(
+        max_length=20,
+        choices=[
+            ('immediate', 'Immediate'),
+            ('hourly', 'Hourly'),
+            ('daily', 'Daily'),
+            ('weekly', 'Weekly'),
+        ],
+        default='immediate'
+    )
+    
+    # Timezone for scheduling
+    timezone = models.CharField(max_length=50, default='UTC')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Notification preferences for {self.user.username}"
+    
+    def is_notification_enabled(self, notification_type: str) -> bool:
+        """Check if a specific notification type is enabled"""
+        field_name = f"{notification_type}_enabled"
+        return getattr(self, field_name, True)
+    
+    def get_delivery_method(self, notification_type: str) -> str:
+        """Get delivery method for a specific notification type"""
+        field_name = f"{notification_type}_delivery"
+        return getattr(self, field_name, 'websocket')
+    
+    def is_in_quiet_hours(self) -> bool:
+        """Check if current time is within quiet hours"""
+        if not self.quiet_hours_enabled:
+            return False
+        
+        from django.utils import timezone as tz
+        import pytz
+        
+        try:
+            user_tz = pytz.timezone(self.timezone)
+            current_time = tz.now().astimezone(user_tz).time()
+            
+            if self.quiet_hours_start <= self.quiet_hours_end:
+                # Same day quiet hours (e.g., 22:00 to 23:59)
+                return self.quiet_hours_start <= current_time <= self.quiet_hours_end
+            else:
+                # Overnight quiet hours (e.g., 22:00 to 08:00)
+                return current_time >= self.quiet_hours_start or current_time <= self.quiet_hours_end
+        except Exception:
+            # Fallback to UTC if timezone is invalid
+            return False
+
+
+class NotificationTemplate(models.Model):
+    """
+    Model for notification message templates and formatting.
+    """
+    TEMPLATE_TYPES = (
+        ('job_posted', 'Job Posted'),
+        ('application_received', 'Application Received'),
+        ('application_status_changed', 'Application Status Changed'),
+        ('match_score_calculated', 'Match Score Calculated'),
+        ('interview_scheduled', 'Interview Scheduled'),
+        ('system_message', 'System Message'),
+        ('reminder', 'Reminder'),
+    )
+    
+    DELIVERY_CHANNELS = (
+        ('websocket', 'WebSocket'),
+        ('email', 'Email'),
+        ('push', 'Push Notification'),
+    )
+    
+    template_type = models.CharField(max_length=30, choices=TEMPLATE_TYPES)
+    delivery_channel = models.CharField(max_length=20, choices=DELIVERY_CHANNELS)
+    
+    # Template content
+    title_template = models.CharField(max_length=255)
+    message_template = models.TextField()
+    
+    # Email-specific templates
+    email_subject_template = models.CharField(max_length=255, blank=True)
+    email_html_template = models.TextField(blank=True)
+    
+    # Template variables documentation
+    available_variables = models.JSONField(
+        default=dict,
+        help_text="JSON object documenting available template variables"
+    )
+    
+    # Status and metadata
+    is_active = models.BooleanField(default=True)
+    is_default = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        unique_together = ('template_type', 'delivery_channel', 'is_default')
+        indexes = [
+            models.Index(fields=['template_type', 'delivery_channel']),
+            models.Index(fields=['is_active', 'is_default']),
+        ]
+    
+    def __str__(self):
+        return f"{self.get_template_type_display()} - {self.get_delivery_channel_display()}"
+    
+    def render_title(self, context: dict) -> str:
+        """Render title template with context variables"""
+        try:
+            return self.title_template.format(**context)
+        except (KeyError, ValueError) as e:
+            return f"Notification (template error: {e})"
+    
+    def render_message(self, context: dict) -> str:
+        """Render message template with context variables"""
+        try:
+            return self.message_template.format(**context)
+        except (KeyError, ValueError) as e:
+            return f"Notification message (template error: {e})"
+    
+    def render_email_subject(self, context: dict) -> str:
+        """Render email subject template with context variables"""
+        if not self.email_subject_template:
+            return self.render_title(context)
+        try:
+            return self.email_subject_template.format(**context)
+        except (KeyError, ValueError) as e:
+            return f"Email notification (template error: {e})"
+    
+    def render_email_html(self, context: dict) -> str:
+        """Render email HTML template with context variables"""
+        if not self.email_html_template:
+            return self.render_message(context)
+        try:
+            return self.email_html_template.format(**context)
+        except (KeyError, ValueError) as e:
+            return f"<p>Email notification (template error: {e})</p>"

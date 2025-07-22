@@ -190,6 +190,16 @@ AUTH_USER_MODEL = "matcher.User"
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
 
+# Secure file upload settings
+SECURE_FILE_UPLOAD = {
+    'MAX_FILE_SIZE': 10 * 1024 * 1024,  # 10MB default
+    'ALLOWED_EXTENSIONS': ['.pdf', '.doc', '.docx', '.txt', '.jpg', '.jpeg', '.png', '.gif'],
+    'SCAN_UPLOADED_FILES': True,
+    'QUARANTINE_SUSPICIOUS_FILES': True,
+    'FILE_RETENTION_DAYS': 365,  # Keep files for 1 year
+    'CLEANUP_INTERVAL_HOURS': 24,  # Run cleanup daily
+}
+
 
 # AI/ML settings
 GEMINI_API_KEY = config('GEMINI_API_KEY', default='')
@@ -253,8 +263,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [(REDIS_HOST, REDIS_PORT)],
-            "password": REDIS_PASSWORD if REDIS_PASSWORD else None,
+            "hosts": [f"redis://{':{}'.format(REDIS_PASSWORD) + '@' if REDIS_PASSWORD else ''}{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"],
         },
     },
 }
