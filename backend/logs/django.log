@@ -1345,3 +1345,21 @@ INFO 2025-07-22 04:20:39,826 file_utils 101088 134737923760384 File validation p
 INFO 2025-07-22 04:20:39,826 file_utils 101088 134737923760384 File stored successfully: resume/5cea88fae596a424/2025/07/5cea88fa_1753158039_0dc3f6fa.pdf for user jobseeker
 INFO 2025-07-22 04:20:39,826 file_views 101088 134737923760384 Resume uploaded successfully by user jobseeker: 1
 WARNING 2025-07-22 04:20:39,828 log 101088 134737923760384 Forbidden: /api/files/delete/1/
+INFO 2025-07-22 04:21:04,191 signals 101346 129314496090368 Created notification preferences for user d4ab6cbe-0244-4e79-8cdd-5b3bd207c0f9
+INFO 2025-07-22 04:21:04,199 file_utils 101346 129314496090368 File validation passed: complete_test_resume.pdf
+INFO 2025-07-22 04:21:04,199 file_utils 101346 129314496090368 File stored successfully: resume/83761038ce2ec524/2025/07/83761038_1753158064_4257ab92.pdf for user jobseeker
+INFO 2025-07-22 04:21:04,200 file_views 101346 129314496090368 Resume uploaded successfully by user jobseeker: 1
+INFO 2025-07-22 04:21:04,204 file_utils 101346 129314496090368 File deleted: resume/83761038ce2ec524/2025/07/83761038_1753158064_4257ab92.pdf
+INFO 2025-07-22 04:21:04,205 file_views 101346 129314496090368 Resume deleted successfully: 1 by user jobseeker
+INFO 2025-07-22 04:21:04,451 signals 101346 129314496090368 Created notification preferences for user eedb889c-68c3-4b01-9bc7-1777c1e80c0b
+INFO 2025-07-22 04:21:04,453 file_utils 101346 129314496090368 File validation passed: resume1.pdf
+INFO 2025-07-22 04:21:04,453 file_utils 101346 129314496090368 File stored successfully: resume/df46bee07de52d43/2025/07/df46bee0_1753158064_a0cebf45.pdf for user jobseeker
+INFO 2025-07-22 04:21:04,454 file_views 101346 129314496090368 Resume uploaded successfully by user jobseeker: 1
+INFO 2025-07-22 04:21:04,455 file_utils 101346 129314496090368 File validation passed: resume2.pdf
+INFO 2025-07-22 04:21:04,455 file_utils 101346 129314496090368 File stored successfully: resume/df46bee07de52d43/2025/07/df46bee0_1753158064_10aac040.pdf for user jobseeker
+INFO 2025-07-22 04:21:04,456 file_views 101346 129314496090368 Resume uploaded successfully by user jobseeker: 2
+INFO 2025-07-22 04:21:04,457 file_utils 101346 129314496090368 File validation passed: resume3.pdf
+INFO 2025-07-22 04:21:04,457 file_utils 101346 129314496090368 File stored successfully: resume/df46bee07de52d43/2025/07/df46bee0_1753158064_92afdcb2.pdf for user jobseeker
+INFO 2025-07-22 04:21:04,457 file_views 101346 129314496090368 Resume uploaded successfully by user jobseeker: 3
+INFO 2025-07-22 04:21:04,461 file_utils 101346 129314496090368 File deleted: resume/df46bee07de52d43/2025/07/df46bee0_1753158064_10aac040.pdf
+INFO 2025-07-22 04:21:04,461 file_views 101346 129314496090368 Resume deleted successfully: 2 by user jobseeker
