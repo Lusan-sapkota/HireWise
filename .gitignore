@@ -159,3 +159,4 @@
 /backend/.pypirc
 /backend/.cursorignore
 /backend/.cursorindexingignore
+/.vscode/*

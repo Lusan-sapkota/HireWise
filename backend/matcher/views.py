@@ -2106,3 +2106,474 @@ def delete_account(request):
     return Response({
         'message': 'Account deactivated successfully'
     }, status=status.HTTP_200_OK)
+
+# Task Monitoring and Management API Views
+from .task_monitoring import TaskMonitor, TaskResultTracker, TaskNotificationManager
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_task_status_view(request, task_id):
+    """
+    Get the status of a Celery task.
+    """
+    try:
+        task_status = TaskMonitor.get_task_status(task_id)
+        return Response(task_status, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Error getting task status for {task_id}: {str(e)}")
+        return Response(
+            {'error': 'Failed to get task status', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_batch_task_status_view(request):
+    """
+    Get the status of multiple Celery tasks.
+    """
+    task_ids = request.data.get('task_ids', [])
+    
+    if not task_ids or not isinstance(task_ids, list):
+        return Response(
+            {'error': 'task_ids must be provided as a non-empty list'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        batch_status = TaskMonitor.get_batch_task_status(task_ids)
+        return Response({
+            'success': True,
+            'task_count': len(task_ids),
+            'task_statuses': batch_status
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Error getting batch task status: {str(e)}")
+        return Response(
+            {'error': 'Failed to get batch task status', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_task_progress_view(request, task_id):
+    """
+    Get the progress of a tracked task.
+    """
+    try:
+        progress = TaskMonitor.get_task_progress(task_id)
+        
+        if progress:
+            return Response({
+                'success': True,
+                'progress': progress
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {'error': 'Task progress not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+    except Exception as e:
+        logger.error(f"Error getting task progress for {task_id}: {str(e)}")
+        return Response(
+            {'error': 'Failed to get task progress', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def cancel_task_view(request, task_id):
+    """
+    Cancel a running Celery task.
+    """
+    try:
+        result = TaskMonitor.cancel_task(task_id)
+        return Response(result, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Error cancelling task {task_id}: {str(e)}")
+        return Response(
+            {'error': 'Failed to cancel task', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_active_tasks_view(request):
+    """
+    Get information about currently active tasks.
+    """
+    # Only allow admin users or staff to view all active tasks
+    if not request.user.is_staff:
+        return Response(
+            {'error': 'Permission denied. Staff access required.'},
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    try:
+        active_tasks = TaskMonitor.get_active_tasks()
+        return Response(active_tasks, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Error getting active tasks: {str(e)}")
+        return Response(
+            {'error': 'Failed to get active tasks', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_worker_stats_view(request):
+    """
+    Get Celery worker statistics.
+    """
+    # Only allow admin users or staff to view worker stats
+    if not request.user.is_staff:
+        return Response(
+            {'error': 'Permission denied. Staff access required.'},
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    try:
+        worker_stats = TaskMonitor.get_worker_stats()
+        return Response(worker_stats, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Error getting worker stats: {str(e)}")
+        return Response(
+            {'error': 'Failed to get worker stats', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_task_result_view(request, task_id):
+    """
+    Get stored task result from cache.
+    """
+    try:
+        result = TaskResultTracker.get_result(task_id)
+        
+        if result:
+            return Response({
+                'success': True,
+                'result': result
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {'error': 'Task result not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+    except Exception as e:
+        logger.error(f"Error getting task result for {task_id}: {str(e)}")
+        return Response(
+            {'error': 'Failed to get task result', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def clear_task_result_view(request, task_id):
+    """
+    Clear stored task result from cache.
+    """
+    try:
+        TaskResultTracker.clear_result(task_id)
+        return Response({
+            'success': True,
+            'message': f'Task result cleared for {task_id}'
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Error clearing task result for {task_id}: {str(e)}")
+        return Response(
+            {'error': 'Failed to clear task result', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_task_results_view(request):
+    """
+    Get task results for the current user.
+    """
+    task_type = request.query_params.get('task_type')
+    
+    try:
+        results = TaskResultTracker.get_user_task_results(
+            str(request.user.id), 
+            task_type
+        )
+        
+        return Response({
+            'success': True,
+            'user_id': str(request.user.id),
+            'task_type': task_type,
+            'result_count': len(results),
+            'results': results
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        logger.error(f"Error getting user task results: {str(e)}")
+        return Response(
+            {'error': 'Failed to get user task results', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def test_celery_task_view(request):
+    """
+    Test Celery task execution.
+    """
+    try:
+        from .tasks import test_celery_task
+        
+        task = test_celery_task.apply_async()
+        
+        return Response({
+            'success': True,
+            'task_id': task.id,
+            'message': 'Test task queued successfully'
+        }, status=status.HTTP_202_ACCEPTED)
+    except Exception as e:
+        logger.error(f"Error queuing test task: {str(e)}")
+        return Response(
+            {'error': 'Failed to queue test task', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def queue_resume_parsing_task_view(request):
+    """
+    Queue resume parsing as a background task.
+    """
+    if request.user.user_type != 'job_seeker':
+        return Response(
+            {'error': 'Only job seekers can parse resumes'},
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    resume_id = request.data.get('resume_id')
+    
+    if not resume_id:
+        return Response(
+            {'error': 'resume_id is required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        # Verify resume exists and belongs to user
+        resume = Resume.objects.get(id=resume_id, job_seeker=request.user)
+    except Resume.DoesNotExist:
+        return Response(
+            {'error': 'Resume not found'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    try:
+        from .tasks import parse_resume_task
+        
+        task = parse_resume_task.apply_async(args=[str(resume_id)])
+        
+        return Response({
+            'success': True,
+            'task_id': task.id,
+            'resume_id': str(resume_id),
+            'status': 'queued',
+            'message': 'Resume parsing task queued successfully'
+        }, status=status.HTTP_202_ACCEPTED)
+    except Exception as e:
+        logger.error(f"Error queuing resume parsing task: {str(e)}")
+        return Response(
+            {'error': 'Failed to queue resume parsing task', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def queue_batch_resume_parsing_task_view(request):
+    """
+    Queue batch resume parsing as a background task.
+    """
+    if request.user.user_type != 'job_seeker':
+        return Response(
+            {'error': 'Only job seekers can parse resumes'},
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    resume_ids = request.data.get('resume_ids', [])
+    
+    if not resume_ids or not isinstance(resume_ids, list):
+        return Response(
+            {'error': 'resume_ids must be provided as a non-empty list'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        # Verify all resumes exist and belong to user
+        resumes = Resume.objects.filter(id__in=resume_ids, job_seeker=request.user)
+        if len(resumes) != len(resume_ids):
+            return Response(
+                {'error': 'Some resumes not found or access denied'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+    except Exception as e:
+        return Response(
+            {'error': 'Error validating resumes', 'details': str(e)},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        from .tasks import batch_parse_resumes_task
+        
+        task = batch_parse_resumes_task.apply_async(args=[resume_ids])
+        
+        return Response({
+            'success': True,
+            'batch_task_id': task.id,
+            'resume_count': len(resume_ids),
+            'status': 'queued',
+            'message': f'Batch resume parsing task queued for {len(resume_ids)} resumes'
+        }, status=status.HTTP_202_ACCEPTED)
+    except Exception as e:
+        logger.error(f"Error queuing batch resume parsing task: {str(e)}")
+        return Response(
+            {'error': 'Failed to queue batch resume parsing task', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def queue_resume_insights_task_view(request):
+    """
+    Queue resume insights generation as a background task.
+    """
+    if request.user.user_type != 'job_seeker':
+        return Response(
+            {'error': 'Only job seekers can generate resume insights'},
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    resume_id = request.data.get('resume_id')
+    
+    if not resume_id:
+        return Response(
+            {'error': 'resume_id is required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        # Verify resume exists and belongs to user
+        resume = Resume.objects.get(id=resume_id, job_seeker=request.user)
+    except Resume.DoesNotExist:
+        return Response(
+            {'error': 'Resume not found'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    try:
+        from .tasks import generate_resume_insights_task
+        
+        task = generate_resume_insights_task.apply_async(args=[str(resume_id)])
+        
+        return Response({
+            'success': True,
+            'task_id': task.id,
+            'resume_id': str(resume_id),
+            'status': 'queued',
+            'message': 'Resume insights generation task queued successfully'
+        }, status=status.HTTP_202_ACCEPTED)
+    except Exception as e:
+        logger.error(f"Error queuing resume insights task: {str(e)}")
+        return Response(
+            {'error': 'Failed to queue resume insights task', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def send_notification_task_view(request):
+    """
+    Send a notification to a user via background task.
+    """
+    user_id = request.data.get('user_id')
+    notification_type = request.data.get('notification_type')
+    message = request.data.get('message')
+    data = request.data.get('data', {})
+    
+    if not all([user_id, notification_type, message]):
+        return Response(
+            {'error': 'user_id, notification_type, and message are required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Only allow users to send notifications to themselves or staff to send to anyone
+    if str(user_id) != str(request.user.id) and not request.user.is_staff:
+        return Response(
+            {'error': 'Permission denied'},
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    try:
+        from .tasks import send_notification_task
+        
+        task = send_notification_task.apply_async(
+            args=[user_id, notification_type, message, data]
+        )
+        
+        return Response({
+            'success': True,
+            'task_id': task.id,
+            'user_id': user_id,
+            'notification_type': notification_type,
+            'status': 'queued',
+            'message': 'Notification task queued successfully'
+        }, status=status.HTTP_202_ACCEPTED)
+    except Exception as e:
+        logger.error(f"Error queuing notification task: {str(e)}")
+        return Response(
+            {'error': 'Failed to queue notification task', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def health_check_task_view(request):
+    """
+    Run system health check task.
+    """
+    # Only allow staff to run health checks
+    if not request.user.is_staff:
+        return Response(
+            {'error': 'Permission denied. Staff access required.'},
+            status=status.HTTP_403_FORBIDDEN
+        )
+    
+    try:
+        from .tasks import health_check_task
+        
+        task = health_check_task.apply_async()
+        
+        return Response({
+            'success': True,
+            'task_id': task.id,
+            'status': 'queued',
+            'message': 'Health check task queued successfully'
+        }, status=status.HTTP_202_ACCEPTED)
+    except Exception as e:
+        logger.error(f"Error queuing health check task: {str(e)}")
+        return Response(
+            {'error': 'Failed to queue health check task', 'details': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )

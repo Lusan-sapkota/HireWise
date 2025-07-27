@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "rest_framework_simplejwt.token_blacklist",
+    "drf_spectacular",
     "corsheaders",
     "channels",
     "matcher",
@@ -51,6 +52,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    "matcher.middleware.RequestTrackingMiddleware",
+    "matcher.middleware.SecurityMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -58,6 +61,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "matcher.middleware.RateLimitMiddleware",
+    "matcher.middleware.ErrorMonitoringMiddleware",
+    "matcher.api_cache.CacheInvalidationMiddleware",
 ]
 
 ROOT_URLCONF = "hirewise.urls"
@@ -174,6 +180,11 @@ REST_FRAMEWORK = {
         "rest_framework.parsers.MultiPartParser",
         "rest_framework.parsers.FormParser",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning",
+    "DEFAULT_VERSION": "v1",
+    "ALLOWED_VERSIONS": ["v1"],
+    "EXCEPTION_HANDLER": "matcher.exceptions.custom_exception_handler",
 }
 
 
@@ -278,6 +289,17 @@ CACHES = {
     }
 }
 
+# Cache optimization settings
+CACHE_OPTIMIZATION = {
+    'ENABLE_QUERY_CACHING': config('ENABLE_QUERY_CACHING', default=True, cast=bool),
+    'ENABLE_API_CACHING': config('ENABLE_API_CACHING', default=True, cast=bool),
+    'ENABLE_FILE_CACHING': config('ENABLE_FILE_CACHING', default=True, cast=bool),
+    'CACHE_WARM_UP_ON_START': config('CACHE_WARM_UP_ON_START', default=True, cast=bool),
+    'DEFAULT_CACHE_TIMEOUT': config('DEFAULT_CACHE_TIMEOUT', default=300, cast=int),
+    'LONG_CACHE_TIMEOUT': config('LONG_CACHE_TIMEOUT', default=3600, cast=int),
+    'SHORT_CACHE_TIMEOUT': config('SHORT_CACHE_TIMEOUT', default=60, cast=int),
+}
+
 # Celery Configuration
 CELERY_BROKER_URL = config('CELERY_BROKER_URL', default=f'redis://{":" + REDIS_PASSWORD + "@" if REDIS_PASSWORD else ""}{REDIS_HOST}:{REDIS_PORT}/1')
 CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default=f'redis://{":" + REDIS_PASSWORD + "@" if REDIS_PASSWORD else ""}{REDIS_HOST}:{REDIS_PORT}/2')
@@ -328,18 +350,46 @@ LOGGING = {
             'format': '{levelname} {message}',
             'style': '{',
         },
+        'structured': {
+            '()': 'matcher.logging_config.StructuredFormatter',
+        },
+    },
+    'filters': {
+        'request_context': {
+            '()': 'matcher.logging_config.RequestContextFilter',
+        },
     },
     'handlers': {
         'file': {
             'level': 'INFO',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': config('LOG_FILE', default=str(BASE_DIR / 'logs' / 'django.log')),
-            'formatter': 'verbose',
+            'formatter': 'structured' if not DEBUG else 'verbose',
+            'filters': ['request_context'],
+            'maxBytes': 10 * 1024 * 1024,  # 10MB
+            'backupCount': 5,
         },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
+        },
+        'error_file': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': config('ERROR_LOG_FILE', default=str(BASE_DIR / 'logs' / 'errors.log')),
+            'formatter': 'structured',
+            'filters': ['request_context'],
+            'maxBytes': 10 * 1024 * 1024,  # 10MB
+            'backupCount': 10,
+        },
+        'security_file': {
+            'level': 'WARNING',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': config('SECURITY_LOG_FILE', default=str(BASE_DIR / 'logs' / 'security.log')),
+            'formatter': 'structured',
+            'maxBytes': 10 * 1024 * 1024,  # 10MB
+            'backupCount': 10,
         },
     },
     'root': {
@@ -358,11 +408,209 @@ LOGGING = {
             'propagate': False,
         },
         'matcher': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console', 'file', 'error_file'],
             'level': 'DEBUG',
             'propagate': False,
         },
+        'hirewise.ai_operations': {
+            'handlers': ['file', 'error_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'hirewise.api_requests': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'hirewise.security': {
+            'handlers': ['security_file', 'error_file'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'hirewise.performance': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
     },
+}
+
+# DRF Spectacular Configuration for API Documentation
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'HireWise API',
+    'DESCRIPTION': 'AI-powered resume matching and job portal API system with comprehensive job management, resume parsing, and real-time notifications.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SCHEMA_PATH_PREFIX': '/api/v1/',
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SORT_OPERATIONS': False,
+    'ENUM_NAME_OVERRIDES': {
+        'ValidationErrorEnum': 'django.core.exceptions.ValidationError',
+    },
+    'POSTPROCESSING_HOOKS': [
+        'matcher.schema_hooks.postprocess_schema_enums',
+        'matcher.schema_hooks.postprocess_schema_security',
+    ],
+    'PREPROCESSING_HOOKS': [
+        'matcher.schema_hooks.preprocess_exclude_paths',
+    ],
+    'SERVERS': [
+        {'url': 'http://localhost:8000', 'description': 'Development server'},
+        {'url': 'https://staging.hirewise.com', 'description': 'Staging server'},
+        {'url': 'https://api.hirewise.com', 'description': 'Production server'},
+    ],
+    'TAGS': [
+        {'name': 'Authentication', 'description': 'JWT authentication and user management'},
+        {'name': 'Jobs', 'description': 'Job posting management and search'},
+        {'name': 'Applications', 'description': 'Job application workflow'},
+        {'name': 'Resume Parsing', 'description': 'AI-powered resume parsing with Google Gemini'},
+        {'name': 'Match Scoring', 'description': 'ML-based job matching and scoring'},
+        {'name': 'Profiles', 'description': 'User profile management'},
+        {'name': 'Files', 'description': 'Secure file upload and management'},
+        {'name': 'Notifications', 'description': 'Real-time notification system'},
+        {'name': 'Dashboard', 'description': 'User dashboard and analytics'},
+        {'name': 'Skills', 'description': 'Skills management and tracking'},
+    ],
+    'EXTERNAL_DOCS': {
+        'description': 'HireWise Documentation',
+        'url': 'https://docs.hirewise.com/',
+    },
+    'CONTACT': {
+        'name': 'HireWise API Support',
+        'email': 'api-support@hirewise.com',
+    },
+    'LICENSE': {
+        'name': 'MIT License',
+        'url': 'https://opensource.org/licenses/MIT',
+    },
+    'SECURITY': [
+        {
+            'type': 'http',
+            'scheme': 'bearer',
+            'bearerFormat': 'JWT',
+        }
+    ],
+    'APPEND_COMPONENTS': {
+        'securitySchemes': {
+            'jwtAuth': {
+                'type': 'http',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
+                'description': 'JWT token authentication. Format: Bearer <token>'
+            }
+        }
+    },
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'persistAuthorization': True,
+        'displayOperationId': True,
+        'filter': True,
+        'tryItOutEnabled': True,
+    },
+    'REDOC_UI_SETTINGS': {
+        'hideDownloadButton': False,
+        'hideHostname': False,
+        'hideLoading': False,
+        'hideSchemaPattern': True,
+        'scrollYOffset': 0,
+        'theme': {
+            'colors': {
+                'primary': {
+                    'main': '#1976d2'
+                }
+            }
+        }
+    },
+}
+
+# Rate Limiting Configuration
+RATE_LIMITING = {
+    'ENABLED': config('RATE_LIMITING_ENABLED', default=True, cast=bool),
+    'DEFAULT_LIMIT': config('RATE_LIMIT_DEFAULT', default=100, cast=int),  # requests per minute
+    'DEFAULT_WINDOW': config('RATE_LIMIT_WINDOW', default=60, cast=int),   # seconds
+    'LIMITS': {
+        'auth': {'requests': config('RATE_LIMIT_AUTH', default=10, cast=int), 'window': 60},
+        'upload': {'requests': config('RATE_LIMIT_UPLOAD', default=20, cast=int), 'window': 60},
+        'ai': {'requests': config('RATE_LIMIT_AI', default=30, cast=int), 'window': 60},
+    },
+    'SPECIAL_PATHS': {
+        '/api/auth/': 'auth',
+        '/api/parse-resume/': 'upload',
+        '/api/match-score/': 'ai',
+        '/api/recommendations/': 'ai',
+    }
+}
+
+# Error Handling Configuration
+ERROR_HANDLING = {
+    'ENABLE_MONITORING': config('ERROR_MONITORING_ENABLED', default=True, cast=bool),
+    'ERROR_RATE_THRESHOLD_5MIN': config('ERROR_RATE_THRESHOLD_5MIN', default=10, cast=int),
+    'ERROR_RATE_THRESHOLD_1HOUR': config('ERROR_RATE_THRESHOLD_1HOUR', default=50, cast=int),
+    'CRITICAL_ERROR_THRESHOLD_5MIN': config('CRITICAL_ERROR_THRESHOLD_5MIN', default=3, cast=int),
+    'ALERT_EMAIL': config('ERROR_ALERT_EMAIL', default=''),
+    'ENABLE_CIRCUIT_BREAKER': config('CIRCUIT_BREAKER_ENABLED', default=True, cast=bool),
+}
+
+# Circuit Breaker Configuration
+CIRCUIT_BREAKER = {
+    'GEMINI_API': {
+        'failure_threshold': config('GEMINI_CIRCUIT_BREAKER_THRESHOLD', default=5, cast=int),
+        'recovery_timeout': config('GEMINI_CIRCUIT_BREAKER_TIMEOUT', default=60, cast=int),
+    },
+    'ML_MODEL': {
+        'failure_threshold': config('ML_CIRCUIT_BREAKER_THRESHOLD', default=3, cast=int),
+        'recovery_timeout': config('ML_CIRCUIT_BREAKER_TIMEOUT', default=30, cast=int),
+    },
+}
+
+# Retry Configuration
+RETRY_CONFIG = {
+    'GEMINI_API': {
+        'max_retries': config('GEMINI_MAX_RETRIES', default=3, cast=int),
+        'base_delay': config('GEMINI_RETRY_DELAY', default=2.0, cast=float),
+        'max_delay': config('GEMINI_MAX_DELAY', default=30.0, cast=float),
+    },
+    'ML_MODEL': {
+        'max_retries': config('ML_MAX_RETRIES', default=2, cast=int),
+        'base_delay': config('ML_RETRY_DELAY', default=1.0, cast=float),
+        'max_delay': config('ML_MAX_DELAY', default=10.0, cast=float),
+    },
+    'DATABASE': {
+        'max_retries': config('DB_MAX_RETRIES', default=3, cast=int),
+        'base_delay': config('DB_RETRY_DELAY', default=0.5, cast=float),
+        'max_delay': config('DB_MAX_DELAY', default=5.0, cast=float),
+    },
+}
+
+# Security Configuration
+SECURITY_CONFIG = {
+    'ENABLE_SUSPICIOUS_ACTIVITY_DETECTION': config('SECURITY_DETECTION_ENABLED', default=True, cast=bool),
+    'MAX_HEADER_SIZE': config('MAX_HEADER_SIZE', default=8192, cast=int),  # 8KB
+    'MAX_USER_AGENT_LENGTH': config('MAX_USER_AGENT_LENGTH', default=500, cast=int),
+    'SUSPICIOUS_PATTERNS': [
+        'script', 'javascript:', '<script', 'eval(', 'document.cookie',
+        'union select', 'drop table', '../', '..\\',
+    ],
+}
+
+# Performance Monitoring Configuration
+PERFORMANCE_MONITORING = {
+    'ENABLE_SLOW_QUERY_LOGGING': config('SLOW_QUERY_LOGGING_ENABLED', default=True, cast=bool),
+    'SLOW_QUERY_THRESHOLD': config('SLOW_QUERY_THRESHOLD', default=2.0, cast=float),  # seconds
+    'ENABLE_MEMORY_MONITORING': config('MEMORY_MONITORING_ENABLED', default=True, cast=bool),
+    'ENABLE_CACHE_MONITORING': config('CACHE_MONITORING_ENABLED', default=True, cast=bool),
+}
+
+# Health Check Configuration
+HEALTH_CHECK = {
+    'ENABLE_HEALTH_CHECKS': config('HEALTH_CHECKS_ENABLED', default=True, cast=bool),
+    'CHECK_INTERVAL': config('HEALTH_CHECK_INTERVAL', default=60, cast=int),  # seconds
+    'SERVICES': {
+        'database': True,
+        'redis': True,
+        'gemini_api': config('GEMINI_HEALTH_CHECK_ENABLED', default=True, cast=bool),
+        'ml_model': config('ML_HEALTH_CHECK_ENABLED', default=True, cast=bool),
+    }
 }
 
 # Default primary key field type

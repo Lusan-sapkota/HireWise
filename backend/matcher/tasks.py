@@ -488,3 +488,316 @@ def generate_resume_insights_task(self, resume_id):
             'status': 'failed',
             'error': str(e)
         }
+
+
+@shared_task(bind=True)
+def cleanup_old_files_task(self, days_old=365):
+    """
+    Background task to clean up old uploaded files.
+    """
+    logger.info(f"Starting cleanup of files older than {days_old} days")
+    
+    try:
+        from .models import Resume
+        from datetime import timedelta
+        import os
+        
+        cutoff_date = timezone.now() - timedelta(days=days_old)
+        
+        # Get old resumes
+        old_resumes = Resume.objects.filter(uploaded_at__lt=cutoff_date)
+        deleted_files = 0
+        deleted_records = 0
+        
+        for resume in old_resumes:
+            try:
+                # Delete the physical file
+                if resume.file and os.path.exists(resume.file.path):
+                    os.remove(resume.file.path)
+                    deleted_files += 1
+                
+                # Delete the database record
+                resume.delete()
+                deleted_records += 1
+                
+            except Exception as e:
+                logger.error(f"Error deleting resume {resume.id}: {str(e)}")
+        
+        logger.info(f"Cleaned up {deleted_files} files and {deleted_records} records")
+        
+        return {
+            'task_id': self.request.id,
+            'deleted_files': deleted_files,
+            'deleted_records': deleted_records,
+            'cutoff_date': cutoff_date.isoformat(),
+            'status': 'completed'
+        }
+        
+    except Exception as e:
+        logger.error(f"Error in file cleanup task: {str(e)}")
+        return {
+            'task_id': self.request.id,
+            'status': 'failed',
+            'error': str(e)
+        }
+
+
+@shared_task(bind=True, max_retries=3, default_retry_delay=30)
+def send_notification_task(self, user_id, notification_type, message, data=None):
+    """
+    Background task to send notifications to users via WebSocket.
+    """
+    logger.info(f"Sending notification to user {user_id}: {notification_type}")
+    
+    try:
+        from channels.layers import get_channel_layer
+        from asgiref.sync import async_to_sync
+        from .models import User, Notification
+        import json
+        
+        # Get the user
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            logger.error(f"User {user_id} not found")
+            return {
+                'user_id': user_id,
+                'status': 'failed',
+                'error': 'User not found'
+            }
+        
+        # Create notification record
+        notification = Notification.objects.create(
+            user=user,
+            notification_type=notification_type,
+            message=message,
+            data=data or {},
+            is_read=False
+        )
+        
+        # Send via WebSocket
+        channel_layer = get_channel_layer()
+        group_name = f"user_{user_id}"
+        
+        notification_data = {
+            'type': 'send_notification',
+            'notification': {
+                'id': str(notification.id),
+                'type': notification_type,
+                'message': message,
+                'data': data or {},
+                'created_at': notification.created_at.isoformat(),
+                'is_read': False
+            }
+        }
+        
+        async_to_sync(channel_layer.group_send)(group_name, notification_data)
+        
+        logger.info(f"Notification sent to user {user_id}")
+        
+        return {
+            'user_id': user_id,
+            'notification_id': str(notification.id),
+            'notification_type': notification_type,
+            'status': 'completed'
+        }
+        
+    except Exception as e:
+        logger.error(f"Error sending notification to user {user_id}: {str(e)}")
+        # Retry the task
+        raise self.retry(exc=e, countdown=30)
+
+
+@shared_task(bind=True)
+def batch_send_notifications_task(self, user_ids, notification_type, message, data=None):
+    """
+    Background task to send notifications to multiple users.
+    """
+    logger.info(f"Sending batch notifications to {len(user_ids)} users: {notification_type}")
+    
+    results = []
+    
+    for user_id in user_ids:
+        try:
+            # Queue individual notification task
+            result = send_notification_task.apply_async(
+                args=[user_id, notification_type, message, data]
+            )
+            results.append({
+                'user_id': user_id,
+                'task_id': result.id,
+                'status': 'queued'
+            })
+        except Exception as e:
+            logger.error(f"Error queuing notification for user {user_id}: {str(e)}")
+            results.append({
+                'user_id': user_id,
+                'status': 'failed',
+                'error': str(e)
+            })
+    
+    return {
+        'batch_id': self.request.id,
+        'total_users': len(user_ids),
+        'results': results,
+        'status': 'completed'
+    }
+
+
+@shared_task(bind=True)
+def health_check_task(self):
+    """
+    Background task for system health checks.
+    """
+    logger.info("Running system health check")
+    
+    try:
+        from django.db import connection
+        from django.core.cache import cache
+        import redis
+        from django.conf import settings
+        
+        health_status = {
+            'task_id': self.request.id,
+            'timestamp': timezone.now().isoformat(),
+            'status': 'healthy',
+            'checks': {}
+        }
+        
+        # Database check
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT 1")
+            health_status['checks']['database'] = {'status': 'healthy'}
+        except Exception as e:
+            health_status['checks']['database'] = {'status': 'unhealthy', 'error': str(e)}
+            health_status['status'] = 'unhealthy'
+        
+        # Cache check
+        try:
+            cache.set('health_check', 'test', 30)
+            cache.get('health_check')
+            health_status['checks']['cache'] = {'status': 'healthy'}
+        except Exception as e:
+            health_status['checks']['cache'] = {'status': 'unhealthy', 'error': str(e)}
+            health_status['status'] = 'unhealthy'
+        
+        # Redis check
+        try:
+            redis_client = redis.Redis.from_url(settings.CELERY_BROKER_URL)
+            redis_client.ping()
+            health_status['checks']['redis'] = {'status': 'healthy'}
+        except Exception as e:
+            health_status['checks']['redis'] = {'status': 'unhealthy', 'error': str(e)}
+            health_status['status'] = 'unhealthy'
+        
+        # AI service check (Gemini API)
+        try:
+            from .services import GeminiResumeParser
+            parser = GeminiResumeParser()
+            # Simple test to check if API key is configured
+            if settings.GEMINI_API_KEY:
+                health_status['checks']['gemini_api'] = {'status': 'configured'}
+            else:
+                health_status['checks']['gemini_api'] = {'status': 'not_configured'}
+        except Exception as e:
+            health_status['checks']['gemini_api'] = {'status': 'unhealthy', 'error': str(e)}
+        
+        # ML model check
+        try:
+            from .ml_services import get_ml_model
+            ml_model = get_ml_model()
+            health_status['checks']['ml_model'] = {'status': 'healthy'}
+        except Exception as e:
+            health_status['checks']['ml_model'] = {'status': 'unhealthy', 'error': str(e)}
+        
+        logger.info(f"Health check completed with status: {health_status['status']}")
+        
+        return health_status
+        
+    except Exception as e:
+        logger.error(f"Error in health check task: {str(e)}")
+        return {
+            'task_id': self.request.id,
+            'timestamp': timezone.now().isoformat(),
+            'status': 'failed',
+            'error': str(e)
+        }
+
+
+@shared_task(bind=True, max_retries=2, default_retry_delay=60)
+def process_job_application_task(self, application_id):
+    """
+    Background task to process job applications and calculate match scores.
+    """
+    logger.info(f"Processing job application {application_id}")
+    
+    try:
+        from .models import Application, AIAnalysisResult
+        
+        # Get the application
+        try:
+            application = Application.objects.get(id=application_id)
+        except Application.DoesNotExist:
+            logger.error(f"Application {application_id} not found")
+            return {
+                'application_id': application_id,
+                'status': 'failed',
+                'error': 'Application not found'
+            }
+        
+        # Calculate match score if not already done
+        if application.match_score == 0.0 and application.resume:
+            match_result = calculate_match_score_task.apply_async(
+                args=[str(application.resume.id), str(application.job_post.id)]
+            )
+            
+            # Wait for match score calculation (with timeout)
+            try:
+                match_score_result = match_result.get(timeout=300)  # 5 minutes timeout
+                if match_score_result['status'] == 'completed':
+                    application.match_score = match_score_result['match_score']
+                    application.save()
+            except Exception as e:
+                logger.warning(f"Match score calculation failed for application {application_id}: {str(e)}")
+        
+        # Send notification to recruiter
+        send_notification_task.delay(
+            user_id=str(application.job_post.recruiter.id),
+            notification_type='new_application',
+            message=f'New application received for {application.job_post.title}',
+            data={
+                'application_id': str(application.id),
+                'job_title': application.job_post.title,
+                'applicant_name': f"{application.job_seeker.first_name} {application.job_seeker.last_name}",
+                'match_score': application.match_score
+            }
+        )
+        
+        # Send confirmation to job seeker
+        send_notification_task.delay(
+            user_id=str(application.job_seeker.id),
+            notification_type='application_submitted',
+            message=f'Your application for {application.job_post.title} has been submitted',
+            data={
+                'application_id': str(application.id),
+                'job_title': application.job_post.title,
+                'company': application.job_post.recruiter.recruiter_profile.company_name if hasattr(application.job_post.recruiter, 'recruiter_profile') else 'Company'
+            }
+        )
+        
+        logger.info(f"Job application {application_id} processed successfully")
+        
+        return {
+            'application_id': application_id,
+            'status': 'completed',
+            'match_score': application.match_score
+        }
+        
+    except Exception as e:
+        logger.error(f"Error processing job application {application_id}: {str(e)}")
+        return {
+            'application_id': application_id,
+            'status': 'failed',
+            'error': str(e)
+        }

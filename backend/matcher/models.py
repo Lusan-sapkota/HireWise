@@ -20,6 +20,18 @@ class User(AbstractUser):
     updated_at = models.DateTimeField(auto_now=True)
     is_verified = models.BooleanField(default=False)
     
+    @classmethod
+    def get_pagination_optimizations(cls, queryset):
+        """
+        Apply pagination optimizations for User queryset.
+        """
+        return queryset.select_related(
+            'job_seeker_profile',
+            'recruiter_profile'
+        ).prefetch_related(
+            'user_skills__skill'
+        )
+    
     def __str__(self):
         return f"{self.username} ({self.get_user_type_display()})"
 
@@ -146,6 +158,21 @@ class JobPost(models.Model):
             models.Index(fields=['salary_min', 'salary_max']),
         ]
     
+    @classmethod
+    def get_pagination_optimizations(cls, queryset):
+        """
+        Apply pagination optimizations for JobPost queryset.
+        """
+        return queryset.select_related(
+            'recruiter',
+            'recruiter__recruiter_profile'
+        ).prefetch_related(
+            models.Prefetch(
+                'applications',
+                queryset=cls.applications.related.related_model.objects.select_related('job_seeker')
+            )
+        )
+    
     def save(self, *args, **kwargs):
         if not self.slug:
             from django.utils.text import slugify
@@ -204,6 +231,19 @@ class Application(models.Model):
     class Meta:
         unique_together = ('job_seeker', 'job_post')
         ordering = ['-applied_at']
+    
+    @classmethod
+    def get_pagination_optimizations(cls, queryset):
+        """
+        Apply pagination optimizations for Application queryset.
+        """
+        return queryset.select_related(
+            'job_seeker',
+            'job_seeker__job_seeker_profile',
+            'job_post',
+            'job_post__recruiter__recruiter_profile',
+            'resume'
+        )
     
     def __str__(self):
         return f"{self.job_seeker.username} -> {self.job_post.title}"

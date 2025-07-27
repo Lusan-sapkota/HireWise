@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
 from . import file_views
+from . import recommendation_views
 
 # Create a router and register our viewsets
 router = DefaultRouter()
@@ -58,6 +59,25 @@ urlpatterns = [
     path('match-scores/resume/<uuid:resume_id>/', views.get_match_scores_for_resume_view, name='match-scores-for-resume'),
     path('match-scores/job/<uuid:job_id>/', views.get_match_scores_for_job_view, name='match-scores-for-job'),
     
+    # Task monitoring and management endpoints
+    path('tasks/status/<str:task_id>/', views.get_task_status_view, name='get-task-status'),
+    path('tasks/batch-status/', views.get_batch_task_status_view, name='get-batch-task-status'),
+    path('tasks/progress/<str:task_id>/', views.get_task_progress_view, name='get-task-progress'),
+    path('tasks/cancel/<str:task_id>/', views.cancel_task_view, name='cancel-task'),
+    path('tasks/active/', views.get_active_tasks_view, name='get-active-tasks'),
+    path('tasks/worker-stats/', views.get_worker_stats_view, name='get-worker-stats'),
+    path('tasks/result/<str:task_id>/', views.get_task_result_view, name='get-task-result'),
+    path('tasks/result/<str:task_id>/clear/', views.clear_task_result_view, name='clear-task-result'),
+    path('tasks/user-results/', views.get_user_task_results_view, name='get-user-task-results'),
+    path('tasks/test/', views.test_celery_task_view, name='test-celery-task'),
+    
+    # Background task queue endpoints
+    path('tasks/queue/parse-resume/', views.queue_resume_parsing_task_view, name='queue-resume-parsing-task'),
+    path('tasks/queue/batch-parse-resumes/', views.queue_batch_resume_parsing_task_view, name='queue-batch-resume-parsing-task'),
+    path('tasks/queue/resume-insights/', views.queue_resume_insights_task_view, name='queue-resume-insights-task'),
+    path('tasks/queue/send-notification/', views.send_notification_task_view, name='send-notification-task'),
+    path('tasks/queue/health-check/', views.health_check_task_view, name='health-check-task'),
+    
     # Secure file upload and management endpoints
     path('files/upload/', file_views.secure_file_upload, name='secure-file-upload'),
     path('files/upload-resume/', file_views.upload_resume, name='upload-resume'),
@@ -66,6 +86,47 @@ urlpatterns = [
     path('files/list/', file_views.list_user_files, name='list-user-files'),
     path('files/cleanup/', file_views.cleanup_old_files, name='cleanup-old-files'),
     path('files/validation-info/', file_views.file_validation_info, name='file-validation-info'),
+    
+    # Advanced search and recommendation endpoints
+    path('recommendations/jobs/', recommendation_views.JobRecommendationView.as_view(), name='job-recommendations'),
+    path('recommendations/candidates/<uuid:job_id>/', recommendation_views.CandidateRecommendationView.as_view(), name='candidate-recommendations'),
+    path('search/jobs/', recommendation_views.AdvancedJobSearchView.as_view(), name='advanced-job-search'),
+    path('search/candidates/', recommendation_views.AdvancedCandidateSearchView.as_view(), name='advanced-candidate-search'),
+    path('dashboard/personalized/', recommendation_views.personalized_dashboard_view, name='personalized-dashboard'),
+    
+    # Notification endpoints
+    path('notifications/', views.NotificationListView.as_view(), name='notifications-list'),
+    path('notifications/<uuid:notification_id>/', views.NotificationDetailView.as_view(), name='notification-detail'),
+    path('notifications/mark-all-read/', views.mark_all_notifications_read, name='mark-all-notifications-read'),
+    path('notifications/unread-count/', views.get_unread_notifications_count, name='unread-notifications-count'),
+    
+    # Resume builder endpoints
+    path('resume-builder/templates/', views.ResumeTemplateListView.as_view(), name='resume-templates'),
+    path('resume-builder/generate/', views.generate_resume_content, name='generate-resume-content'),
+    path('resume-builder/export/', views.export_resume, name='export-resume'),
+    path('resume-builder/suggestions/', views.get_resume_suggestions, name='resume-suggestions'),
+    
+    # AI Interview endpoints
+    path('ai-interview/start/', views.start_ai_interview, name='start-ai-interview'),
+    path('ai-interview/<uuid:session_id>/response/', views.submit_ai_interview_response, name='submit-ai-interview-response'),
+    path('ai-interview/<uuid:session_id>/end/', views.end_ai_interview, name='end-ai-interview'),
+    path('ai-interview/<uuid:session_id>/feedback/', views.get_ai_interview_feedback, name='ai-interview-feedback'),
+    
+    # Message endpoints
+    path('messages/conversations/', views.ConversationListView.as_view(), name='conversations-list'),
+    path('messages/conversations/<uuid:conversation_id>/', views.ConversationDetailView.as_view(), name='conversation-detail'),
+    path('messages/conversations/<uuid:conversation_id>/messages/', views.MessageListView.as_view(), name='messages-list'),
+    path('messages/send/', views.send_message, name='send-message'),
+    path('messages/mark-read/', views.mark_messages_read, name='mark-messages-read'),
+    
+    # Search analytics and suggestions endpoints
+    path('search/suggestions/', recommendation_views.search_suggestions_view, name='search-suggestions'),
+    path('search/popular/', recommendation_views.popular_searches_view, name='popular-searches'),
+    path('search/save/', recommendation_views.save_search_view, name='save-search'),
+    path('search/saved/', recommendation_views.saved_searches_view, name='saved-searches'),
+    path('search/saved/<uuid:search_id>/', recommendation_views.delete_saved_search_view, name='delete-saved-search'),
+    path('search/analytics/', recommendation_views.search_analytics_view, name='search-analytics'),
+    path('search/track-interaction/', recommendation_views.track_search_interaction_view, name='track-search-interaction'),
     
     # Include router URLs
     path('', include(router.urls)),

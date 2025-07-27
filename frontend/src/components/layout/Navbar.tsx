@@ -17,8 +17,8 @@ import {
   Settings,
   LogOut,
   MessageSquare,
-  Zap
 } from 'lucide-react';
+import logo from '../../../public/logo.png';
 import { mockUser } from '../../data/mockData';
 
 export const Navbar: React.FC = () => {
@@ -50,8 +50,8 @@ export const Navbar: React.FC = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center shadow-lg">
-              <Zap className="w-6 h-6 text-white" />
+            <div className="flex bg-gradient-to-t from-indigo-500 to-violet-500 items-center justify-center shadow-lg">
+              <img src={logo} alt="HireWise Logo" className="w-12 h-12" />
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold text-gray-900 dark:text-white">HireWise</span>

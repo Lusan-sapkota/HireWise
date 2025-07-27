@@ -18,17 +18,22 @@ import PyPDF2
 import docx
 from io import BytesIO
 
+from .exceptions import GeminiAPIException, FileProcessingException, ConfigurationException
+from .logging_config import ai_logger, performance_logger
+from .error_recovery import (
+    gemini_retry_config, gemini_circuit_breaker, gemini_bulkhead,
+    retry_with_backoff, safe_execute, with_performance_monitoring
+)
+
 logger = logging.getLogger(__name__)
 
-
-class GeminiAPIError(Exception):
-    """Custom exception for Gemini API errors"""
-    pass
+# For backward compatibility
+GeminiAPIError = GeminiAPIException
 
 
 class GeminiResumeParser:
     """
-    Google Gemini API client for resume parsing and analysis
+    Google Gemini API client for resume parsing and analysis with comprehensive error handling
     """
     
     def __init__(self):
@@ -36,18 +41,29 @@ class GeminiResumeParser:
         self.model_name = getattr(settings, 'GEMINI_MODEL_NAME', 'gemini-pro')
         
         if not self.api_key:
-            raise GeminiAPIError("GEMINI_API_KEY not configured in settings")
+            raise ConfigurationException(
+                message="GEMINI_API_KEY not configured in settings",
+                code="GEMINI_API_KEY_MISSING"
+            )
         
         try:
             genai.configure(api_key=self.api_key)
             self.model = genai.GenerativeModel(self.model_name)
+            logger.info(f"Gemini model {self.model_name} initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize Gemini model: {str(e)}")
-            raise GeminiAPIError(f"Failed to initialize Gemini model: {str(e)}")
+            raise GeminiAPIException(
+                message=f"Failed to initialize Gemini model: {str(e)}",
+                code="GEMINI_INITIALIZATION_ERROR"
+            )
     
+    @gemini_circuit_breaker
+    @gemini_bulkhead
+    @retry_with_backoff(gemini_retry_config)
+    @with_performance_monitoring
     def parse_resume(self, file_path: str, file_content: Optional[bytes] = None) -> Dict[str, Any]:
         """
-        Parse resume using Google Gemini API
+        Parse resume using Google Gemini API with comprehensive error handling
         
         Args:
             file_path: Path to the resume file
@@ -57,18 +73,32 @@ class GeminiResumeParser:
             Dict containing parsed resume data
         """
         start_time = time.time()
+        file_size = len(file_content) if file_content else 0
         
         try:
             # Extract text from file
             text_content = self._extract_text_from_file(file_path, file_content)
             
             if not text_content.strip():
-                raise GeminiAPIError("No text content could be extracted from the file")
+                raise FileProcessingException(
+                    message="No text content could be extracted from the file",
+                    code="EMPTY_FILE_CONTENT"
+                )
             
             # Generate structured data using Gemini
             parsed_data = self._generate_structured_data(text_content)
             
             processing_time = time.time() - start_time
+            
+            # Log successful operation
+            ai_logger.log_gemini_request(
+                operation='resume_parse',
+                input_size=file_size or len(text_content.encode('utf-8')),
+                processing_time=processing_time,
+                success=True,
+                confidence_score=parsed_data.get('confidence_score', 0.8),
+                file_path=file_path
+            )
             
             return {
                 'success': True,
@@ -79,20 +109,42 @@ class GeminiResumeParser:
                 'timestamp': time.time()
             }
             
+        except (GeminiAPIException, FileProcessingException) as e:
+            processing_time = time.time() - start_time
+            
+            # Log failed operation
+            ai_logger.log_gemini_request(
+                operation='resume_parse',
+                input_size=file_size,
+                processing_time=processing_time,
+                success=False,
+                error=str(e),
+                file_path=file_path
+            )
+            
+            raise e
+            
         except Exception as e:
             processing_time = time.time() - start_time
-            logger.error(f"Error parsing resume {file_path}: {str(e)}")
             
-            return {
-                'success': False,
-                'error': str(e),
-                'processing_time': processing_time,
-                'timestamp': time.time()
-            }
+            # Log unexpected error
+            ai_logger.log_gemini_request(
+                operation='resume_parse',
+                input_size=file_size,
+                processing_time=processing_time,
+                success=False,
+                error=f"Unexpected error: {str(e)}",
+                file_path=file_path
+            )
+            
+            raise GeminiAPIException(
+                message=f"Unexpected error during resume parsing: {str(e)}",
+                code="GEMINI_UNEXPECTED_ERROR"
+            )
     
     def _extract_text_from_file(self, file_path: str, file_content: Optional[bytes] = None) -> str:
         """
-        Extract text content from PDF, DOCX, or TXT files
+        Extract text content from PDF, DOCX, or TXT files with error handling
         """
         try:
             file_extension = Path(file_path).suffix.lower()
@@ -115,14 +167,22 @@ class GeminiResumeParser:
                     with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
                         return f.read()
             
-            raise ValueError(f"Unsupported file format: {file_extension}")
+            raise FileProcessingException(
+                message=f"Unsupported file format: {file_extension}",
+                code="UNSUPPORTED_FILE_FORMAT"
+            )
             
+        except FileProcessingException:
+            raise
         except Exception as e:
             logger.error(f"Error extracting text from {file_path}: {str(e)}")
-            raise GeminiAPIError(f"Failed to extract text: {str(e)}")
+            raise FileProcessingException(
+                message=f"Failed to extract text: {str(e)}",
+                code="TEXT_EXTRACTION_ERROR"
+            )
     
     def _extract_text_from_pdf_file(self, file_path: str) -> str:
-        """Extract text from PDF file"""
+        """Extract text from PDF file with error handling"""
         text = ""
         try:
             with open(file_path, 'rb') as file:
@@ -130,12 +190,15 @@ class GeminiResumeParser:
                 for page in pdf_reader.pages:
                     text += page.extract_text() + "\n"
         except Exception as e:
-            raise GeminiAPIError(f"Error reading PDF file: {str(e)}")
+            raise FileProcessingException(
+                message=f"Error reading PDF file: {str(e)}",
+                code="PDF_READING_ERROR"
+            )
         
         return text.strip()
     
     def _extract_text_from_pdf_bytes(self, file_content: bytes) -> str:
-        """Extract text from PDF bytes"""
+        """Extract text from PDF bytes with error handling"""
         text = ""
         try:
             pdf_file = BytesIO(file_content)
@@ -143,24 +206,30 @@ class GeminiResumeParser:
             for page in pdf_reader.pages:
                 text += page.extract_text() + "\n"
         except Exception as e:
-            raise GeminiAPIError(f"Error reading PDF content: {str(e)}")
+            raise FileProcessingException(
+                message=f"Error reading PDF content: {str(e)}",
+                code="PDF_CONTENT_ERROR"
+            )
         
         return text.strip()
     
     def _extract_text_from_docx_file(self, file_path: str) -> str:
-        """Extract text from DOCX file"""
+        """Extract text from DOCX file with error handling"""
         text = ""
         try:
             doc = docx.Document(file_path)
             for paragraph in doc.paragraphs:
                 text += paragraph.text + "\n"
         except Exception as e:
-            raise GeminiAPIError(f"Error reading DOCX file: {str(e)}")
+            raise FileProcessingException(
+                message=f"Error reading DOCX file: {str(e)}",
+                code="DOCX_READING_ERROR"
+            )
         
         return text.strip()
     
     def _extract_text_from_docx_bytes(self, file_content: bytes) -> str:
-        """Extract text from DOCX bytes"""
+        """Extract text from DOCX bytes with error handling"""
         text = ""
         try:
             docx_file = BytesIO(file_content)
@@ -168,13 +237,16 @@ class GeminiResumeParser:
             for paragraph in doc.paragraphs:
                 text += paragraph.text + "\n"
         except Exception as e:
-            raise GeminiAPIError(f"Error reading DOCX content: {str(e)}")
+            raise FileProcessingException(
+                message=f"Error reading DOCX content: {str(e)}",
+                code="DOCX_CONTENT_ERROR"
+            )
         
         return text.strip()
     
     def _generate_structured_data(self, text_content: str) -> Dict[str, Any]:
         """
-        Use Gemini API to generate structured data from resume text
+        Use Gemini API to generate structured data from resume text with error handling
         """
         try:
             prompt = self._create_parsing_prompt(text_content)
@@ -183,7 +255,10 @@ class GeminiResumeParser:
             response = self.model.generate_content(prompt)
             
             if not response or not hasattr(response, 'text'):
-                raise GeminiAPIError("Invalid response from Gemini API")
+                raise GeminiAPIException(
+                    message="Invalid response from Gemini API",
+                    code="GEMINI_INVALID_RESPONSE"
+                )
             
             # Parse the JSON response
             try:
@@ -195,9 +270,14 @@ class GeminiResumeParser:
             # Validate and clean the structured data
             return self._validate_structured_data(structured_data)
             
+        except GeminiAPIException:
+            raise
         except Exception as e:
             logger.error(f"Error generating structured data: {str(e)}")
-            raise GeminiAPIError(f"Failed to generate structured data: {str(e)}")
+            raise GeminiAPIException(
+                message=f"Failed to generate structured data: {str(e)}",
+                code="GEMINI_STRUCTURED_DATA_ERROR"
+            )
     
     def _create_parsing_prompt(self, text_content: str) -> str:
         """

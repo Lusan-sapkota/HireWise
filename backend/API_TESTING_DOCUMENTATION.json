@@ -1,0 +1,503 @@
+{
+  "api_endpoints": {
+    "Authentication": {
+      "POST /api/v1/auth/jwt/register/": {
+        "description": "Register new user with JWT tokens",
+        "authentication": "None",
+        "parameters": [
+          "username",
+          "email",
+          "password",
+          "user_type"
+        ],
+        "responses": {
+          "201": "User created successfully with tokens",
+          "400": "Validation error",
+          "409": "User already exists"
+        },
+        "test_coverage": "tests_jwt_auth.py::TestJWTRegistration",
+        "performance_target": "< 300ms average response time"
+      },
+      "POST /api/v1/auth/jwt/login/": {
+        "description": "Authenticate user and receive JWT tokens",
+        "authentication": "None",
+        "parameters": [
+          "username",
+          "password"
+        ],
+        "responses": {
+          "200": "Login successful with tokens",
+          "401": "Invalid credentials"
+        },
+        "test_coverage": "tests_jwt_auth.py::TestJWTLogin",
+        "performance_target": "< 200ms average response time"
+      },
+      "POST /api/v1/auth/jwt/logout/": {
+        "description": "Logout user and blacklist refresh token",
+        "authentication": "JWT Bearer Token",
+        "parameters": [
+          "refresh_token"
+        ],
+        "responses": {
+          "200": "Logout successful",
+          "401": "Authentication required"
+        },
+        "test_coverage": "tests_jwt_auth.py::TestJWTLogout",
+        "performance_target": "< 100ms average response time"
+      }
+    },
+    "Job Management": {
+      "GET /api/v1/job-posts/": {
+        "description": "List job postings with filtering and search",
+        "authentication": "Optional (public endpoint)",
+        "parameters": [
+          "search",
+          "location",
+          "job_type",
+          "skills",
+          "page",
+          "page_size"
+        ],
+        "responses": {
+          "200": "Paginated list of job postings"
+        },
+        "test_coverage": "tests_job_management.py::TestJobPostList",
+        "performance_target": "< 500ms with 1000+ jobs"
+      },
+      "POST /api/v1/job-posts/": {
+        "description": "Create new job posting (recruiters only)",
+        "authentication": "JWT Bearer Token (recruiter)",
+        "parameters": [
+          "title",
+          "description",
+          "location",
+          "job_type",
+          "skills_required"
+        ],
+        "responses": {
+          "201": "Job posting created",
+          "400": "Validation error",
+          "403": "Permission denied"
+        },
+        "test_coverage": "tests_job_management.py::TestJobPostCreate",
+        "performance_target": "< 200ms average response time"
+      },
+      "GET /api/v1/job-posts/{id}/": {
+        "description": "Retrieve specific job posting",
+        "authentication": "Optional",
+        "parameters": [
+          "id (path parameter)"
+        ],
+        "responses": {
+          "200": "Job posting details",
+          "404": "Job not found"
+        },
+        "test_coverage": "tests_job_management.py::TestJobPostDetail",
+        "performance_target": "< 100ms average response time"
+      }
+    },
+    "Applications": {
+      "POST /api/v1/applications/": {
+        "description": "Apply to job posting",
+        "authentication": "JWT Bearer Token (job_seeker)",
+        "parameters": [
+          "job_post",
+          "resume",
+          "cover_letter"
+        ],
+        "responses": {
+          "201": "Application submitted",
+          "400": "Validation error or duplicate application",
+          "403": "Permission denied"
+        },
+        "test_coverage": "tests_application_system.py::TestApplicationCreate",
+        "performance_target": "< 300ms average response time"
+      },
+      "GET /api/v1/applications/": {
+        "description": "List user applications",
+        "authentication": "JWT Bearer Token",
+        "parameters": [
+          "status",
+          "page",
+          "page_size"
+        ],
+        "responses": {
+          "200": "Paginated list of applications"
+        },
+        "test_coverage": "tests_application_system.py::TestApplicationList",
+        "performance_target": "< 200ms average response time"
+      }
+    },
+    "Resume Parsing": {
+      "POST /api/v1/parse-resume/": {
+        "description": "Upload and parse resume with AI",
+        "authentication": "JWT Bearer Token (job_seeker)",
+        "parameters": [
+          "resume_file (multipart)"
+        ],
+        "responses": {
+          "200": "Resume parsed successfully",
+          "400": "Invalid file format",
+          "413": "File too large",
+          "503": "AI service unavailable"
+        },
+        "test_coverage": "tests_resume_parsing.py::TestResumeParsingAPI",
+        "performance_target": "< 5s for files up to 10MB"
+      },
+      "POST /api/v1/parse-resume-async/": {
+        "description": "Submit resume for asynchronous parsing",
+        "authentication": "JWT Bearer Token (job_seeker)",
+        "parameters": [
+          "resume_file (multipart)"
+        ],
+        "responses": {
+          "202": "Parsing task submitted",
+          "400": "Invalid file format"
+        },
+        "test_coverage": "tests_resume_parsing.py::TestAsyncResumeParsingAPI",
+        "performance_target": "< 500ms task submission"
+      }
+    },
+    "Match Scoring": {
+      "POST /api/v1/calculate-match-score/": {
+        "description": "Calculate AI-powered job match score",
+        "authentication": "JWT Bearer Token",
+        "parameters": [
+          "resume_id",
+          "job_id"
+        ],
+        "responses": {
+          "200": "Match score calculated",
+          "404": "Resume or job not found",
+          "503": "ML service unavailable"
+        },
+        "test_coverage": "tests_ml_integration.py::TestMatchScoreAPI",
+        "performance_target": "< 2s average calculation time"
+      },
+      "POST /api/v1/batch-calculate-match-scores/": {
+        "description": "Calculate match scores for multiple resume-job pairs",
+        "authentication": "JWT Bearer Token",
+        "parameters": [
+          "resume_ids",
+          "job_ids"
+        ],
+        "responses": {
+          "202": "Batch calculation task submitted"
+        },
+        "test_coverage": "tests_ml_integration.py::TestBatchMatchScoreAPI",
+        "performance_target": "< 1s task submission"
+      }
+    },
+    "File Management": {
+      "POST /api/v1/files/upload/": {
+        "description": "Secure file upload with validation",
+        "authentication": "JWT Bearer Token",
+        "parameters": [
+          "file (multipart)",
+          "file_type"
+        ],
+        "responses": {
+          "201": "File uploaded successfully",
+          "400": "Invalid file type or size",
+          "413": "File too large"
+        },
+        "test_coverage": "tests_secure_file_upload.py::TestSecureFileUpload",
+        "performance_target": "< 2s per MB uploaded"
+      },
+      "GET /api/v1/files/list/": {
+        "description": "List user uploaded files",
+        "authentication": "JWT Bearer Token",
+        "parameters": [
+          "file_type",
+          "page",
+          "page_size"
+        ],
+        "responses": {
+          "200": "Paginated list of files"
+        },
+        "test_coverage": "tests_secure_file_upload.py::TestFileList",
+        "performance_target": "< 200ms average response time"
+      }
+    }
+  },
+  "test_coverage": {
+    "overall_coverage": {
+      "target": "90%",
+      "current": "Run `python test_runner.py --coverage-only` to get current coverage",
+      "critical_paths": [
+        "Authentication flows",
+        "Job CRUD operations",
+        "Application workflow",
+        "AI service integrations",
+        "File upload security"
+      ]
+    },
+    "test_categories": {
+      "unit_tests": {
+        "description": "Test individual functions and methods in isolation",
+        "files": [
+          "tests_user_management.py",
+          "tests_job_management.py",
+          "tests_application_system.py",
+          "tests_jwt_auth.py",
+          "tests_ml_integration.py",
+          "tests_notification_system.py",
+          "tests_resume_parsing.py",
+          "tests_secure_file_upload.py",
+          "tests_websocket.py"
+        ],
+        "coverage_target": "95%"
+      },
+      "integration_tests": {
+        "description": "Test complete workflows and API endpoint interactions",
+        "files": [
+          "tests_comprehensive_integration.py",
+          "tests_api_integration.py"
+        ],
+        "coverage_target": "85%"
+      },
+      "performance_tests": {
+        "description": "Test response times, throughput, and scalability",
+        "files": [
+          "tests_performance.py"
+        ],
+        "coverage_target": "Performance benchmarks met"
+      }
+    },
+    "testing_tools": {
+      "pytest": "Primary testing framework",
+      "factory_boy": "Test data generation",
+      "django_test": "Django-specific testing utilities",
+      "coverage.py": "Code coverage measurement",
+      "locust": "Load testing (optional)"
+    }
+  },
+  "performance_benchmarks": {
+    "response_time_targets": {
+      "authentication": "< 300ms average",
+      "job_listing": "< 500ms with pagination",
+      "job_search": "< 800ms with complex filters",
+      "application_creation": "< 300ms average",
+      "resume_parsing": "< 5s for files up to 10MB",
+      "match_score_calculation": "< 2s average",
+      "file_upload": "< 2s per MB"
+    },
+    "throughput_targets": {
+      "concurrent_users": "100+ simultaneous users",
+      "requests_per_second": "1000+ RPS for read operations",
+      "database_queries": "< 5 queries per API call",
+      "memory_usage": "< 512MB for typical workload"
+    },
+    "scalability_metrics": {
+      "database_records": "Tested with 100K+ job postings",
+      "file_storage": "Supports TB-scale file storage",
+      "websocket_connections": "1000+ concurrent connections",
+      "background_tasks": "Celery-based async processing"
+    },
+    "performance_testing": {
+      "tools": [
+        "pytest-benchmark",
+        "locust",
+        "django-debug-toolbar"
+      ],
+      "environments": [
+        "development",
+        "staging",
+        "production-like"
+      ],
+      "monitoring": [
+        "response times",
+        "error rates",
+        "resource usage"
+      ],
+      "alerts": [
+        "response time > 2s",
+        "error rate > 1%",
+        "memory usage > 80%"
+      ]
+    }
+  },
+  "testing_strategies": {
+    "test_driven_development": {
+      "approach": "Write tests before implementation",
+      "benefits": [
+        "Better design",
+        "Higher coverage",
+        "Fewer bugs"
+      ],
+      "implementation": [
+        "Write failing test",
+        "Implement minimal code to pass",
+        "Refactor while keeping tests green"
+      ]
+    },
+    "api_testing_strategy": {
+      "levels": {
+        "unit": "Test individual functions and methods",
+        "integration": "Test API endpoints and workflows",
+        "contract": "Test API schema and documentation",
+        "performance": "Test response times and scalability"
+      },
+      "test_data_management": {
+        "factories": "Use factory_boy for consistent test data",
+        "fixtures": "Predefined data sets for specific scenarios",
+        "cleanup": "Automatic cleanup after each test",
+        "isolation": "Tests should not depend on each other"
+      }
+    },
+    "continuous_testing": {
+      "pre_commit_hooks": "Run fast tests before commits",
+      "ci_pipeline": "Full test suite on pull requests",
+      "deployment_gates": "All tests must pass before deployment",
+      "monitoring": "Continuous monitoring in production"
+    },
+    "security_testing": {
+      "authentication": "Test JWT token validation",
+      "authorization": "Test role-based permissions",
+      "input_validation": "Test against injection attacks",
+      "file_upload": "Test malicious file detection",
+      "rate_limiting": "Test API rate limits"
+    }
+  },
+  "examples": {
+    "authentication_flow": {
+      "description": "Complete user authentication workflow",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Register new user",
+          "request": {
+            "method": "POST",
+            "url": "/api/v1/auth/jwt/register/",
+            "body": {
+              "username": "john_doe",
+              "email": "john@example.com",
+              "password": "securepassword123",
+              "password_confirm": "securepassword123",
+              "user_type": "job_seeker"
+            }
+          },
+          "response": {
+            "status": 201,
+            "body": {
+              "user": {
+                "id": "uuid",
+                "username": "john_doe"
+              },
+              "tokens": {
+                "access": "jwt-token",
+                "refresh": "refresh-token"
+              }
+            }
+          }
+        },
+        {
+          "step": 2,
+          "action": "Use access token for authenticated requests",
+          "request": {
+            "method": "GET",
+            "url": "/api/v1/auth/profile/",
+            "headers": {
+              "Authorization": "Bearer jwt-token"
+            }
+          },
+          "response": {
+            "status": 200,
+            "body": {
+              "id": "uuid",
+              "username": "john_doe",
+              "email": "john@example.com"
+            }
+          }
+        }
+      ]
+    },
+    "job_application_workflow": {
+      "description": "Complete job application process",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Search for jobs",
+          "request": {
+            "method": "GET",
+            "url": "/api/v1/job-posts/?search=Python&location=Remote"
+          }
+        },
+        {
+          "step": 2,
+          "action": "Upload resume",
+          "request": {
+            "method": "POST",
+            "url": "/api/v1/parse-resume/",
+            "body": "multipart/form-data with resume file"
+          }
+        },
+        {
+          "step": 3,
+          "action": "Apply to job",
+          "request": {
+            "method": "POST",
+            "url": "/api/v1/applications/",
+            "body": {
+              "job_post": "job-uuid",
+              "resume": "resume-uuid",
+              "cover_letter": "I am interested in this position..."
+            }
+          }
+        }
+      ]
+    },
+    "ai_integration_example": {
+      "description": "AI-powered resume parsing and job matching",
+      "steps": [
+        {
+          "step": 1,
+          "action": "Parse resume with AI",
+          "request": {
+            "method": "POST",
+            "url": "/api/v1/parse-resume/",
+            "body": "multipart file upload"
+          },
+          "response": {
+            "parsed_data": {
+              "personal_info": {
+                "name": "John Doe"
+              },
+              "skills": [
+                "Python",
+                "Django"
+              ],
+              "experience": [
+                {
+                  "company": "Tech Corp"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "step": 2,
+          "action": "Calculate match score",
+          "request": {
+            "method": "POST",
+            "url": "/api/v1/calculate-match-score/",
+            "body": {
+              "resume_id": "uuid",
+              "job_id": "uuid"
+            }
+          },
+          "response": {
+            "overall_score": 87.5,
+            "matching_skills": [
+              "Python",
+              "Django"
+            ],
+            "missing_skills": [
+              "Docker"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

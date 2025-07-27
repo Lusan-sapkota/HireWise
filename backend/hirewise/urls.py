@@ -25,12 +25,49 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
     TokenBlacklistView,
 )
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
+from matcher.health_views import (
+    HealthCheckView,
+    DetailedHealthCheckView,
+    ReadinessCheckView,
+    LivenessCheckView,
+)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("matcher.urls")),
+    
+    # Health Check endpoints (for monitoring and load balancers)
+    path("health/", HealthCheckView.as_view(), name="health-check"),
+    path("api/health/", DetailedHealthCheckView.as_view(), name="detailed-health-check"),
+    path("ready/", ReadinessCheckView.as_view(), name="readiness-check"),
+    path("live/", LivenessCheckView.as_view(), name="liveness-check"),
+    
+    # API Documentation (version-specific)
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema-v1"),
+    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    path("api/v1/docs/", SpectacularSwaggerView.as_view(url_name="schema-v1"), name="swagger-ui-v1"),
+    path("api/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+    path("api/v1/redoc/", SpectacularRedocView.as_view(url_name="schema-v1"), name="redoc-v1"),
+    
+    # Versioned API endpoints
+    path("api/v1/", include(("matcher.urls", "matcher"), namespace="v1")),
+    path("api/", include(("matcher.urls", "matcher"), namespace="default")),  # Default to v1 for backward compatibility
+    
+    # DRF browsable API
     path("api-auth/", include("rest_framework.urls")),
-    # JWT Authentication endpoints
+    
+    # JWT Authentication endpoints (versioned)
+    path("api/v1/auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair_v1"),
+    path("api/v1/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh_v1"),
+    path("api/v1/auth/token/verify/", TokenVerifyView.as_view(), name="token_verify_v1"),
+    path("api/v1/auth/token/blacklist/", TokenBlacklistView.as_view(), name="token_blacklist_v1"),
+    
+    # Legacy endpoints (for backward compatibility)
     path("api/auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/auth/token/verify/", TokenVerifyView.as_view(), name="token_verify"),

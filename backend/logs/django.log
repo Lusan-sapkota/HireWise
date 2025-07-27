@@ -1363,3 +1363,870 @@ INFO 2025-07-22 04:21:04,457 file_utils 101346 129314496090368 File stored succe
 INFO 2025-07-22 04:21:04,457 file_views 101346 129314496090368 Resume uploaded successfully by user jobseeker: 3
 INFO 2025-07-22 04:21:04,461 file_utils 101346 129314496090368 File deleted: resume/df46bee07de52d43/2025/07/df46bee0_1753158064_10aac040.pdf
 INFO 2025-07-22 04:21:04,461 file_views 101346 129314496090368 Resume deleted successfully: 2 by user jobseeker
+INFO 2025-07-22 05:32:02,086 autoreload 13603 135046784160000 Watching for file changes with StatReloader
+INFO 2025-07-22 05:32:12,310 server 13603 135046707590848 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-22 05:32:12,311 server 13603 135046707590848 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-22 05:32:12,312 server 13603 135046707590848 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-22 05:36:28,780 autoreload 13603 135046784160000 /home/lusan/Documents/HireWise/backend/hirewise/settings.py changed, reloading.
+INFO 2025-07-22 05:36:30,096 autoreload 15187 129107813921024 Watching for file changes with StatReloader
+INFO 2025-07-22 05:39:33,870 autoreload 15187 129107813921024 /home/lusan/Documents/HireWise/backend/hirewise/settings.py changed, reloading.
+INFO 2025-07-22 05:39:34,829 autoreload 15978 130922703347968 Watching for file changes with StatReloader
+INFO 2025-07-22 05:40:33,705 autoreload 15978 130922703347968 /home/lusan/Documents/HireWise/backend/hirewise/settings.py changed, reloading.
+INFO 2025-07-22 05:40:34,680 autoreload 16598 124099584266496 Watching for file changes with StatReloader
+INFO 2025-07-22 06:03:53,190 autoreload 16598 124099584266496 /home/lusan/Documents/HireWise/backend/hirewise/settings.py changed, reloading.
+INFO 2025-07-22 06:03:54,245 autoreload 44485 133801340637440 Watching for file changes with StatReloader
+INFO 2025-07-22 06:03:58,203 server 44485 133801257252544 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-22 06:03:58,204 server 44485 133801257252544 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-22 06:03:58,205 server 44485 133801257252544 Listening on TCP address 127.0.0.1:8000
+ERROR 2025-07-22 06:07:37,567 log 46452 135307209347328 Internal Server Error: /api/schema/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 192, in _get_response
+    wrapped_callback = self.make_view_atomic(callback)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 348, in make_view_atomic
+    if settings_dict["ATOMIC_REQUESTS"] and alias not in non_atomic_requests:
+       ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+KeyError: 'ATOMIC_REQUESTS'
+WARNING 2025-07-22 06:09:31,401 log 47382 123550193991936 Unauthorized: /api/v1/job-posts/
+WARNING 2025-07-22 06:13:20,263 log 51670 139916476293376 Unauthorized: /api/v1/job-posts/
+INFO 2025-07-27 15:44:38,650 celery 55240 135847823581440 Task matcher.tasks.test_celery_task [37bb7a08-905e-4ed3-9f9b-55f90b9cd678] started with args: (), kwargs: {}
+INFO 2025-07-27 15:44:38,651 tasks 55240 135847823581440 Test Celery task executed with task ID: 37bb7a08-905e-4ed3-9f9b-55f90b9cd678
+INFO 2025-07-27 15:44:38,661 celery 55240 135847823581440 Task matcher.tasks.test_celery_task [37bb7a08-905e-4ed3-9f9b-55f90b9cd678] completed successfully
+INFO 2025-07-27 15:44:38,661 trace 55240 135847823581440 Task matcher.tasks.test_celery_task[37bb7a08-905e-4ed3-9f9b-55f90b9cd678] succeeded in 0.011128188000157024s: {'task_id': '37bb7a08-905e-4ed3-9f9b-55f90b9cd678', 'message': 'Celery is working correctly!', 'status': 'success'}
+INFO 2025-07-27 15:44:38,661 celery 55240 135847823581440 Task matcher.tasks.test_celery_task [37bb7a08-905e-4ed3-9f9b-55f90b9cd678] completed with state: SUCCESS
+INFO 2025-07-27 15:45:38,724 signals 56625 129972587262208 Created notification preferences for user f1d47337-6cd7-4510-834e-4635b3c35cdf
+INFO 2025-07-27 15:45:38,725 signals 56625 129972587262208 Created notification preferences for user 1f11fe06-9bb2-4822-b76e-a5230256a75a
+INFO 2025-07-27 15:45:38,728 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,732 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,732 signals 56625 129972587262208 Job posted notification sent for job 20facd82-af13-4203-bb9f-c7a3df2bb97f: Camera operator
+INFO 2025-07-27 15:45:38,739 signals 56625 129972587262208 Created notification preferences for user 47c5c0a6-613b-40ea-8c3a-12459211879f
+INFO 2025-07-27 15:45:38,740 signals 56625 129972587262208 Created notification preferences for user f25d7fce-d45c-42b0-9618-3036ac2b848d
+INFO 2025-07-27 15:45:38,742 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,745 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,745 signals 56625 129972587262208 Job posted notification sent for job 50455d7d-debb-4fc3-8ec6-c4514e064ff3: Museum/gallery curator
+INFO 2025-07-27 15:45:38,747 signals 56625 129972587262208 Created notification preferences for user c929a0ef-0638-4aae-95c2-5bbb30a9fbce
+INFO 2025-07-27 15:45:38,748 signals 56625 129972587262208 Created notification preferences for user a5e83a0e-d1da-4e8d-813a-367b201a6297
+INFO 2025-07-27 15:45:38,751 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,753 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,753 signals 56625 129972587262208 Job posted notification sent for job 3eaf1d36-2bb2-4d98-9c24-632889288561: Garment/textile technologist
+INFO 2025-07-27 15:45:38,756 signals 56625 129972587262208 Created notification preferences for user 595fa8d2-5905-4289-b4fc-a458939763f0
+INFO 2025-07-27 15:45:38,757 signals 56625 129972587262208 Created notification preferences for user 255346d6-05da-44c4-bd36-e43f16317004
+INFO 2025-07-27 15:45:38,759 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,761 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,761 signals 56625 129972587262208 Job posted notification sent for job 68397330-a45d-4032-9dc7-3e4d30728ecd: Early years teacher
+INFO 2025-07-27 15:45:38,764 signals 56625 129972587262208 Created notification preferences for user 5e074dd0-3f16-4eb6-ab41-f26e6240b4e4
+INFO 2025-07-27 15:45:38,765 signals 56625 129972587262208 Created notification preferences for user fe7a36f0-0cb9-4200-850b-7b2316b39925
+INFO 2025-07-27 15:45:38,768 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,771 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,771 signals 56625 129972587262208 Job posted notification sent for job 319b49d0-91f6-48df-a4c2-b2892d20c2aa: Clinical cytogeneticist
+INFO 2025-07-27 15:45:38,774 signals 56625 129972587262208 Created notification preferences for user 7a7ba281-a2f0-4b9e-9cef-6a7611fc8598
+INFO 2025-07-27 15:45:38,775 signals 56625 129972587262208 Created notification preferences for user 54e300a4-f0a6-4b24-b3c9-0eeface7c9b3
+INFO 2025-07-27 15:45:38,778 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,780 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,780 signals 56625 129972587262208 Job posted notification sent for job 30586148-17e3-44b4-8915-f0e39aa80662: Professor Emeritus
+INFO 2025-07-27 15:45:38,783 signals 56625 129972587262208 Created notification preferences for user 10c54e5d-88f9-4b83-81d1-7dcf99d2cb06
+INFO 2025-07-27 15:45:38,784 signals 56625 129972587262208 Created notification preferences for user 25c0a980-4fcf-4bd1-98ca-d8ad06ebcd37
+INFO 2025-07-27 15:45:38,786 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,789 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,789 signals 56625 129972587262208 Job posted notification sent for job 1842e7f8-6637-4c01-bc28-172479d2b04c: Interior and spatial designer
+INFO 2025-07-27 15:45:38,792 signals 56625 129972587262208 Created notification preferences for user c4adcc8e-7cde-44ea-8f3b-0c4ae5f12c7b
+INFO 2025-07-27 15:45:38,792 signals 56625 129972587262208 Created notification preferences for user cd64de23-5a17-4e9e-9663-847d88fbfcd4
+INFO 2025-07-27 15:45:38,795 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,797 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,797 signals 56625 129972587262208 Job posted notification sent for job 0e75a34e-fabf-4ce4-8c51-eaa2a812178a: Writer
+INFO 2025-07-27 15:45:38,800 signals 56625 129972587262208 Created notification preferences for user c2002dd6-bbc9-49b6-adcd-3a879d2db854
+INFO 2025-07-27 15:45:38,802 signals 56625 129972587262208 Created notification preferences for user 014b6e91-3533-4224-b5db-4d50783a90b7
+INFO 2025-07-27 15:45:38,806 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,808 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,808 signals 56625 129972587262208 Job posted notification sent for job d5e59c3e-6557-4464-9c44-756e189fae2a: Bookseller
+INFO 2025-07-27 15:45:38,812 signals 56625 129972587262208 Created notification preferences for user 886c071f-c268-449e-8f41-ffbb2a799ad0
+INFO 2025-07-27 15:45:38,813 signals 56625 129972587262208 Created notification preferences for user 340d565f-5e82-41fa-a3f0-6ea4b2261a43
+INFO 2025-07-27 15:45:38,815 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,817 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,817 signals 56625 129972587262208 Job posted notification sent for job 7adda872-04a8-4f45-9e26-4e3aade5fa8f: Osteopath
+INFO 2025-07-27 15:45:38,820 signals 56625 129972587262208 Created notification preferences for user 318f3511-c472-4383-954d-fa5a04fe757c
+INFO 2025-07-27 15:45:38,821 signals 56625 129972587262208 Created notification preferences for user f9470df3-44d6-48c9-9c94-ccf5946f936d
+INFO 2025-07-27 15:45:38,823 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,826 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,826 signals 56625 129972587262208 Job posted notification sent for job 6a4fc952-29d3-4dbf-9a94-9992fe049560: Probation officer
+INFO 2025-07-27 15:45:38,828 signals 56625 129972587262208 Created notification preferences for user 3698ec3a-65b5-43df-8775-728fbbc38730
+INFO 2025-07-27 15:45:38,829 signals 56625 129972587262208 Created notification preferences for user 00fe2dc4-fd97-430a-82cc-a331be17193a
+INFO 2025-07-27 15:45:38,831 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,833 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,834 signals 56625 129972587262208 Job posted notification sent for job 99c57e01-b360-457c-bbf2-0924eb5a0473: Musician
+INFO 2025-07-27 15:45:38,837 signals 56625 129972587262208 Created notification preferences for user 29d2f8f7-6320-416d-858f-c87d1e7fbc0e
+INFO 2025-07-27 15:45:38,837 signals 56625 129972587262208 Created notification preferences for user abda54b5-b830-454c-bf53-733fa140dda8
+INFO 2025-07-27 15:45:38,840 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,842 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,842 signals 56625 129972587262208 Job posted notification sent for job 5868a856-6996-48e9-9255-da21d3b4dc6f: Housing manager/officer
+INFO 2025-07-27 15:45:38,845 signals 56625 129972587262208 Created notification preferences for user 38847517-fe86-4caf-9a3c-76c94e1ba891
+INFO 2025-07-27 15:45:38,846 signals 56625 129972587262208 Created notification preferences for user 32cfb484-f6d0-450f-a0de-4c1a2edd3d80
+INFO 2025-07-27 15:45:38,848 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,850 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,851 signals 56625 129972587262208 Job posted notification sent for job 55cb86b6-781b-4614-b536-f7ba45fe54a5: Building surveyor
+INFO 2025-07-27 15:45:38,853 signals 56625 129972587262208 Created notification preferences for user f379e49c-b3fc-44ef-8e9a-e6c6380c8a06
+INFO 2025-07-27 15:45:38,854 signals 56625 129972587262208 Created notification preferences for user 296f18f6-0e6e-49a5-8eba-74a6a4e6b609
+INFO 2025-07-27 15:45:38,857 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,859 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,859 signals 56625 129972587262208 Job posted notification sent for job 49b3ec32-5e1b-4d4c-a51b-776e5a145834: Diagnostic radiographer
+INFO 2025-07-27 15:45:38,862 signals 56625 129972587262208 Created notification preferences for user a6fbe197-e861-479d-a3f6-4d485404e127
+INFO 2025-07-27 15:45:38,863 signals 56625 129972587262208 Created notification preferences for user b1856a8a-b4d1-4270-aab1-bc66b7dfff80
+INFO 2025-07-27 15:45:38,865 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,867 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,867 signals 56625 129972587262208 Job posted notification sent for job 9bc546e1-86eb-4886-924c-f8482acbf6be: Data scientist
+INFO 2025-07-27 15:45:38,870 signals 56625 129972587262208 Created notification preferences for user dd169799-c0de-4840-9280-64e058cc9a0f
+INFO 2025-07-27 15:45:38,871 signals 56625 129972587262208 Created notification preferences for user 7479e626-98c7-4a3c-bab8-64db177c9089
+INFO 2025-07-27 15:45:38,873 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,875 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,876 signals 56625 129972587262208 Job posted notification sent for job 04dd2339-1cbe-44bd-ad3a-c613e1f0f2fd: Diplomatic Services operational officer
+INFO 2025-07-27 15:45:38,879 signals 56625 129972587262208 Created notification preferences for user 4e980a3c-6b0a-44c6-989b-b6e07a8ca5f1
+INFO 2025-07-27 15:45:38,880 signals 56625 129972587262208 Created notification preferences for user cc16b36a-6dee-4aea-b27c-c812064f3fe3
+INFO 2025-07-27 15:45:38,882 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,884 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,885 signals 56625 129972587262208 Job posted notification sent for job a9355069-8344-4d3e-86af-c837760c7df0: Therapist, drama
+INFO 2025-07-27 15:45:38,887 signals 56625 129972587262208 Created notification preferences for user 7eea4e21-de6d-4986-b41b-c45504a0030e
+INFO 2025-07-27 15:45:38,888 signals 56625 129972587262208 Created notification preferences for user b8161ab0-dfcc-4a2b-ab4f-498345194b1f
+INFO 2025-07-27 15:45:38,891 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,893 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,893 signals 56625 129972587262208 Job posted notification sent for job eb8ba2ea-bb76-4ae7-ac86-f6305f630d5c: Hospital pharmacist
+INFO 2025-07-27 15:45:38,896 signals 56625 129972587262208 Created notification preferences for user de4fad16-b116-4e95-8083-112072aa2fe3
+INFO 2025-07-27 15:45:38,897 signals 56625 129972587262208 Created notification preferences for user f7cedec2-5307-43aa-a296-911fc10c352c
+INFO 2025-07-27 15:45:38,899 signals 56625 129972587262208 Created 1 job posted notifications
+INFO 2025-07-27 15:45:38,902 notification_utils 56625 129972587262208 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:45:38,902 signals 56625 129972587262208 Job posted notification sent for job 513ab729-5b13-4dc1-b040-9f584ee16804: Race relations officer
+INFO 2025-07-27 15:47:27,786 signals 57875 123906096132352 Created notification preferences for user 816e491d-3be0-490c-baf6-33d56a327711
+INFO 2025-07-27 15:47:27,788 signals 57875 123906096132352 Created notification preferences for user 245e5181-8b18-4ffe-ba0b-a1440182011c
+INFO 2025-07-27 15:47:27,791 signals 57875 123906096132352 Created 1 job posted notifications
+INFO 2025-07-27 15:47:27,794 notification_utils 57875 123906096132352 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 15:47:27,795 signals 57875 123906096132352 Job posted notification sent for job 26f28105-b912-412f-89a0-2ee0dfc53b55: Designer, blown glass/stained glass
+INFO 2025-07-27 15:47:27,801 celery 57875 123906096132352 Task matcher.tasks.test_celery_task [e6807157-f15d-4c0b-b555-baac8b474b5e] started with args: (), kwargs: {}
+INFO 2025-07-27 15:47:27,801 tasks 57875 123906096132352 Test Celery task executed with task ID: e6807157-f15d-4c0b-b555-baac8b474b5e
+INFO 2025-07-27 15:47:27,809 celery 57875 123906096132352 Task matcher.tasks.test_celery_task [e6807157-f15d-4c0b-b555-baac8b474b5e] completed successfully
+INFO 2025-07-27 15:47:27,809 trace 57875 123906096132352 Task matcher.tasks.test_celery_task[e6807157-f15d-4c0b-b555-baac8b474b5e] succeeded in 0.008261819999916042s: {'task_id': 'e6807157-f15d-4c0b-b555-baac8b474b5e', 'message': 'Celery is working correctly!', 'status': 'success'}
+INFO 2025-07-27 15:47:27,809 celery 57875 123906096132352 Task matcher.tasks.test_celery_task [e6807157-f15d-4c0b-b555-baac8b474b5e] completed with state: SUCCESS
+INFO 2025-07-27 16:02:52,833 signals 80896 138834017366272 Created notification preferences for user 08974f4a-b574-449c-b4b8-72b0685b78f8
+INFO 2025-07-27 16:02:53,059 signals 80896 138834017366272 Created notification preferences for user ddc4e0b5-c518-4b9c-869f-b907c43788e4
+INFO 2025-07-27 16:02:53,063 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:53,073 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:53,073 signals 80896 138834017366272 Job posted notification sent for job 9225a3fd-2cca-4715-8b7f-41c5270877e5: Senior Python Developer
+INFO 2025-07-27 16:02:53,075 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:53,077 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:53,077 signals 80896 138834017366272 Job posted notification sent for job e6f92dd6-edb7-49e1-a21f-8324fb992e51: Frontend React Developer
+INFO 2025-07-27 16:02:53,279 signals 80896 138834017366272 Created notification preferences for user de086007-a0d1-4a0f-a0fd-b2f5b177d9fd
+INFO 2025-07-27 16:02:53,485 signals 80896 138834017366272 Created notification preferences for user 661fef0c-b708-4cb2-abc4-ac8b35f9e412
+INFO 2025-07-27 16:02:53,488 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:53,491 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:53,491 signals 80896 138834017366272 Job posted notification sent for job 03eaf8b4-d670-41bf-b053-8d234fb160c2: Senior Python Developer
+INFO 2025-07-27 16:02:53,493 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:53,495 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:53,495 signals 80896 138834017366272 Job posted notification sent for job 5e2eda18-6ee5-4327-b0b8-3f2d6f92d303: Frontend React Developer
+INFO 2025-07-27 16:02:53,708 signals 80896 138834017366272 Created notification preferences for user 0cbc6a7d-27c9-46d9-8c83-b7fd852c4d73
+INFO 2025-07-27 16:02:53,917 signals 80896 138834017366272 Created notification preferences for user 0819d453-f127-4b8b-bc76-f5f0d798d3cc
+INFO 2025-07-27 16:02:53,920 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:53,923 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:53,923 signals 80896 138834017366272 Job posted notification sent for job ca9a8e91-c98a-4516-b071-1027ab3b73b5: Senior Python Developer
+INFO 2025-07-27 16:02:53,925 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:53,927 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:53,927 signals 80896 138834017366272 Job posted notification sent for job eec10eec-5259-49d4-9531-2802abc43f67: Frontend React Developer
+INFO 2025-07-27 16:02:54,130 signals 80896 138834017366272 Created notification preferences for user 22d0165f-10e2-4242-b6d6-1fa8164f77dc
+INFO 2025-07-27 16:02:54,342 signals 80896 138834017366272 Created notification preferences for user 2fc69dc1-0d8b-4075-a298-70e1f67b559e
+INFO 2025-07-27 16:02:54,547 signals 80896 138834017366272 Created notification preferences for user 9ec00eff-8674-4b9e-b050-837a4f6d5e1b
+INFO 2025-07-27 16:02:54,549 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:54,552 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:54,552 signals 80896 138834017366272 Job posted notification sent for job 39a099f2-7897-42e9-8612-7a671c90367c: Senior Python Developer
+INFO 2025-07-27 16:02:54,554 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:54,556 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:54,556 signals 80896 138834017366272 Job posted notification sent for job 1e4e1f46-c820-4e6c-a81f-9c86a18a89ae: Frontend React Developer
+ERROR 2025-07-27 16:02:54,571 recommendation_engine 80896 138834017366272 Error in skill-matched candidates: 'UserSkill' object has no attribute 'name'
+INFO 2025-07-27 16:02:54,780 signals 80896 138834017366272 Created notification preferences for user fa505029-07ce-48bb-aaa0-c5b200732871
+INFO 2025-07-27 16:02:54,985 signals 80896 138834017366272 Created notification preferences for user c0d8cbb6-812a-44c9-bb3b-8ed9fb2e27ee
+INFO 2025-07-27 16:02:54,987 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:54,990 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:54,990 signals 80896 138834017366272 Job posted notification sent for job c1852e47-11c4-4e77-b065-ebc439fbbbf3: Senior Python Developer
+INFO 2025-07-27 16:02:54,992 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:54,994 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:54,994 signals 80896 138834017366272 Job posted notification sent for job 4cea85ec-9c03-4979-8a00-a81c1a38c761: Frontend React Developer
+INFO 2025-07-27 16:02:55,206 signals 80896 138834017366272 Created notification preferences for user ed9f7883-3ab0-4330-b7c5-9ad86c2d3fe2
+INFO 2025-07-27 16:02:55,409 signals 80896 138834017366272 Created notification preferences for user 0170ca5e-bed4-4af4-b4b4-ef01333f21f3
+INFO 2025-07-27 16:02:55,412 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:55,415 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:55,415 signals 80896 138834017366272 Job posted notification sent for job 95116e84-6e07-405b-8853-ee37671fd73f: Senior Python Developer
+INFO 2025-07-27 16:02:55,417 signals 80896 138834017366272 Created 1 job posted notifications
+INFO 2025-07-27 16:02:55,419 notification_utils 80896 138834017366272 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:02:55,419 signals 80896 138834017366272 Job posted notification sent for job 91875e93-eb5d-4ca0-9ba2-95d30a091d9c: Frontend React Developer
+ERROR 2025-07-27 16:02:55,422 recommendation_engine 80896 138834017366272 Error in skill-matched candidates: 'UserSkill' object has no attribute 'name'
+WARNING 2025-07-27 16:15:11,900 error_recovery 99352 138930819870976 Circuit breaker test_service_2 opened after 2 failures
+ERROR 2025-07-27 16:15:11,901 error_recovery 99352 138930819870976 Function test_function failed after 0.00s: Temporary failure
+WARNING 2025-07-27 16:15:11,901 error_recovery 99352 138930819870976 Retry attempt 1 for test_function after 0.98s: Temporary failure
+INFO 2025-07-27 16:15:12,886 logging_config 99352 138930819870976 Memory usage for test_function: 0.00MB
+WARNING 2025-07-27 16:15:12,889 error_recovery 99352 138930819870976 Retry attempt 1 for test_function after 0.08s: Permanent failure
+WARNING 2025-07-27 16:15:12,969 error_recovery 99352 138930819870976 Retry attempt 2 for test_function after 0.14s: Permanent failure
+ERROR 2025-07-27 16:15:13,105 error_recovery 99352 138930819870976 Function test_function failed after 2 retries: Permanent failure
+WARNING 2025-07-27 16:15:13,107 error_recovery 99352 138930819870976 Retry attempt 1 for test_function after 0.08s: Temporary failure
+WARNING 2025-07-27 16:15:13,185 error_recovery 99352 138930819870976 Retry attempt 2 for test_function after 0.14s: Temporary failure
+ERROR 2025-07-27 16:15:13,329 error_recovery 99352 138930819870976 Safe execution failed for test_function: Function failed
+ERROR 2025-07-27 16:16:32,147 error_recovery 99795 130357798686976 Safe execution failed for <lambda>: division by zero
+INFO 2025-07-27 16:16:49,362 server 99846 125422079557888 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:16:49,362 server 99846 125422079557888 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:16:49,363 server 99846 125422079557888 Listening on TCP address 127.0.0.1:8000
+ERROR 2025-07-27 16:16:51,163 middleware 99846 125422079557888 Error in security check: object of type 'bool' has no len()
+ERROR 2025-07-27 16:16:51,180 log 99846 125419730757312 Internal Server Error: /api/jobs/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+                     ~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/matcher/middleware.py", line 270, in __call__
+    self.add_security_headers(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/matcher/middleware.py", line 350, in add_security_headers
+    response['Content-Security-Policy'] = (
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'coroutine' object does not support item assignment
+ERROR 2025-07-27 16:16:51,181 logging_config 99846 125419739150016 API request failed: GET /api/jobs/
+ERROR 2025-07-27 16:16:51,182 runserver 99846 125422079557888 [35;1mHTTP GET /api/jobs/ 500 [0.02, 127.0.0.1:33214][0m
+INFO 2025-07-27 16:16:51,254 server 99846 125422079557888 Killed 0 pending application instances
+INFO 2025-07-27 16:17:21,234 autoreload 100847 132088465867008 Watching for file changes with StatReloader
+INFO 2025-07-27 16:17:22,221 server 100847 132088383190720 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:17:22,221 server 100847 132088383190720 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:17:22,222 server 100847 132088383190720 Listening on TCP address 127.0.0.1:8000
+WARNING 2025-07-27 16:17:26,822 exceptions 100941 129545994912000 HireWise Exception: Test error
+INFO 2025-07-27 16:17:26,823 logging_config 100941 129545994912000 API request: GET /test/
+ERROR 2025-07-27 16:17:26,823 error_recovery 100941 129545994912000 Safe execution failed for <lambda>: division by zero
+WARNING 2025-07-27 16:17:26,823 error_recovery 100941 129545994912000 Retry attempt 1 for test_function after 0.08s: Temporary failure
+INFO 2025-07-27 16:17:26,905 logging_config 100941 129545994912000 Gemini API test completed
+INFO 2025-07-27 16:17:26,905 logging_config 100941 129545994912000 API request: GET /api/test/
+INFO 2025-07-27 16:24:08,183 autoreload 100847 132088465867008 /home/lusan/Documents/HireWise/backend/hirewise/urls.py changed, reloading.
+INFO 2025-07-27 16:24:08,846 autoreload 108231 138664105115904 Watching for file changes with StatReloader
+INFO 2025-07-27 16:24:09,798 server 108231 138664022161088 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:24:09,798 server 108231 138664022161088 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:24:09,798 server 108231 138664022161088 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 16:24:19,054 autoreload 108231 138664105115904 /home/lusan/Documents/HireWise/backend/hirewise/urls.py changed, reloading.
+INFO 2025-07-27 16:24:19,697 autoreload 108549 137812342071552 Watching for file changes with StatReloader
+INFO 2025-07-27 16:24:20,694 server 108549 137812258633408 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:24:20,694 server 108549 137812258633408 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:24:20,695 server 108549 137812258633408 Listening on TCP address 127.0.0.1:8000
+ERROR 2025-07-27 16:35:01,806 middleware 113546 137966067826944 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:35:02,669 logging_config 113546 137966067826944 API request: GET /health/
+ERROR 2025-07-27 16:35:02,670 middleware 113546 137966067826944 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:35:02,671 logging_config 113546 137966067826944 API request: GET /live/
+ERROR 2025-07-27 16:35:02,671 middleware 113546 137966067826944 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:35:02,673 logging_config 113546 137966067826944 API request: GET /ready/
+ERROR 2025-07-27 16:35:02,673 middleware 113546 137966067826944 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-27 16:35:02,738 logging_config 113546 137966067826944 API request failed: GET /api/health/
+ERROR 2025-07-27 16:35:02,738 log 113546 137966067826944 Service Unavailable: /api/health/
+INFO 2025-07-27 16:36:47,701 autoreload 108549 137812342071552 /home/lusan/Documents/HireWise/backend/matcher/admin.py changed, reloading.
+INFO 2025-07-27 16:36:48,292 autoreload 114175 132226854650112 Watching for file changes with StatReloader
+INFO 2025-07-27 16:36:49,234 server 114175 132226771105472 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:36:49,234 server 114175 132226771105472 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:36:49,235 server 114175 132226771105472 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 16:37:19,723 autoreload 114175 132226854650112 /home/lusan/Documents/HireWise/backend/matcher/admin.py changed, reloading.
+INFO 2025-07-27 16:37:20,577 autoreload 115612 125570665353472 Watching for file changes with StatReloader
+INFO 2025-07-27 16:37:21,504 server 115612 125570582623936 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:37:21,504 server 115612 125570582623936 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:37:21,505 server 115612 125570582623936 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 16:37:41,896 autoreload 115612 125570665353472 /home/lusan/Documents/HireWise/backend/matcher/admin.py changed, reloading.
+INFO 2025-07-27 16:37:42,632 autoreload 116467 128103945625856 Watching for file changes with StatReloader
+INFO 2025-07-27 16:37:43,573 server 116467 128103862548160 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:37:43,574 server 116467 128103862548160 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:37:43,574 server 116467 128103862548160 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 16:38:03,956 autoreload 116467 128103945625856 /home/lusan/Documents/HireWise/backend/matcher/admin.py changed, reloading.
+INFO 2025-07-27 16:38:04,772 autoreload 117276 132612407263488 Watching for file changes with StatReloader
+INFO 2025-07-27 16:38:05,722 server 117276 132612324112064 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:38:05,723 server 117276 132612324112064 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:38:05,723 server 117276 132612324112064 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 16:38:32,168 autoreload 117276 132612407263488 /home/lusan/Documents/HireWise/backend/matcher/admin.py changed, reloading.
+INFO 2025-07-27 16:38:33,200 autoreload 118373 140484406665472 Watching for file changes with StatReloader
+INFO 2025-07-27 16:38:34,196 server 118373 140484323882688 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:38:34,196 server 118373 140484323882688 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:38:34,197 server 118373 140484323882688 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 16:39:03,674 autoreload 118373 140484406665472 /home/lusan/Documents/HireWise/backend/matcher/admin.py changed, reloading.
+INFO 2025-07-27 16:39:04,763 autoreload 119662 136509955535104 Watching for file changes with StatReloader
+INFO 2025-07-27 16:39:05,745 server 119662 136509872715456 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:39:05,745 server 119662 136509872715456 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:39:05,746 server 119662 136509872715456 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 16:40:38,982 autoreload 119662 136509955535104 /home/lusan/Documents/HireWise/backend/matcher/admin.py changed, reloading.
+INFO 2025-07-27 16:40:39,827 autoreload 124067 133945309372672 Watching for file changes with StatReloader
+INFO 2025-07-27 16:43:16,344 autoreload 124067 133945309372672 /home/lusan/Documents/HireWise/backend/matcher/admin.py changed, reloading.
+INFO 2025-07-27 16:43:17,450 autoreload 129847 125342907142400 Watching for file changes with StatReloader
+INFO 2025-07-27 16:43:18,651 server 129847 125342823528128 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:43:18,651 server 129847 125342823528128 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:43:18,651 server 129847 125342823528128 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 16:46:07,568 signals 136759 136447361712384 Created notification preferences for user e0a36bf5-0c21-4c7d-8c3e-de8c211144c0
+INFO 2025-07-27 16:46:07,772 signals 136759 136447361712384 Created notification preferences for user 5104eb03-7d7c-4d69-9cf0-1a279c5e8b73
+INFO 2025-07-27 16:46:07,975 signals 136759 136447361712384 Created notification preferences for user 20593498-20c8-4f38-9072-6a62846f0f27
+INFO 2025-07-27 16:46:07,978 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:07,981 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:07,982 signals 136759 136447361712384 Job posted notification sent for job 425b68e8-a045-4fce-ad62-4d2445d1b6bb: Senior Python Developer
+INFO 2025-07-27 16:46:07,985 notification_utils 136759 136447361712384 Notification sent to group user_20593498-20c8-4f38-9072-6a62846f0f27: application_received_notification
+INFO 2025-07-27 16:46:07,985 signals 136759 136447361712384 Application received notification sent for application 8b28e4d9-49b2-4625-be55-9d0ca55d05d5
+INFO 2025-07-27 16:46:07,986 signals 136759 136447361712384 Created application received notification for recruiter 20593498-20c8-4f38-9072-6a62846f0f27
+ERROR 2025-07-27 16:46:08,182 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:08,248 logging_config 136759 136447361712384 API request: GET /admin/matcher/user/5104eb03-7d7c-4d69-9cf0-1a279c5e8b73/change/
+ERROR 2025-07-27 16:46:08,249 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:08,269 logging_config 136759 136447361712384 API request: GET /admin/matcher/jobpost/425b68e8-a045-4fce-ad62-4d2445d1b6bb/change/
+INFO 2025-07-27 16:46:08,465 signals 136759 136447361712384 Created notification preferences for user 10372add-e82e-4b26-bfa9-96c78167eeb3
+INFO 2025-07-27 16:46:08,660 signals 136759 136447361712384 Created notification preferences for user 8fbd2901-58ea-42fb-b965-f3441c831ff0
+INFO 2025-07-27 16:46:08,856 signals 136759 136447361712384 Created notification preferences for user 5928b058-8890-4d73-8dcf-6ba08bf87be7
+INFO 2025-07-27 16:46:08,858 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:08,861 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:08,861 signals 136759 136447361712384 Job posted notification sent for job ad4ddc55-b4fa-4ed8-acc5-889031d251c8: Senior Python Developer
+INFO 2025-07-27 16:46:08,865 notification_utils 136759 136447361712384 Notification sent to group user_5928b058-8890-4d73-8dcf-6ba08bf87be7: application_received_notification
+INFO 2025-07-27 16:46:08,865 signals 136759 136447361712384 Application received notification sent for application becce9ab-a85f-4375-92f6-1d7d308d2de5
+INFO 2025-07-27 16:46:08,866 signals 136759 136447361712384 Created application received notification for recruiter 5928b058-8890-4d73-8dcf-6ba08bf87be7
+ERROR 2025-07-27 16:46:09,064 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:09,075 logging_config 136759 136447361712384 API request: GET /admin/matcher/resume/1/change/
+ERROR 2025-07-27 16:46:09,075 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:09,091 logging_config 136759 136447361712384 API request: GET /admin/matcher/application/becce9ab-a85f-4375-92f6-1d7d308d2de5/change/
+INFO 2025-07-27 16:46:09,285 signals 136759 136447361712384 Created notification preferences for user cfa6c6b9-d8cd-485f-84a2-646d45cd0da0
+INFO 2025-07-27 16:46:09,481 signals 136759 136447361712384 Created notification preferences for user 27e28963-53e0-4f0a-a158-5ec0e702e95b
+INFO 2025-07-27 16:46:09,684 signals 136759 136447361712384 Created notification preferences for user b69efd25-de28-4049-b9b7-732a9185478a
+INFO 2025-07-27 16:46:09,686 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:09,690 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:09,690 signals 136759 136447361712384 Job posted notification sent for job 2ad337f1-694a-410b-947c-ea8fa9b1fd62: Senior Python Developer
+INFO 2025-07-27 16:46:09,693 notification_utils 136759 136447361712384 Notification sent to group user_b69efd25-de28-4049-b9b7-732a9185478a: application_received_notification
+INFO 2025-07-27 16:46:09,693 signals 136759 136447361712384 Application received notification sent for application e6b414c4-6b8a-447b-ad0f-8cbfd9b0ec32
+INFO 2025-07-27 16:46:09,694 signals 136759 136447361712384 Created application received notification for recruiter b69efd25-de28-4049-b9b7-732a9185478a
+ERROR 2025-07-27 16:46:09,896 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:09,904 logging_config 136759 136447361712384 API request: GET /admin/
+INFO 2025-07-27 16:46:10,102 signals 136759 136447361712384 Created notification preferences for user 0d80a845-6373-4802-8174-980bd980290e
+INFO 2025-07-27 16:46:10,297 signals 136759 136447361712384 Created notification preferences for user 30d8e4e4-44eb-4b51-bf6c-807a3a7335c0
+INFO 2025-07-27 16:46:10,503 signals 136759 136447361712384 Created notification preferences for user 170313b7-c1e7-4fe5-8657-24a4d109c09f
+INFO 2025-07-27 16:46:10,505 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:10,508 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:10,508 signals 136759 136447361712384 Job posted notification sent for job 2456483f-dea9-4dfd-92d8-59bec7ce1adc: Senior Python Developer
+INFO 2025-07-27 16:46:10,510 notification_utils 136759 136447361712384 Notification sent to group user_170313b7-c1e7-4fe5-8657-24a4d109c09f: application_received_notification
+INFO 2025-07-27 16:46:10,510 signals 136759 136447361712384 Application received notification sent for application 805fce9c-01e3-4ac6-9f3e-f2e5933ab963
+INFO 2025-07-27 16:46:10,511 signals 136759 136447361712384 Created application received notification for recruiter 170313b7-c1e7-4fe5-8657-24a4d109c09f
+ERROR 2025-07-27 16:46:10,712 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:10,715 logging_config 136759 136447361712384 API request: POST /admin/matcher/user/
+ERROR 2025-07-27 16:46:10,716 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:10,719 logging_config 136759 136447361712384 API request: POST /admin/matcher/jobpost/
+INFO 2025-07-27 16:46:10,919 signals 136759 136447361712384 Created notification preferences for user 2b845796-4cab-4d0e-ba9f-60e9a13591b6
+INFO 2025-07-27 16:46:11,112 signals 136759 136447361712384 Created notification preferences for user 0f57cbb7-ff7a-493c-90fa-59ea44c44c1e
+INFO 2025-07-27 16:46:11,307 signals 136759 136447361712384 Created notification preferences for user e3802ca1-ec49-4fa7-82cf-af92ef6c5119
+INFO 2025-07-27 16:46:11,309 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:11,312 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:11,312 signals 136759 136447361712384 Job posted notification sent for job 4d0d7816-63e9-4034-b422-80a811079954: Senior Python Developer
+INFO 2025-07-27 16:46:11,316 notification_utils 136759 136447361712384 Notification sent to group user_e3802ca1-ec49-4fa7-82cf-af92ef6c5119: application_received_notification
+INFO 2025-07-27 16:46:11,316 signals 136759 136447361712384 Application received notification sent for application b3472665-5975-4390-9589-94c44e0f6688
+INFO 2025-07-27 16:46:11,317 signals 136759 136447361712384 Created application received notification for recruiter e3802ca1-ec49-4fa7-82cf-af92ef6c5119
+ERROR 2025-07-27 16:46:11,515 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:11,518 logging_config 136759 136447361712384 API request: POST /admin/matcher/user/
+ERROR 2025-07-27 16:46:11,518 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:11,521 logging_config 136759 136447361712384 API request: POST /admin/matcher/jobpost/
+INFO 2025-07-27 16:46:11,717 signals 136759 136447361712384 Created notification preferences for user b729f9f6-e712-4a56-b331-64742f0c8377
+INFO 2025-07-27 16:46:11,914 signals 136759 136447361712384 Created notification preferences for user 385b049a-b44f-4e1c-bcf1-086990637ec1
+INFO 2025-07-27 16:46:12,109 signals 136759 136447361712384 Created notification preferences for user b44251ac-6178-4462-b1b3-5ded629613a8
+INFO 2025-07-27 16:46:12,111 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:12,114 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:12,114 signals 136759 136447361712384 Job posted notification sent for job 4d78e779-fb70-41bb-bd6d-a3aed99cdc98: Senior Python Developer
+INFO 2025-07-27 16:46:12,117 notification_utils 136759 136447361712384 Notification sent to group user_b44251ac-6178-4462-b1b3-5ded629613a8: application_received_notification
+INFO 2025-07-27 16:46:12,117 signals 136759 136447361712384 Application received notification sent for application 32b091b0-1615-4451-9711-8710567af50d
+INFO 2025-07-27 16:46:12,119 signals 136759 136447361712384 Created application received notification for recruiter b44251ac-6178-4462-b1b3-5ded629613a8
+ERROR 2025-07-27 16:46:12,315 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:12,330 logging_config 136759 136447361712384 API request: GET /admin/matcher/user/
+ERROR 2025-07-27 16:46:12,330 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:12,340 logging_config 136759 136447361712384 API request: GET /admin/matcher/jobpost/
+ERROR 2025-07-27 16:46:12,340 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-27 16:46:12,349 middleware 136759 136447361712384 Critical error detected: Unknown format code 'f' for object of type 'SafeString'
+ERROR 2025-07-27 16:46:12,350 middleware 136759 136447361712384 Request exception: Unknown format code 'f' for object of type 'SafeString'
+ERROR 2025-07-27 16:46:12,350 log 136759 136447361712384 Internal Server Error: /admin/matcher/application/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/options.py", line 683, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'match_score_display'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/utils.py", line 290, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/utils.py", line 330, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/options.py", line 685, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: Application has no field named 'match_score_display'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/templatetags/base.py", line 45, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/library.py", line 359, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/templatetags/admin_list.py", line 354, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/templatetags/admin_list.py", line 330, in results
+    yield ResultList(None, items_for_result(cl, res, None))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/templatetags/admin_list.py", line 321, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/templatetags/admin_list.py", line 219, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/utils.py", line 299, in lookup_field
+    value = attr(obj)
+  File "/home/lusan/Documents/HireWise/backend/matcher/admin.py", line 698, in match_score_display
+    return format_html(
+        '<span style="color: {}; font-weight: bold;">{:.1f}%</span>',
+        color, obj.match_score
+    )
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/utils/html.py", line 145, in format_html
+    return mark_safe(format_string.format(*args_safe, **kwargs_safe))
+                     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unknown format code 'f' for object of type 'SafeString'
+ERROR 2025-07-27 16:46:12,356 logging_config 136759 136447361712384 API request failed: GET /admin/matcher/application/
+INFO 2025-07-27 16:46:12,546 signals 136759 136447361712384 Created notification preferences for user e28306c6-64d0-4d27-a5c4-ed087fbc8929
+INFO 2025-07-27 16:46:12,741 signals 136759 136447361712384 Created notification preferences for user 20409b1d-5e8d-4408-bbfc-b6743c18f82e
+INFO 2025-07-27 16:46:12,936 signals 136759 136447361712384 Created notification preferences for user ce2ed4a6-5700-4614-b946-424217f1789a
+INFO 2025-07-27 16:46:12,938 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:12,941 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:12,942 signals 136759 136447361712384 Job posted notification sent for job 523697a8-210b-4af1-ae4e-96b9cdf7f418: Senior Python Developer
+INFO 2025-07-27 16:46:12,944 notification_utils 136759 136447361712384 Notification sent to group user_ce2ed4a6-5700-4614-b946-424217f1789a: application_received_notification
+INFO 2025-07-27 16:46:12,944 signals 136759 136447361712384 Application received notification sent for application bc38764d-768a-4b1c-83fa-2f880d064cec
+INFO 2025-07-27 16:46:12,945 signals 136759 136447361712384 Created application received notification for recruiter ce2ed4a6-5700-4614-b946-424217f1789a
+ERROR 2025-07-27 16:46:13,143 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:13,149 logging_config 136759 136447361712384 API request: GET /admin/
+ERROR 2025-07-27 16:46:13,149 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:13,159 logging_config 136759 136447361712384 API request: GET /admin/matcher/user/
+ERROR 2025-07-27 16:46:13,159 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:13,188 logging_config 136759 136447361712384 API request: GET /admin/matcher/user/20409b1d-5e8d-4408-bbfc-b6743c18f82e/change/
+ERROR 2025-07-27 16:46:13,188 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:13,198 logging_config 136759 136447361712384 API request: GET /admin/matcher/jobpost/
+ERROR 2025-07-27 16:46:13,198 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-27 16:46:13,207 middleware 136759 136447361712384 Critical error detected: Unknown format code 'f' for object of type 'SafeString'
+ERROR 2025-07-27 16:46:13,207 middleware 136759 136447361712384 Request exception: Unknown format code 'f' for object of type 'SafeString'
+ERROR 2025-07-27 16:46:13,207 log 136759 136447361712384 Internal Server Error: /admin/matcher/application/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/options.py", line 683, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'match_score_display'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/utils.py", line 290, in lookup_field
+    f = _get_non_gfk_field(opts, name)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/utils.py", line 330, in _get_non_gfk_field
+    field = opts.get_field(name)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/db/models/options.py", line 685, in get_field
+    raise FieldDoesNotExist(
+        "%s has no field named '%s'" % (self.object_name, field_name)
+    )
+django.core.exceptions.FieldDoesNotExist: Application has no field named 'match_score_display'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/test/utils.py", line 114, in instrumented_test_render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/templatetags/base.py", line 45, in render
+    return super().render(context)
+           ~~~~~~~~~~~~~~^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/template/library.py", line 359, in render
+    _dict = self.func(*resolved_args, **resolved_kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/templatetags/admin_list.py", line 354, in result_list
+    "results": list(results(cl)),
+               ~~~~^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/templatetags/admin_list.py", line 330, in results
+    yield ResultList(None, items_for_result(cl, res, None))
+          ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/templatetags/admin_list.py", line 321, in __init__
+    super().__init__(*items)
+    ~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/templatetags/admin_list.py", line 219, in items_for_result
+    f, attr, value = lookup_field(field_name, result, cl.model_admin)
+                     ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/contrib/admin/utils.py", line 299, in lookup_field
+    value = attr(obj)
+  File "/home/lusan/Documents/HireWise/backend/matcher/admin.py", line 698, in match_score_display
+    return format_html(
+        '<span style="color: {}; font-weight: bold;">{:.1f}%</span>',
+        color, obj.match_score
+    )
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/utils/html.py", line 145, in format_html
+    return mark_safe(format_string.format(*args_safe, **kwargs_safe))
+                     ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unknown format code 'f' for object of type 'SafeString'
+ERROR 2025-07-27 16:46:13,210 logging_config 136759 136447361712384 API request failed: GET /admin/matcher/application/
+INFO 2025-07-27 16:46:13,419 signals 136759 136447361712384 Created notification preferences for user 1947a183-8ce5-45de-9931-938e2a66ae92
+INFO 2025-07-27 16:46:13,619 signals 136759 136447361712384 Created notification preferences for user 460587d8-b4fc-49bf-a052-4cd7940bced4
+INFO 2025-07-27 16:46:13,818 signals 136759 136447361712384 Created notification preferences for user 7eed16ce-afcc-4b2e-b2b7-9076fbffd194
+INFO 2025-07-27 16:46:13,820 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:13,822 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:13,823 signals 136759 136447361712384 Job posted notification sent for job 1c6a930e-6df9-40f1-8af9-384fd9380dda: Senior Python Developer
+INFO 2025-07-27 16:46:13,826 notification_utils 136759 136447361712384 Notification sent to group user_7eed16ce-afcc-4b2e-b2b7-9076fbffd194: application_received_notification
+INFO 2025-07-27 16:46:13,826 signals 136759 136447361712384 Application received notification sent for application dbaa2873-543e-4cc2-a004-9af458d30f1b
+INFO 2025-07-27 16:46:13,827 signals 136759 136447361712384 Created application received notification for recruiter 7eed16ce-afcc-4b2e-b2b7-9076fbffd194
+ERROR 2025-07-27 16:46:14,026 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:14,036 logging_config 136759 136447361712384 API request: GET /admin/matcher/user/
+ERROR 2025-07-27 16:46:14,037 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:14,047 logging_config 136759 136447361712384 API request: GET /admin/matcher/jobpost/
+INFO 2025-07-27 16:46:14,247 signals 136759 136447361712384 Created notification preferences for user 4d0dbca7-5252-4a6c-b395-93fc4fcc6ca6
+INFO 2025-07-27 16:46:14,443 signals 136759 136447361712384 Created notification preferences for user 40704f8a-f9f4-4e64-bdbb-ff2fae2be48a
+INFO 2025-07-27 16:46:14,642 signals 136759 136447361712384 Created notification preferences for user e1403ca0-a813-44b6-a2d4-c2edf74ca060
+INFO 2025-07-27 16:46:14,644 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:14,647 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:14,647 signals 136759 136447361712384 Job posted notification sent for job 540654e3-f8f2-43c7-8db6-f32f1513f243: Senior Python Developer
+INFO 2025-07-27 16:46:14,650 notification_utils 136759 136447361712384 Notification sent to group user_e1403ca0-a813-44b6-a2d4-c2edf74ca060: application_received_notification
+INFO 2025-07-27 16:46:14,650 signals 136759 136447361712384 Application received notification sent for application 3de153cd-3a75-4f4d-a17c-4fa560351b2b
+INFO 2025-07-27 16:46:14,651 signals 136759 136447361712384 Created application received notification for recruiter e1403ca0-a813-44b6-a2d4-c2edf74ca060
+ERROR 2025-07-27 16:46:15,046 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:15,047 logging_config 136759 136447361712384 API request: GET /admin/
+INFO 2025-07-27 16:46:15,243 signals 136759 136447361712384 Created notification preferences for user 531dd164-162c-4412-b0eb-2b3a7bb7d0b1
+INFO 2025-07-27 16:46:15,439 signals 136759 136447361712384 Created notification preferences for user 7d10aa88-c85f-4d1b-9d4f-3ba982d60003
+INFO 2025-07-27 16:46:15,635 signals 136759 136447361712384 Created notification preferences for user 7f850931-7fda-4dac-9cb4-65e97be1f799
+INFO 2025-07-27 16:46:15,637 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:15,640 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:15,640 signals 136759 136447361712384 Job posted notification sent for job 52e58f58-36fb-47b2-ad0e-422cf0e98cdc: Senior Python Developer
+INFO 2025-07-27 16:46:15,643 notification_utils 136759 136447361712384 Notification sent to group user_7f850931-7fda-4dac-9cb4-65e97be1f799: application_received_notification
+INFO 2025-07-27 16:46:15,643 signals 136759 136447361712384 Application received notification sent for application e281dd2a-7b99-4380-87ec-be462aa2c6ba
+INFO 2025-07-27 16:46:15,644 signals 136759 136447361712384 Created application received notification for recruiter 7f850931-7fda-4dac-9cb4-65e97be1f799
+INFO 2025-07-27 16:46:16,039 signals 136759 136447361712384 Created notification preferences for user 3fecf026-74f3-4eaa-bcef-cf4eaa30df87
+ERROR 2025-07-27 16:46:16,238 middleware 136759 136447361712384 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-27 16:46:16,242 logging_config 136759 136447361712384 API request: GET /admin/
+INFO 2025-07-27 16:46:16,439 signals 136759 136447361712384 Created notification preferences for user 5f3117a7-b667-4d65-851f-8c8ca723e2a4
+INFO 2025-07-27 16:46:16,634 signals 136759 136447361712384 Created notification preferences for user 6b464943-dd05-4d84-a291-f02ad3e94d3f
+INFO 2025-07-27 16:46:16,829 signals 136759 136447361712384 Created notification preferences for user 31bf14d8-5718-4635-a9aa-c3645b2db670
+INFO 2025-07-27 16:46:16,831 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:16,834 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:16,834 signals 136759 136447361712384 Job posted notification sent for job af9dd485-8c9a-407a-a96e-2593207289f6: Senior Python Developer
+INFO 2025-07-27 16:46:16,837 notification_utils 136759 136447361712384 Notification sent to group user_31bf14d8-5718-4635-a9aa-c3645b2db670: application_received_notification
+INFO 2025-07-27 16:46:16,837 signals 136759 136447361712384 Application received notification sent for application b319c4d6-b075-4239-b981-4b0d37d8ceea
+INFO 2025-07-27 16:46:16,838 signals 136759 136447361712384 Created application received notification for recruiter 31bf14d8-5718-4635-a9aa-c3645b2db670
+INFO 2025-07-27 16:46:17,243 signals 136759 136447361712384 Created notification preferences for user 4e764dbb-3a01-4581-9714-15523536d447
+INFO 2025-07-27 16:46:17,441 signals 136759 136447361712384 Created notification preferences for user 566251b1-26b6-4deb-b357-be1f21b51a36
+INFO 2025-07-27 16:46:17,636 signals 136759 136447361712384 Created notification preferences for user cf673072-b557-4f0b-ba61-8693ea8c20f2
+INFO 2025-07-27 16:46:17,638 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:17,641 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:17,641 signals 136759 136447361712384 Job posted notification sent for job 63bb294d-1c99-4521-9393-45ee85ee5af6: Senior Python Developer
+INFO 2025-07-27 16:46:17,644 notification_utils 136759 136447361712384 Notification sent to group user_cf673072-b557-4f0b-ba61-8693ea8c20f2: application_received_notification
+INFO 2025-07-27 16:46:17,644 signals 136759 136447361712384 Application received notification sent for application b57e986f-2c78-4715-ad16-2d8517de786b
+INFO 2025-07-27 16:46:17,645 signals 136759 136447361712384 Created application received notification for recruiter cf673072-b557-4f0b-ba61-8693ea8c20f2
+INFO 2025-07-27 16:46:18,043 signals 136759 136447361712384 Created notification preferences for user c7a8f447-225d-4f13-bb39-706b1d1bd625
+INFO 2025-07-27 16:46:18,240 signals 136759 136447361712384 Created notification preferences for user a17e3184-a9f0-41d0-853e-7d588a49df81
+INFO 2025-07-27 16:46:18,434 signals 136759 136447361712384 Created notification preferences for user f07effa2-7041-47c5-9e36-d3fef5463ac8
+INFO 2025-07-27 16:46:18,437 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:18,439 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:18,439 signals 136759 136447361712384 Job posted notification sent for job 8e827cfa-7fab-488a-a949-4fc8bfd35bdd: Senior Python Developer
+INFO 2025-07-27 16:46:18,442 notification_utils 136759 136447361712384 Notification sent to group user_f07effa2-7041-47c5-9e36-d3fef5463ac8: application_received_notification
+INFO 2025-07-27 16:46:18,442 signals 136759 136447361712384 Application received notification sent for application ba818da2-2416-479f-9fa5-4630f2e87025
+INFO 2025-07-27 16:46:18,443 signals 136759 136447361712384 Created application received notification for recruiter f07effa2-7041-47c5-9e36-d3fef5463ac8
+INFO 2025-07-27 16:46:18,847 signals 136759 136447361712384 Created notification preferences for user 77b386e8-cfc3-4b0b-b425-56c5101256d0
+INFO 2025-07-27 16:46:19,043 signals 136759 136447361712384 Created notification preferences for user 7b2510e8-260c-4eab-b578-00f66e57455a
+INFO 2025-07-27 16:46:19,241 signals 136759 136447361712384 Created notification preferences for user 2db0eccc-3330-43b3-8853-dbfed89953bf
+INFO 2025-07-27 16:46:19,243 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:19,245 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:19,245 signals 136759 136447361712384 Job posted notification sent for job ab5a6a67-27f5-4cf9-989a-4e1f9eced72c: Senior Python Developer
+INFO 2025-07-27 16:46:19,248 notification_utils 136759 136447361712384 Notification sent to group user_2db0eccc-3330-43b3-8853-dbfed89953bf: application_received_notification
+INFO 2025-07-27 16:46:19,249 signals 136759 136447361712384 Application received notification sent for application 13477c14-07f5-4e9d-949e-81decffde242
+INFO 2025-07-27 16:46:19,249 signals 136759 136447361712384 Created application received notification for recruiter 2db0eccc-3330-43b3-8853-dbfed89953bf
+INFO 2025-07-27 16:46:19,644 signals 136759 136447361712384 Created notification preferences for user 2656b14f-0d0c-4a3d-aafa-0ad77a0e8e58
+INFO 2025-07-27 16:46:19,843 signals 136759 136447361712384 Created notification preferences for user 379eb94d-0828-41f6-b237-467569b12797
+INFO 2025-07-27 16:46:20,039 signals 136759 136447361712384 Created notification preferences for user b1b5bb07-63b5-4764-884a-4b841b5b75a8
+INFO 2025-07-27 16:46:20,041 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:20,045 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:20,045 signals 136759 136447361712384 Job posted notification sent for job 9e25111e-060e-4c7b-b78b-0ee26ca0f994: Senior Python Developer
+INFO 2025-07-27 16:46:20,047 notification_utils 136759 136447361712384 Notification sent to group user_b1b5bb07-63b5-4764-884a-4b841b5b75a8: application_received_notification
+INFO 2025-07-27 16:46:20,047 signals 136759 136447361712384 Application received notification sent for application 5449e565-2656-4580-84c5-a64557bb5a92
+INFO 2025-07-27 16:46:20,048 signals 136759 136447361712384 Created application received notification for recruiter b1b5bb07-63b5-4764-884a-4b841b5b75a8
+INFO 2025-07-27 16:46:20,447 signals 136759 136447361712384 Created notification preferences for user b5349be0-0bb6-4d9d-80e3-b2599be3f012
+INFO 2025-07-27 16:46:20,644 signals 136759 136447361712384 Created notification preferences for user ee1fa17e-fefe-4a47-975b-f877babd5f77
+INFO 2025-07-27 16:46:20,840 signals 136759 136447361712384 Created notification preferences for user 95ba1da7-9662-4743-aa8b-771e7fa683e0
+INFO 2025-07-27 16:46:20,842 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:20,845 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:20,845 signals 136759 136447361712384 Job posted notification sent for job d11d1bd9-b5e2-4261-98d6-2615fec4129f: Senior Python Developer
+INFO 2025-07-27 16:46:20,848 notification_utils 136759 136447361712384 Notification sent to group user_95ba1da7-9662-4743-aa8b-771e7fa683e0: application_received_notification
+INFO 2025-07-27 16:46:20,848 signals 136759 136447361712384 Application received notification sent for application cd0f9edd-8f9f-44bd-8d5f-ea01e396703f
+INFO 2025-07-27 16:46:20,849 signals 136759 136447361712384 Created application received notification for recruiter 95ba1da7-9662-4743-aa8b-771e7fa683e0
+INFO 2025-07-27 16:46:21,243 signals 136759 136447361712384 Created notification preferences for user 4d80d96a-e16e-4984-92de-228eae5f2b73
+INFO 2025-07-27 16:46:21,440 signals 136759 136447361712384 Created notification preferences for user 3446992c-03ae-4543-b0ea-cdf6b651ee03
+INFO 2025-07-27 16:46:21,636 signals 136759 136447361712384 Created notification preferences for user 748544f8-b786-4322-8d20-fc0480481f52
+INFO 2025-07-27 16:46:21,638 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:21,642 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:21,642 signals 136759 136447361712384 Job posted notification sent for job ba8e82a3-64ee-47d6-aebe-83d1e8b149c5: Senior Python Developer
+INFO 2025-07-27 16:46:21,644 notification_utils 136759 136447361712384 Notification sent to group user_748544f8-b786-4322-8d20-fc0480481f52: application_received_notification
+INFO 2025-07-27 16:46:21,645 signals 136759 136447361712384 Application received notification sent for application b70c75c8-8652-4f44-9d79-0416e4c03d15
+INFO 2025-07-27 16:46:21,645 signals 136759 136447361712384 Created application received notification for recruiter 748544f8-b786-4322-8d20-fc0480481f52
+INFO 2025-07-27 16:46:22,044 signals 136759 136447361712384 Created notification preferences for user 13daebff-171d-4476-b17c-8d32b22741e4
+INFO 2025-07-27 16:46:22,241 signals 136759 136447361712384 Created notification preferences for user f51ab3a2-9bb6-4d92-9b18-4a15eb5e0078
+INFO 2025-07-27 16:46:22,443 signals 136759 136447361712384 Created notification preferences for user f4b5c9a4-9dda-4a28-93c9-8c2e9536d1d6
+INFO 2025-07-27 16:46:22,445 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:22,448 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:22,448 signals 136759 136447361712384 Job posted notification sent for job 8dc8f30f-ceed-48a2-90f9-afc17febfceb: Senior Python Developer
+INFO 2025-07-27 16:46:22,451 notification_utils 136759 136447361712384 Notification sent to group user_f4b5c9a4-9dda-4a28-93c9-8c2e9536d1d6: application_received_notification
+INFO 2025-07-27 16:46:22,451 signals 136759 136447361712384 Application received notification sent for application e24aef45-a7b6-4904-a865-820de0ea4c57
+INFO 2025-07-27 16:46:22,452 signals 136759 136447361712384 Created application received notification for recruiter f4b5c9a4-9dda-4a28-93c9-8c2e9536d1d6
+INFO 2025-07-27 16:46:22,851 signals 136759 136447361712384 Created notification preferences for user 7445e077-a1e8-434f-97be-8c5d55d32240
+INFO 2025-07-27 16:46:23,046 signals 136759 136447361712384 Created notification preferences for user 7a28abcd-841b-4d93-9175-a66cc8162ccd
+INFO 2025-07-27 16:46:23,243 signals 136759 136447361712384 Created notification preferences for user b95908c2-082d-4d63-b40a-4237e3bb0522
+INFO 2025-07-27 16:46:23,245 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:23,247 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:23,247 signals 136759 136447361712384 Job posted notification sent for job cedf5a11-b497-4497-a4db-d38bb9482cba: Senior Python Developer
+INFO 2025-07-27 16:46:23,250 notification_utils 136759 136447361712384 Notification sent to group user_b95908c2-082d-4d63-b40a-4237e3bb0522: application_received_notification
+INFO 2025-07-27 16:46:23,251 signals 136759 136447361712384 Application received notification sent for application 5dba9321-ca66-488a-94c3-b2e946002f84
+INFO 2025-07-27 16:46:23,252 signals 136759 136447361712384 Created application received notification for recruiter b95908c2-082d-4d63-b40a-4237e3bb0522
+INFO 2025-07-27 16:46:23,646 signals 136759 136447361712384 Created notification preferences for user 76983fc0-daa5-4a26-b327-45b292928c23
+INFO 2025-07-27 16:46:23,841 signals 136759 136447361712384 Created notification preferences for user 3b5df674-c692-4b16-aee4-e40921b07c02
+INFO 2025-07-27 16:46:24,037 signals 136759 136447361712384 Created notification preferences for user 190da528-af1c-42df-9d5c-5965a4070036
+INFO 2025-07-27 16:46:24,039 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:24,041 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:24,042 signals 136759 136447361712384 Job posted notification sent for job f5d03a7e-482e-4765-9a54-83b56ff7084d: Senior Python Developer
+INFO 2025-07-27 16:46:24,045 notification_utils 136759 136447361712384 Notification sent to group user_190da528-af1c-42df-9d5c-5965a4070036: application_received_notification
+INFO 2025-07-27 16:46:24,045 signals 136759 136447361712384 Application received notification sent for application 63823369-fbe6-4937-bf4f-ee94f7fd4d61
+INFO 2025-07-27 16:46:24,046 signals 136759 136447361712384 Created application received notification for recruiter 190da528-af1c-42df-9d5c-5965a4070036
+INFO 2025-07-27 16:46:24,437 signals 136759 136447361712384 Created notification preferences for user 376f0350-e4e3-405f-bff2-49a940ea7fbb
+INFO 2025-07-27 16:46:24,633 signals 136759 136447361712384 Created notification preferences for user da35a79d-a7bc-4c19-83b4-ec822d3b5b11
+INFO 2025-07-27 16:46:24,832 signals 136759 136447361712384 Created notification preferences for user c1ddb7ed-c3dc-4d7d-b65e-4027b08d176f
+INFO 2025-07-27 16:46:24,834 signals 136759 136447361712384 Created 1 job posted notifications
+INFO 2025-07-27 16:46:24,837 notification_utils 136759 136447361712384 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:46:24,838 signals 136759 136447361712384 Job posted notification sent for job 9750a2d1-10bf-4947-9182-1e72f740ee67: Senior Python Developer
+INFO 2025-07-27 16:46:24,841 notification_utils 136759 136447361712384 Notification sent to group user_c1ddb7ed-c3dc-4d7d-b65e-4027b08d176f: application_received_notification
+INFO 2025-07-27 16:46:24,841 signals 136759 136447361712384 Application received notification sent for application 1018a820-3df6-4efd-afaa-227a1f578a77
+INFO 2025-07-27 16:46:24,842 signals 136759 136447361712384 Created application received notification for recruiter c1ddb7ed-c3dc-4d7d-b65e-4027b08d176f
+INFO 2025-07-27 16:46:37,171 autoreload 129847 125342907142400 /home/lusan/Documents/HireWise/backend/matcher/admin.py changed, reloading.
+INFO 2025-07-27 16:46:38,100 autoreload 137199 133496896143616 Watching for file changes with StatReloader
+INFO 2025-07-27 16:46:39,258 server 137199 133496812648128 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:46:39,258 server 137199 133496812648128 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:46:39,258 server 137199 133496812648128 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 16:49:05,215 signals 139104 127647175237888 Created notification preferences for user 55c3b43e-c5d1-4d77-8484-d983231302c8
+INFO 2025-07-27 16:49:05,414 signals 139104 127647175237888 Created notification preferences for user c257fb05-e472-4610-8352-66e268f3a51f
+INFO 2025-07-27 16:49:05,616 signals 139104 127647175237888 Created notification preferences for user 5b1e1e83-63a4-4bc2-b368-0e55e06fcd5e
+INFO 2025-07-27 16:49:05,620 signals 139104 127647175237888 Created 1 job posted notifications
+INFO 2025-07-27 16:49:05,624 notification_utils 139104 127647175237888 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:49:05,624 signals 139104 127647175237888 Job posted notification sent for job 5e4b0a41-c968-4930-9b38-e707cb69a3cc: Senior Python Developer
+INFO 2025-07-27 16:49:05,628 notification_utils 139104 127647175237888 Notification sent to group user_5b1e1e83-63a4-4bc2-b368-0e55e06fcd5e: application_received_notification
+INFO 2025-07-27 16:49:05,628 signals 139104 127647175237888 Application received notification sent for application 84afc637-f3a3-49ea-8d14-d4d287075ae4
+INFO 2025-07-27 16:49:05,629 signals 139104 127647175237888 Created application received notification for recruiter 5b1e1e83-63a4-4bc2-b368-0e55e06fcd5e
+INFO 2025-07-27 16:49:22,557 signals 139293 129972680352000 Created notification preferences for user bdf61067-3499-4a19-99ae-be643729021a
+INFO 2025-07-27 16:49:22,792 signals 139293 129972680352000 Created notification preferences for user b1075c5c-67c4-472b-9c35-691b6827ec8f
+INFO 2025-07-27 16:49:23,021 signals 139293 129972680352000 Created notification preferences for user 1ee61684-b861-42ff-a3fe-9a73a99f28c8
+INFO 2025-07-27 16:49:23,237 signals 139293 129972680352000 Created notification preferences for user 1bae2ff7-720e-47e2-8cec-c28f895a345d
+INFO 2025-07-27 16:49:23,469 signals 139293 129972680352000 Created notification preferences for user 878d0259-0f5f-4b82-beb8-62c6ae54968d
+INFO 2025-07-27 16:49:23,698 signals 139293 129972680352000 Created notification preferences for user d8e567a3-cc72-4dc1-8349-8a802c9a0c5f
+INFO 2025-07-27 16:49:23,926 signals 139293 129972680352000 Created notification preferences for user d44783f8-95fd-4940-9292-db25b29adff7
+INFO 2025-07-27 16:49:24,141 signals 139293 129972680352000 Created notification preferences for user 5c83197e-4417-4480-91a8-97ebe9314ea8
+INFO 2025-07-27 16:49:24,347 signals 139293 129972680352000 Created notification preferences for user 3c3446af-71d6-48f4-b8c6-b0ff6024ebb2
+INFO 2025-07-27 16:49:24,563 signals 139293 129972680352000 Created notification preferences for user 5961dedf-2c2f-4631-b65a-f1da5d1f4b36
+INFO 2025-07-27 16:49:24,589 signals 139293 129972680352000 Created 9 job posted notifications
+INFO 2025-07-27 16:49:24,592 notification_utils 139293 129972680352000 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-27 16:49:24,592 signals 139293 129972680352000 Job posted notification sent for job ce1f33b1-4138-41a5-b213-6f1bb08709ff: Product Manager
+INFO 2025-07-27 16:49:24,605 notification_utils 139293 129972680352000 Notification sent to group user_5c83197e-4417-4480-91a8-97ebe9314ea8: application_received_notification
+INFO 2025-07-27 16:49:24,605 signals 139293 129972680352000 Application received notification sent for application 9ab64dde-d23f-49fd-a9ae-f9b5e47d0991
+INFO 2025-07-27 16:49:24,608 signals 139293 129972680352000 Created application received notification for recruiter 5c83197e-4417-4480-91a8-97ebe9314ea8
+INFO 2025-07-27 16:49:24,614 notification_utils 139293 129972680352000 Notification sent to group user_5961dedf-2c2f-4631-b65a-f1da5d1f4b36: application_received_notification
+INFO 2025-07-27 16:49:24,615 signals 139293 129972680352000 Application received notification sent for application 7a2921f5-b5b1-4081-a1f7-b5dcb8c2e5ca
+INFO 2025-07-27 16:49:24,617 signals 139293 129972680352000 Created application received notification for recruiter 5961dedf-2c2f-4631-b65a-f1da5d1f4b36
+INFO 2025-07-27 16:49:24,624 notification_utils 139293 129972680352000 Notification sent to group user_5c83197e-4417-4480-91a8-97ebe9314ea8: application_received_notification
+INFO 2025-07-27 16:49:24,624 signals 139293 129972680352000 Application received notification sent for application 4d3c226c-875f-4763-9598-5f5f9eafed0f
+INFO 2025-07-27 16:49:24,626 signals 139293 129972680352000 Created application received notification for recruiter 5c83197e-4417-4480-91a8-97ebe9314ea8
+INFO 2025-07-27 16:49:24,632 notification_utils 139293 129972680352000 Notification sent to group user_5961dedf-2c2f-4631-b65a-f1da5d1f4b36: application_received_notification
+INFO 2025-07-27 16:49:24,632 signals 139293 129972680352000 Application received notification sent for application 7f24a12a-127e-4668-968f-b4a152966d94
+INFO 2025-07-27 16:49:24,634 signals 139293 129972680352000 Created application received notification for recruiter 5961dedf-2c2f-4631-b65a-f1da5d1f4b36
+INFO 2025-07-27 16:49:24,640 notification_utils 139293 129972680352000 Notification sent to group user_5961dedf-2c2f-4631-b65a-f1da5d1f4b36: application_received_notification
+INFO 2025-07-27 16:49:24,640 signals 139293 129972680352000 Application received notification sent for application e0dc9c72-faf1-4613-a87c-872cb5da8fc9
+INFO 2025-07-27 16:49:24,643 signals 139293 129972680352000 Created application received notification for recruiter 5961dedf-2c2f-4631-b65a-f1da5d1f4b36
+INFO 2025-07-27 16:49:24,648 notification_utils 139293 129972680352000 Notification sent to group user_5c83197e-4417-4480-91a8-97ebe9314ea8: application_received_notification
+INFO 2025-07-27 16:49:24,648 signals 139293 129972680352000 Application received notification sent for application 3715619d-9c12-4cc5-bcc0-0edb34c0240e
+INFO 2025-07-27 16:49:24,650 signals 139293 129972680352000 Created application received notification for recruiter 5c83197e-4417-4480-91a8-97ebe9314ea8
+INFO 2025-07-27 16:49:24,659 notification_utils 139293 129972680352000 Notification sent to group user_5c83197e-4417-4480-91a8-97ebe9314ea8: application_received_notification
+INFO 2025-07-27 16:49:24,659 signals 139293 129972680352000 Application received notification sent for application 99747447-1081-4a64-b309-97dc68ca58c5
+INFO 2025-07-27 16:49:24,662 signals 139293 129972680352000 Created application received notification for recruiter 5c83197e-4417-4480-91a8-97ebe9314ea8
+INFO 2025-07-27 16:49:24,668 notification_utils 139293 129972680352000 Notification sent to group user_5961dedf-2c2f-4631-b65a-f1da5d1f4b36: application_received_notification
+INFO 2025-07-27 16:49:24,668 signals 139293 129972680352000 Application received notification sent for application c93721e4-ae5d-4dac-b325-dea0d5ba8f31
+INFO 2025-07-27 16:49:24,670 signals 139293 129972680352000 Created application received notification for recruiter 5961dedf-2c2f-4631-b65a-f1da5d1f4b36
+INFO 2025-07-27 16:49:24,676 notification_utils 139293 129972680352000 Notification sent to group user_5c83197e-4417-4480-91a8-97ebe9314ea8: application_received_notification
+INFO 2025-07-27 16:49:24,676 signals 139293 129972680352000 Application received notification sent for application 4db87748-2e3f-4654-a76b-2fad6e628aa3
+INFO 2025-07-27 16:49:24,678 signals 139293 129972680352000 Created application received notification for recruiter 5c83197e-4417-4480-91a8-97ebe9314ea8
+INFO 2025-07-27 16:49:24,684 notification_utils 139293 129972680352000 Notification sent to group user_5961dedf-2c2f-4631-b65a-f1da5d1f4b36: application_received_notification
+INFO 2025-07-27 16:49:24,684 signals 139293 129972680352000 Application received notification sent for application 1f2e72ef-0f17-4b7a-a8d1-62726df5abcc
+INFO 2025-07-27 16:49:24,686 signals 139293 129972680352000 Created application received notification for recruiter 5961dedf-2c2f-4631-b65a-f1da5d1f4b36
+INFO 2025-07-27 16:49:24,692 notification_utils 139293 129972680352000 Notification sent to group user_5c83197e-4417-4480-91a8-97ebe9314ea8: application_received_notification
+INFO 2025-07-27 16:49:24,692 signals 139293 129972680352000 Application received notification sent for application 5bb202f9-a191-49bc-bdf5-e1412e9fb0c4
+INFO 2025-07-27 16:49:24,695 signals 139293 129972680352000 Created application received notification for recruiter 5c83197e-4417-4480-91a8-97ebe9314ea8
+INFO 2025-07-27 16:49:24,700 notification_utils 139293 129972680352000 Notification sent to group user_5c83197e-4417-4480-91a8-97ebe9314ea8: application_received_notification
+INFO 2025-07-27 16:49:24,700 signals 139293 129972680352000 Application received notification sent for application 096f6f89-26e0-4b9a-a947-1a8f85224bd1
+INFO 2025-07-27 16:49:24,703 signals 139293 129972680352000 Created application received notification for recruiter 5c83197e-4417-4480-91a8-97ebe9314ea8
+INFO 2025-07-27 16:49:24,708 notification_utils 139293 129972680352000 Notification sent to group user_5c83197e-4417-4480-91a8-97ebe9314ea8: application_received_notification
+INFO 2025-07-27 16:49:24,708 signals 139293 129972680352000 Application received notification sent for application eff281e3-c944-46fb-bb3d-f02c75b38645
+INFO 2025-07-27 16:49:24,711 signals 139293 129972680352000 Created application received notification for recruiter 5c83197e-4417-4480-91a8-97ebe9314ea8
+INFO 2025-07-27 16:49:24,716 notification_utils 139293 129972680352000 Notification sent to group user_5961dedf-2c2f-4631-b65a-f1da5d1f4b36: application_received_notification
+INFO 2025-07-27 16:49:24,717 signals 139293 129972680352000 Application received notification sent for application 8be1b316-e82d-48f4-bd73-a48802ac886f
+INFO 2025-07-27 16:49:24,719 signals 139293 129972680352000 Created application received notification for recruiter 5961dedf-2c2f-4631-b65a-f1da5d1f4b36
+INFO 2025-07-27 16:59:14,171 autoreload 137199 133496896143616 /home/lusan/Documents/HireWise/backend/hirewise/settings.py changed, reloading.
+INFO 2025-07-27 16:59:14,828 autoreload 158446 131948525478144 Watching for file changes with StatReloader
+INFO 2025-07-27 16:59:15,781 server 158446 131948442334912 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:59:15,781 server 158446 131948442334912 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:59:15,781 server 158446 131948442334912 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 16:59:25,045 autoreload 158446 131948525478144 /home/lusan/Documents/HireWise/backend/hirewise/settings.py changed, reloading.
+INFO 2025-07-27 16:59:25,720 autoreload 158718 140214663176448 Watching for file changes with StatReloader
+INFO 2025-07-27 16:59:26,700 server 158718 140214579803840 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 16:59:26,700 server 158718 140214579803840 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 16:59:26,700 server 158718 140214579803840 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 17:00:14,418 autoreload 158718 140214663176448 /home/lusan/Documents/HireWise/backend/matcher/models.py changed, reloading.
+INFO 2025-07-27 17:00:15,277 autoreload 159784 130134338392320 Watching for file changes with StatReloader
+INFO 2025-07-27 17:00:16,244 server 159784 130134254859968 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 17:00:16,244 server 159784 130134254859968 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 17:00:16,245 server 159784 130134254859968 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 17:00:32,586 autoreload 159784 130134338392320 /home/lusan/Documents/HireWise/backend/matcher/models.py changed, reloading.
+INFO 2025-07-27 17:00:33,369 autoreload 160208 133974708809984 Watching for file changes with StatReloader
+INFO 2025-07-27 17:00:34,345 server 160208 133974625662656 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 17:00:34,345 server 160208 133974625662656 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 17:00:34,346 server 160208 133974625662656 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 17:00:49,679 autoreload 160208 133974708809984 /home/lusan/Documents/HireWise/backend/matcher/models.py changed, reloading.
+INFO 2025-07-27 17:00:50,640 autoreload 160542 134184942481664 Watching for file changes with StatReloader
+INFO 2025-07-27 17:00:51,685 server 160542 134184858859200 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 17:00:51,686 server 160542 134184858859200 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 17:00:51,686 server 160542 134184858859200 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 17:11:04,895 cache_utils 168108 126735467172096 Starting cache warm-up process
+ERROR 2025-07-27 17:11:04,908 cache_utils 168108 126735467172096 Cache set error for key skills:list: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+ERROR 2025-07-27 17:11:04,909 cache_utils 168108 126735467172096 Cache warm-up failed: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+ERROR 2025-07-27 17:11:04,909 api_cache 168108 126735467172096 Error warming skills cache: AbstractConnection.__init__() got an unexpected keyword argument 'CLIENT_CLASS'
+INFO 2025-07-27 17:11:17,328 autoreload 160542 134184942481664 /home/lusan/Documents/HireWise/backend/hirewise/settings.py changed, reloading.
+INFO 2025-07-27 17:11:17,952 autoreload 168303 135780852896000 Watching for file changes with StatReloader
+INFO 2025-07-27 17:11:18,932 server 168303 135780769511104 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-27 17:11:18,932 server 168303 135780769511104 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-27 17:11:18,932 server 168303 135780769511104 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-27 17:11:30,561 cache_utils 168474 128744441245952 Starting cache warm-up process
+INFO 2025-07-27 17:11:30,565 cache_utils 168474 128744441245952 Cache warm-up completed successfully
+INFO 2025-07-27 17:14:54,093 file_optimization 169608 139525157155072 File optimization completed: 5400 -> 99 bytes (98.2% reduction)
+INFO 2025-07-27 17:28:17,109 autoreload 168303 135780852896000 /home/lusan/Documents/HireWise/backend/matcher/urls.py changed, reloading.
+INFO 2025-07-27 17:28:17,814 autoreload 173589 128885753360640 Watching for file changes with StatReloader
