@@ -741,3 +741,274 @@ class NotificationTemplate(models.Model):
             return self.email_html_template.format(**context)
         except (KeyError, ValueError) as e:
             return f"<p>Email notification (template error: {e})</p>"
+
+
+class ResumeTemplate(models.Model):
+    """
+    Model for resume templates used in the resume builder.
+    """
+    TEMPLATE_CATEGORIES = [
+        ('professional', 'Professional'),
+        ('creative', 'Creative'),
+        ('modern', 'Modern'),
+        ('classic', 'Classic'),
+        ('academic', 'Academic'),
+        ('technical', 'Technical'),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    category = models.CharField(max_length=20, choices=TEMPLATE_CATEGORIES, default='professional')
+    template_data = models.JSONField(default=dict, help_text="Template structure and styling data")
+    preview_image = models.ImageField(upload_to='resume_templates/', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_premium = models.BooleanField(default=False)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'matcher_resumetemplate'
+        ordering = ['category', 'name']
+        indexes = [
+            models.Index(fields=['category', 'is_active']),
+            models.Index(fields=['is_active', 'created_at']),
+        ]
+    
+    def __str__(self):
+        return f"{self.name} ({self.get_category_display()})"
+
+
+class Conversation(models.Model):
+    """
+    Model for conversations between users (messaging system).
+    """
+    CONVERSATION_TYPES = [
+        ('direct', 'Direct Message'),
+        ('job_inquiry', 'Job Inquiry'),
+        ('interview', 'Interview Discussion'),
+        ('support', 'Support Ticket'),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    participants = models.ManyToManyField(User, related_name='conversations')
+    conversation_type = models.CharField(max_length=20, choices=CONVERSATION_TYPES, default='direct')
+    subject = models.CharField(max_length=255, blank=True)
+    related_job = models.ForeignKey(JobPost, on_delete=models.SET_NULL, null=True, blank=True)
+    related_application = models.ForeignKey(Application, on_delete=models.SET_NULL, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'matcher_conversation'
+        ordering = ['-updated_at']
+        indexes = [
+            models.Index(fields=['conversation_type', 'is_active']),
+            models.Index(fields=['updated_at']),
+        ]
+    
+    def __str__(self):
+        participant_names = ", ".join([p.username for p in self.participants.all()[:2]])
+        return f"{self.get_conversation_type_display()}: {participant_names}"
+    
+    @property
+    def last_message(self):
+        """Get the last message in this conversation"""
+        return self.messages.order_by('-sent_at').first()
+    
+    @property
+    def unread_count_for_user(self, user):
+        """Get unread message count for a specific user"""
+        return self.messages.filter(is_read=False).exclude(sender=user).count()
+
+
+class Message(models.Model):
+    """
+    Model for individual messages within conversations.
+    """
+    MESSAGE_TYPES = [
+        ('text', 'Text Message'),
+        ('file', 'File Attachment'),
+        ('image', 'Image'),
+        ('system', 'System Message'),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='messages')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    content = models.TextField()
+    message_type = models.CharField(max_length=20, choices=MESSAGE_TYPES, default='text')
+    attachment = models.FileField(upload_to='message_attachments/', blank=True, null=True)
+    is_read = models.BooleanField(default=False)
+    read_at = models.DateTimeField(null=True, blank=True)
+    sent_at = models.DateTimeField(auto_now_add=True)
+    edited_at = models.DateTimeField(null=True, blank=True)
+    
+    class Meta:
+        db_table = 'matcher_message'
+        ordering = ['sent_at']
+        indexes = [
+            models.Index(fields=['conversation', 'sent_at']),
+            models.Index(fields=['sender', 'sent_at']),
+            models.Index(fields=['is_read']),
+        ]
+    
+    def __str__(self):
+        return f"Message from {self.sender.username} at {self.sent_at}"
+    
+    def mark_as_read(self, user=None):
+        """Mark message as read"""
+        if not self.is_read and (user is None or user != self.sender):
+            self.is_read = True
+            self.read_at = timezone.now()
+            self.save(update_fields=['is_read', 'read_at'])
+
+
+class ResumeTemplate(models.Model):
+    """
+    Model for resume templates used in the resume builder.
+    """
+    TEMPLATE_CATEGORIES = [
+        ('professional', 'Professional'),
+        ('creative', 'Creative'),
+        ('modern', 'Modern'),
+        ('classic', 'Classic'),
+        ('academic', 'Academic'),
+        ('technical', 'Technical'),
+    ]
+    
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    category = models.CharField(max_length=20, choices=TEMPLATE_CATEGORIES, default='professional')
+    template_data = models.JSONField(default=dict, help_text="Template structure and styling data")
+    preview_image = models.ImageField(upload_to='resume_templates/', blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    is_premium = models.BooleanField(default=False)
+    version = models.CharField(max_length=20, default='1.0')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='created_templates')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    usage_count = models.IntegerField(default=0)
+    
+    # Template sections configuration
+    sections = models.JSONField(default=list, help_text="List of available sections for this template")
+    
+    class Meta:
+        db_table = 'matcher_resumetemplate'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['category', 'is_active']),
+            models.Index(fields=['is_premium', 'is_active']),
+            models.Index(fields=['usage_count']),
+        ]
+    
+    def __str__(self):
+        return f"{self.name} ({self.get_category_display()})"
+    
+    def increment_usage_count(self):
+        """Increment usage count atomically"""
+        from django.db.models import F
+        ResumeTemplate.objects.filter(id=self.id).update(usage_count=F('usage_count') + 1)
+    
+    @property
+    def is_popular(self):
+        """Check if template is popular based on usage"""
+        return self.usage_count > 100
+    
+    def get_default_sections(self):
+        """Get default sections for this template"""
+        if not self.sections:
+            return [
+                {'name': 'personal_info', 'title': 'Personal Information', 'required': True, 'order': 1},
+                {'name': 'summary', 'title': 'Professional Summary', 'required': False, 'order': 2},
+                {'name': 'experience', 'title': 'Work Experience', 'required': True, 'order': 3},
+                {'name': 'education', 'title': 'Education', 'required': True, 'order': 4},
+                {'name': 'skills', 'title': 'Skills', 'required': False, 'order': 5},
+                {'name': 'certifications', 'title': 'Certifications', 'required': False, 'order': 6},
+                {'name': 'projects', 'title': 'Projects', 'required': False, 'order': 7},
+            ]
+        return self.sections
+
+
+class ResumeTemplateVersion(models.Model):
+    """
+    Model for tracking resume template versions and changes.
+    """
+    template = models.ForeignKey(ResumeTemplate, on_delete=models.CASCADE, related_name='versions')
+    version_number = models.CharField(max_length=20)
+    template_data = models.JSONField()
+    sections = models.JSONField(default=list)
+    change_notes = models.TextField(blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_current = models.BooleanField(default=False)
+    
+    class Meta:
+        db_table = 'matcher_resumetemplateversion'
+        unique_together = ('template', 'version_number')
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.template.name} v{self.version_number}"
+    
+    def make_current(self):
+        """Make this version the current version"""
+        # Set all other versions to not current
+        ResumeTemplateVersion.objects.filter(template=self.template).update(is_current=False)
+        # Set this version as current
+        self.is_current = True
+        self.save(update_fields=['is_current'])
+        # Update the main template
+        self.template.version = self.version_number
+        self.template.template_data = self.template_data
+        self.template.sections = self.sections
+        self.template.save(update_fields=['version', 'template_data', 'sections'])
+
+
+class UserResumeTemplate(models.Model):
+    """
+    Model for tracking user's customized resume templates.
+    """
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='resume_templates')
+    base_template = models.ForeignKey(ResumeTemplate, on_delete=models.CASCADE, related_name='user_customizations')
+    name = models.CharField(max_length=255)
+    customized_data = models.JSONField(default=dict, help_text="User's customizations to the base template")
+    customized_sections = models.JSONField(default=list, help_text="User's customized sections")
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'matcher_userresumetemplate'
+        unique_together = ('user', 'name')
+        ordering = ['-updated_at']
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.name}"
+    
+    def get_merged_template_data(self):
+        """Get template data merged with user customizations"""
+        import copy
+        
+        # Deep copy the base template data
+        base_data = copy.deepcopy(self.base_template.template_data)
+        
+        # Deep merge customized data
+        def deep_merge(base_dict, custom_dict):
+            for key, value in custom_dict.items():
+                if key in base_dict and isinstance(base_dict[key], dict) and isinstance(value, dict):
+                    deep_merge(base_dict[key], value)
+                else:
+                    base_dict[key] = value
+        
+        deep_merge(base_data, self.customized_data)
+        return base_data
+    
+    def get_merged_sections(self):
+        """Get sections merged with user customizations"""
+        if self.customized_sections:
+            return self.customized_sections
+        return self.base_template.get_default_sections()

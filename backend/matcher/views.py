@@ -21,13 +21,16 @@ import json
 import os
 import logging
 from datetime import datetime, timedelta
+from django.db import models
 
 logger = logging.getLogger(__name__)
 
 from .models import (
     User, JobSeekerProfile, RecruiterProfile, Resume, JobPost,
     Application, AIAnalysisResult, InterviewSession, Skill, UserSkill,
-    EmailVerificationToken, PasswordResetToken, JobAnalytics, JobView
+    EmailVerificationToken, PasswordResetToken, JobAnalytics, JobView,
+    Notification, ResumeTemplate, ResumeTemplateVersion, UserResumeTemplate,
+    Conversation, Message
 )
 from .serializers import (
     UserRegistrationSerializer, UserLoginSerializer, UserSerializer,
@@ -36,7 +39,9 @@ from .serializers import (
     AIAnalysisResultSerializer, InterviewSessionSerializer, SkillSerializer, UserSkillSerializer,
     JobMatchSerializer, EmailVerificationSerializer, EmailVerificationConfirmSerializer,
     PasswordResetRequestSerializer, PasswordResetConfirmSerializer, ChangePasswordSerializer,
-    UserProfileUpdateSerializer, JobAnalyticsSerializer, JobViewSerializer
+    UserProfileUpdateSerializer, JobAnalyticsSerializer, JobViewSerializer,
+    NotificationSerializer, ResumeTemplateSerializer, ResumeTemplateVersionSerializer,
+    UserResumeTemplateSerializer, ResumeTemplateListSerializer, ConversationSerializer, MessageSerializer
 )
 from .jwt_serializers import (
     CustomTokenObtainPairSerializer, CustomTokenRefreshSerializer,
@@ -2577,3 +2582,1785 @@ def health_check_task_view(request):
             {'error': 'Failed to queue health check task', 'details': str(e)},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+# =============================================================================
+# NOTIFICATION VIEWS
+# =============================================================================
+
+class NotificationListView(generics.ListAPIView):
+    """
+    List notifications for the authenticated user with pagination and filtering
+    """
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        queryset = Notification.objects.filter(recipient=self.request.user)
+        
+        # Filter by read status
+        is_read = self.request.query_params.get('is_read')
+        if is_read is not None:
+            is_read_bool = is_read.lower() in ['true', '1', 'yes']
+            queryset = queryset.filter(is_read=is_read_bool)
+        
+        # Filter by notification type
+        notification_type = self.request.query_params.get('type')
+        if notification_type:
+            queryset = queryset.filter(notification_type=notification_type)
+        
+        # Filter by priority
+        priority = self.request.query_params.get('priority')
+        if priority:
+            queryset = queryset.filter(priority=priority)
+        
+        return queryset.order_by('-created_at')
+    
+    def list(self, request, *args, **kwargs):
+        """
+        Enhanced list method using notification service
+        """
+        try:
+            from .notification_service import notification_service
+            
+            # Get query parameters
+            notification_type = request.query_params.get('type')
+            is_read = request.query_params.get('is_read')
+            limit = int(request.query_params.get('limit', 20))
+            offset = int(request.query_params.get('offset', 0))
+            
+            # Convert is_read to boolean if provided
+            is_read_bool = None
+            if is_read is not None:
+                is_read_bool = is_read.lower() in ['true', '1', 'yes']
+            
+            # Get notifications using service
+            result = notification_service.get_user_notifications(
+                user_id=str(request.user.id),
+                notification_type=notification_type,
+                is_read=is_read_bool,
+                limit=limit,
+                offset=offset
+            )
+            
+            return Response(result, status=status.HTTP_200_OK)
+            
+        except Exception as e:
+            logger.error(f"Error in notification list view: {e}")
+            # Fallback to default behavior
+            return super().list(request, *args, **kwargs)
+
+
+class NotificationDetailView(generics.RetrieveUpdateAPIView):
+    """
+    Retrieve and update a specific notification (mainly for marking as read)
+    """
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'id'
+    lookup_url_kwarg = 'notification_id'
+    
+    def get_queryset(self):
+        return Notification.objects.filter(recipient=self.request.user)
+    
+    def perform_update(self, serializer):
+        # Use notification service for marking as read
+        if serializer.validated_data.get('is_read') and not serializer.instance.is_read:
+            from .notification_service import notification_service
+            notification_service.mark_notification_as_read(
+                notification_id=str(serializer.instance.id),
+                user_id=str(self.request.user.id)
+            )
+        else:
+            serializer.save()
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def mark_all_notifications_read(request):
+    """
+    Mark all notifications as read for the authenticated user
+    """
+    try:
+        from .notification_service import notification_service
+        
+        notification_type = request.data.get('notification_type')  # Optional filter
+        updated_count = notification_service.mark_all_notifications_read(
+            user_id=str(request.user.id),
+            notification_type=notification_type
+        )
+        
+        return Response({
+            'success': True,
+            'message': f'Marked {updated_count} notifications as read',
+            'updated_count': updated_count
+        })
+    
+    except Exception as e:
+        logger.error(f"Error marking notifications as read: {str(e)}")
+        return Response({
+            'success': False,
+            'error': 'Failed to mark notifications as read'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_unread_notifications_count(request):
+    """
+    Get the count of unread notifications for the authenticated user
+    """
+    try:
+        from .notification_service import notification_service
+        
+        unread_count = notification_service.get_unread_count(str(request.user.id))
+        
+        return Response({
+            'unread_count': unread_count
+        })
+    
+    except Exception as e:
+        logger.error(f"Error getting unread notifications count: {str(e)}")
+        return Response({
+            'error': 'Failed to get unread notifications count'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def mark_notification_read(request, notification_id):
+    """
+    Mark a specific notification as read
+    """
+    try:
+        from .notification_service import notification_service
+        
+        success = notification_service.mark_notification_as_read(
+            notification_id=notification_id,
+            user_id=str(request.user.id)
+        )
+        
+        if success:
+            return Response({
+                'success': True,
+                'message': 'Notification marked as read'
+            })
+        else:
+            return Response({
+                'success': False,
+                'error': 'Notification not found or access denied'
+            }, status=status.HTTP_404_NOT_FOUND)
+    
+    except Exception as e:
+        logger.error(f"Error marking notification as read: {str(e)}")
+        return Response({
+            'success': False,
+            'error': 'Failed to mark notification as read'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET', 'PUT'])
+@permission_classes([IsAuthenticated])
+def notification_preferences(request):
+    """
+    Get or update notification preferences for the authenticated user
+    """
+    try:
+        from .notification_service import notification_service
+        
+        if request.method == 'GET':
+            preferences = notification_service.get_user_preferences(request.user)
+            
+            return Response({
+                'job_posted_enabled': preferences.job_posted_enabled,
+                'job_posted_delivery': preferences.job_posted_delivery,
+                'application_received_enabled': preferences.application_received_enabled,
+                'application_received_delivery': preferences.application_received_delivery,
+                'application_status_changed_enabled': preferences.application_status_changed_enabled,
+                'application_status_changed_delivery': preferences.application_status_changed_delivery,
+                'match_score_calculated_enabled': preferences.match_score_calculated_enabled,
+                'match_score_calculated_delivery': preferences.match_score_calculated_delivery,
+                'interview_scheduled_enabled': preferences.interview_scheduled_enabled,
+                'interview_scheduled_delivery': preferences.interview_scheduled_delivery,
+                'message_received_enabled': preferences.message_received_enabled,
+                'message_received_delivery': preferences.message_received_delivery,
+                'system_update_enabled': preferences.system_update_enabled,
+                'system_update_delivery': preferences.system_update_delivery,
+                'quiet_hours_enabled': preferences.quiet_hours_enabled,
+                'quiet_hours_start': preferences.quiet_hours_start,
+                'quiet_hours_end': preferences.quiet_hours_end,
+                'timezone': preferences.timezone
+            })
+        
+        elif request.method == 'PUT':
+            preferences = notification_service.get_user_preferences(request.user)
+            
+            # Update preferences based on request data
+            update_fields = [
+                'job_posted_enabled', 'job_posted_delivery',
+                'application_received_enabled', 'application_received_delivery',
+                'application_status_changed_enabled', 'application_status_changed_delivery',
+                'match_score_calculated_enabled', 'match_score_calculated_delivery',
+                'interview_scheduled_enabled', 'interview_scheduled_delivery',
+                'message_received_enabled', 'message_received_delivery',
+                'system_update_enabled', 'system_update_delivery',
+                'quiet_hours_enabled', 'quiet_hours_start', 'quiet_hours_end', 'timezone'
+            ]
+            
+            for field in update_fields:
+                if field in request.data:
+                    setattr(preferences, field, request.data[field])
+            
+            preferences.save()
+            
+            return Response({
+                'success': True,
+                'message': 'Notification preferences updated successfully'
+            })
+    
+    except Exception as e:
+        logger.error(f"Error handling notification preferences: {str(e)}")
+        return Response({
+            'error': 'Failed to handle notification preferences'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def cleanup_expired_notifications(request):
+    """
+    Clean up expired notifications (admin only)
+    """
+    if not request.user.is_staff:
+        return Response({
+            'error': 'Permission denied'
+        }, status=status.HTTP_403_FORBIDDEN)
+    
+    try:
+        from .notification_service import notification_service
+        
+        cleaned_count = notification_service.cleanup_expired_notifications()
+        
+        return Response({
+            'success': True,
+            'message': f'Cleaned up {cleaned_count} expired notifications',
+            'cleaned_count': cleaned_count
+        })
+    
+    except Exception as e:
+        logger.error(f"Error cleaning up expired notifications: {str(e)}")
+        return Response({
+            'error': 'Failed to clean up expired notifications'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deliver_queued_notifications(request):
+    """
+    Deliver queued notifications for the authenticated user
+    """
+    try:
+        from .notification_service import notification_service
+        
+        notification_service.deliver_queued_notifications(str(request.user.id))
+        
+        return Response({
+            'success': True,
+            'message': 'Queued notifications delivered'
+        })
+    
+    except Exception as e:
+        logger.error(f"Error delivering queued notifications: {str(e)}")
+        return Response({
+            'error': 'Failed to deliver queued notifications'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# =============================================================================
+# RESUME BUILDER VIEWS
+# =============================================================================
+
+class ResumeTemplateListView(generics.ListAPIView):
+    """
+    List available resume templates
+    """
+    serializer_class = ResumeTemplateSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        queryset = ResumeTemplate.objects.filter(is_active=True)
+        
+        # Filter by category
+        category = self.request.query_params.get('category')
+        if category:
+            queryset = queryset.filter(category=category)
+        
+        # Filter by premium status
+        include_premium = self.request.query_params.get('include_premium', 'true')
+        if include_premium.lower() not in ['true', '1', 'yes']:
+            queryset = queryset.filter(is_premium=False)
+        
+        return queryset.order_by('category', 'name')
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def generate_resume_content(request):
+    """
+    Generate AI-powered resume content suggestions
+    """
+    try:
+        # Get request data
+        job_title = request.data.get('job_title', '')
+        experience_level = request.data.get('experience_level', '')
+        skills = request.data.get('skills', [])
+        industry = request.data.get('industry', '')
+        
+        if not job_title:
+            return Response({
+                'error': 'Job title is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Import AI service
+        from .ml_services import generate_resume_suggestions
+        
+        # Generate content suggestions
+        suggestions = generate_resume_suggestions(
+            job_title=job_title,
+            experience_level=experience_level,
+            skills=skills,
+            industry=industry
+        )
+        
+        return Response({
+            'success': True,
+            'suggestions': suggestions
+        })
+    
+    except Exception as e:
+        logger.error(f"Error generating resume content: {str(e)}")
+        return Response({
+            'error': 'Failed to generate resume content'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def export_resume(request):
+    """
+    Export resume to PDF or DOCX format
+    """
+    try:
+        # Get request data
+        resume_data = request.data.get('resume_data', {})
+        template_id = request.data.get('template_id')
+        export_format = request.data.get('format', 'pdf').lower()
+        
+        if not resume_data:
+            return Response({
+                'error': 'Resume data is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        if export_format not in ['pdf', 'docx']:
+            return Response({
+                'error': 'Format must be either pdf or docx'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get template if specified
+        template = None
+        if template_id:
+            try:
+                template = ResumeTemplate.objects.get(id=template_id, is_active=True)
+            except ResumeTemplate.DoesNotExist:
+                return Response({
+                    'error': 'Template not found'
+                }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Import export service
+        from .services import export_resume_to_file
+        
+        # Export resume
+        file_path, filename = export_resume_to_file(
+            resume_data=resume_data,
+            template=template,
+            format=export_format,
+            user=request.user
+        )
+        
+        return Response({
+            'success': True,
+            'download_url': f'/api/v1/download-resume/{filename}/',
+            'filename': filename
+        })
+    
+    except Exception as e:
+        logger.error(f"Error exporting resume: {str(e)}")
+        return Response({
+            'error': 'Failed to export resume'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_resume_suggestions(request):
+    """
+    Get AI-powered resume improvement suggestions
+    """
+    try:
+        # Get request data
+        resume_content = request.data.get('resume_content', '')
+        target_job = request.data.get('target_job', '')
+        
+        if not resume_content:
+            return Response({
+                'error': 'Resume content is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Import AI service
+        from .ml_services import analyze_resume_content
+        
+        # Analyze resume and get suggestions
+        analysis = analyze_resume_content(
+            resume_content=resume_content,
+            target_job=target_job
+        )
+        
+        return Response({
+            'success': True,
+            'analysis': analysis
+        })
+    
+    except Exception as e:
+        logger.error(f"Error getting resume suggestions: {str(e)}")
+        return Response({
+            'error': 'Failed to get resume suggestions'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# =============================================================================
+# AI INTERVIEW VIEWS
+# =============================================================================
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def start_ai_interview(request):
+    """
+    Start an AI-powered interview session
+    """
+    try:
+        # Get request data
+        application_id = request.data.get('application_id')
+        interview_type = request.data.get('interview_type', 'technical')
+        num_questions = request.data.get('num_questions', 5)
+        
+        if not application_id:
+            return Response({
+                'error': 'Application ID is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Validate interview type
+        valid_types = ['technical', 'behavioral', 'situational', 'ai_screening']
+        if interview_type not in valid_types:
+            return Response({
+                'error': f'Invalid interview type. Must be one of: {", ".join(valid_types)}'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get application
+        try:
+            application = Application.objects.get(
+                id=application_id,
+                job_seeker=request.user
+            )
+        except Application.DoesNotExist:
+            return Response({
+                'error': 'Application not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Check if there's already an active interview session
+        existing_session = InterviewSession.objects.filter(
+            application=application,
+            status='in_progress'
+        ).first()
+        
+        if existing_session:
+            return Response({
+                'error': 'An interview session is already in progress for this application'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Create interview session
+        interview_session = InterviewSession.objects.create(
+            application=application,
+            interview_type=interview_type,
+            status='in_progress',
+            scheduled_at=timezone.now(),
+            duration_minutes=num_questions * 8  # Estimate 8 minutes per question
+        )
+        
+        # Import AI service
+        from .ml_services import generate_interview_questions
+        from .models import AIInterviewQuestion
+        
+        # Generate interview questions
+        questions_data = generate_interview_questions(
+            job_post=application.job_post,
+            resume=application.resume,
+            interview_type=interview_type,
+            num_questions=num_questions
+        )
+        
+        # Store questions in database
+        created_questions = []
+        for question_data in questions_data:
+            question = AIInterviewQuestion.objects.create(
+                interview_session=interview_session,
+                question_text=question_data['question_text'],
+                question_type=question_data['question_type'],
+                difficulty_level=question_data['difficulty_level'],
+                expected_answer=question_data.get('expected_answer', '')
+            )
+            created_questions.append({
+                'id': question.id,
+                'question_text': question.question_text,
+                'question_type': question.question_type,
+                'difficulty_level': question.difficulty_level,
+                'focus_area': question_data.get('focus_area', ''),
+                'estimated_duration': question_data.get('estimated_duration', 5)
+            })
+        
+        logger.info(f"Started AI interview session {interview_session.id} with {len(created_questions)} questions")
+        
+        return Response({
+            'success': True,
+            'session_id': interview_session.id,
+            'questions': created_questions,
+            'interview_type': interview_type,
+            'total_questions': len(created_questions),
+            'estimated_duration': interview_session.duration_minutes
+        })
+    
+    except Exception as e:
+        logger.error(f"Error starting AI interview: {str(e)}")
+        return Response({
+            'error': 'Failed to start AI interview',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def submit_ai_interview_response(request, session_id):
+    """
+    Submit a response to an AI interview question
+    """
+    try:
+        # Get interview session
+        try:
+            session = InterviewSession.objects.get(
+                id=session_id,
+                application__job_seeker=request.user,
+                status='in_progress'
+            )
+        except InterviewSession.DoesNotExist:
+            return Response({
+                'error': 'Interview session not found or not active'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Get request data
+        question_id = request.data.get('question_id')
+        response_text = request.data.get('response')
+        time_taken = request.data.get('time_taken_seconds', 0)
+        
+        if not question_id or not response_text:
+            return Response({
+                'error': 'Question ID and response are required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Validate question belongs to this session
+        from .models import AIInterviewQuestion
+        try:
+            question = AIInterviewQuestion.objects.get(
+                id=question_id,
+                interview_session=session
+            )
+        except AIInterviewQuestion.DoesNotExist:
+            return Response({
+                'error': 'Question not found for this interview session'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Check if question already has a response
+        if question.candidate_answer:
+            return Response({
+                'error': 'This question has already been answered'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Import AI service
+        from .ml_services import analyze_interview_response
+        
+        # Analyze the response
+        analysis = analyze_interview_response(
+            question_id=question_id,
+            response=response_text,
+            session=session
+        )
+        
+        # Update question with time taken
+        question.time_taken_seconds = time_taken
+        question.save()
+        
+        logger.info(f"Interview response submitted for question {question_id} in session {session_id}")
+        
+        return Response({
+            'success': True,
+            'question_id': question_id,
+            'analysis': analysis,
+            'score': analysis.get('score', 0),
+            'feedback': analysis.get('detailed_feedback', '')
+        })
+    
+    except Exception as e:
+        logger.error(f"Error submitting interview response: {str(e)}")
+        return Response({
+            'error': 'Failed to submit interview response',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def end_ai_interview(request, session_id):
+    """
+    End an AI interview session and generate final analysis
+    """
+    try:
+        # Get interview session
+        try:
+            session = InterviewSession.objects.get(
+                id=session_id,
+                application__job_seeker=request.user,
+                status='in_progress'
+            )
+        except InterviewSession.DoesNotExist:
+            return Response({
+                'error': 'Interview session not found or not active'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Check if all questions have been answered
+        from .models import AIInterviewQuestion
+        total_questions = AIInterviewQuestion.objects.filter(interview_session=session).count()
+        answered_questions = AIInterviewQuestion.objects.filter(
+            interview_session=session,
+            candidate_answer__isnull=False
+        ).exclude(candidate_answer='').count()
+        
+        if answered_questions == 0:
+            return Response({
+                'error': 'Cannot end interview session with no answered questions'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Update session status and completion time
+        session.status = 'completed'
+        session.updated_at = timezone.now()
+        
+        # Calculate actual duration based on question response times
+        total_time = AIInterviewQuestion.objects.filter(
+            interview_session=session
+        ).aggregate(
+            total_time=models.Sum('time_taken_seconds')
+        )['total_time'] or 0
+        
+        if total_time > 0:
+            session.duration_minutes = max(1, total_time // 60)  # Convert to minutes, minimum 1
+        
+        session.save()
+        
+        # Import AI service
+        from .ml_services import generate_interview_analysis
+        
+        # Generate final analysis
+        final_analysis = generate_interview_analysis(session)
+        
+        # Store the analysis in the session notes
+        session.notes = json.dumps(final_analysis, indent=2)
+        session.rating = final_analysis.get('overall_score', 70) // 10  # Convert to 1-10 scale
+        session.feedback = final_analysis.get('performance_summary', '')
+        session.save()
+        
+        # Create notification for the candidate
+        from .models import Notification
+        Notification.objects.create(
+            recipient=session.application.job_seeker,
+            notification_type='interview_completed',
+            title='AI Interview Completed',
+            message=f'Your AI interview for {session.application.job_post.title} has been completed. View your feedback and results.',
+            job_post=session.application.job_post,
+            application=session.application,
+            data={
+                'session_id': str(session.id),
+                'overall_score': final_analysis.get('overall_score', 70),
+                'interview_type': session.interview_type
+            }
+        )
+        
+        logger.info(f"AI interview session {session_id} completed with {answered_questions}/{total_questions} questions answered")
+        
+        return Response({
+            'success': True,
+            'session_id': session.id,
+            'status': 'completed',
+            'questions_answered': answered_questions,
+            'total_questions': total_questions,
+            'completion_rate': round((answered_questions / total_questions) * 100, 1) if total_questions > 0 else 0,
+            'duration_minutes': session.duration_minutes,
+            'overall_score': final_analysis.get('overall_score', 70),
+            'final_analysis': final_analysis
+        })
+    
+    except Exception as e:
+        logger.error(f"Error ending AI interview: {str(e)}")
+        return Response({
+            'error': 'Failed to end AI interview',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_ai_interview_feedback(request, session_id):
+    """
+    Get detailed feedback for a completed AI interview session
+    """
+    try:
+        # Get interview session
+        try:
+            session = InterviewSession.objects.get(
+                id=session_id,
+                application__job_seeker=request.user,
+                status='completed'
+            )
+        except InterviewSession.DoesNotExist:
+            return Response({
+                'error': 'Completed interview session not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Import AI service
+        from .ml_services import get_interview_feedback
+        from .models import AIInterviewQuestion
+        
+        # Get detailed feedback
+        feedback = get_interview_feedback(session)
+        
+        # Get individual question feedback
+        questions = AIInterviewQuestion.objects.filter(interview_session=session).order_by('created_at')
+        question_feedback = []
+        
+        for question in questions:
+            question_data = {
+                'id': question.id,
+                'question_text': question.question_text,
+                'question_type': question.question_type,
+                'difficulty_level': question.difficulty_level,
+                'candidate_answer': question.candidate_answer,
+                'ai_score': question.ai_score,
+                'time_taken_seconds': question.time_taken_seconds,
+                'expected_answer': question.expected_answer
+            }
+            question_feedback.append(question_data)
+        
+        # Get session statistics
+        total_questions = questions.count()
+        answered_questions = questions.exclude(candidate_answer__isnull=True).exclude(candidate_answer='').count()
+        average_score = questions.aggregate(avg_score=models.Avg('ai_score'))['avg_score'] or 0
+        total_time = questions.aggregate(total_time=models.Sum('time_taken_seconds'))['total_time'] or 0
+        
+        # Parse stored analysis from session notes if available
+        stored_analysis = {}
+        if session.notes:
+            try:
+                stored_analysis = json.loads(session.notes)
+            except json.JSONDecodeError:
+                pass
+        
+        logger.info(f"Retrieved feedback for interview session {session_id}")
+        
+        return Response({
+            'success': True,
+            'session_id': session.id,
+            'session_info': {
+                'interview_type': session.interview_type,
+                'scheduled_at': session.scheduled_at,
+                'duration_minutes': session.duration_minutes,
+                'status': session.status,
+                'rating': session.rating,
+                'job_title': session.application.job_post.title,
+                'company': session.application.job_post.recruiter.recruiter_profile.company_name
+            },
+            'statistics': {
+                'total_questions': total_questions,
+                'answered_questions': answered_questions,
+                'completion_rate': round((answered_questions / total_questions) * 100, 1) if total_questions > 0 else 0,
+                'average_score': round(average_score, 1),
+                'total_time_minutes': round(total_time / 60, 1) if total_time > 0 else 0
+            },
+            'feedback': feedback,
+            'stored_analysis': stored_analysis,
+            'question_feedback': question_feedback
+        })
+    
+    except Exception as e:
+        logger.error(f"Error getting interview feedback: {str(e)}")
+        return Response({
+            'error': 'Failed to get interview feedback',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# =============================================================================
+# MESSAGING VIEWS
+# =============================================================================
+
+class ConversationListView(generics.ListCreateAPIView):
+    """
+    List conversations for the authenticated user or create a new conversation
+    """
+    serializer_class = ConversationSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Conversation.objects.filter(
+            participants=self.request.user,
+            is_active=True
+        ).distinct().order_by('-updated_at')
+    
+    def perform_create(self, serializer):
+        conversation = serializer.save()
+        conversation.participants.add(self.request.user)
+
+
+class ConversationDetailView(generics.RetrieveUpdateAPIView):
+    """
+    Retrieve and update a specific conversation
+    """
+    serializer_class = ConversationSerializer
+    permission_classes = [IsAuthenticated]
+    lookup_field = 'id'
+    
+    def get_queryset(self):
+        return Conversation.objects.filter(
+            participants=self.request.user,
+            is_active=True
+        ).distinct()
+
+
+class MessageListView(generics.ListCreateAPIView):
+    """
+    List messages in a conversation or send a new message
+    """
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        conversation_id = self.request.query_params.get('conversation_id')
+        if not conversation_id:
+            return Message.objects.none()
+        
+        # Verify user is participant in the conversation
+        try:
+            conversation = Conversation.objects.get(
+                id=conversation_id,
+                participants=self.request.user,
+                is_active=True
+            )
+            return conversation.messages.all().order_by('sent_at')
+        except Conversation.DoesNotExist:
+            return Message.objects.none()
+    
+    def perform_create(self, serializer):
+        conversation_id = self.request.data.get('conversation_id')
+        try:
+            conversation = Conversation.objects.get(
+                id=conversation_id,
+                participants=self.request.user,
+                is_active=True
+            )
+            serializer.save(conversation=conversation)
+        except Conversation.DoesNotExist:
+            raise ValidationError("Conversation not found or access denied")
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def send_message(request):
+    """
+    Send a message in a conversation with real-time WebSocket integration
+    """
+    try:
+        conversation_id = request.data.get('conversation_id')
+        content = request.data.get('content', '').strip()
+        message_type = request.data.get('message_type', 'text')
+        
+        if not conversation_id or not content:
+            return Response({
+                'error': 'Conversation ID and content are required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get conversation
+        try:
+            conversation = Conversation.objects.get(
+                id=conversation_id,
+                participants=request.user,
+                is_active=True
+            )
+        except Conversation.DoesNotExist:
+            return Response({
+                'error': 'Conversation not found or access denied'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Create message
+        message = Message.objects.create(
+            conversation=conversation,
+            sender=request.user,
+            content=content,
+            message_type=message_type
+        )
+        
+        # Update conversation timestamp
+        conversation.updated_at = timezone.now()
+        conversation.save()
+        
+        # Send real-time notification via WebSocket
+        from .consumers import send_message_notification
+        send_message_notification(conversation, message)
+        
+        # Serialize message for response
+        serializer = MessageSerializer(message)
+        
+        return Response({
+            'success': True,
+            'message': serializer.data
+        })
+    
+    except Exception as e:
+        logger.error(f"Error sending message: {str(e)}")
+        return Response({
+            'error': 'Failed to send message'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def mark_messages_read(request):
+    """
+    Mark messages as read for the authenticated user
+    """
+    try:
+        conversation_id = request.data.get('conversation_id')
+        message_ids = request.data.get('message_ids', [])
+        
+        if not conversation_id:
+            return Response({
+                'error': 'Conversation ID is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get conversation
+        try:
+            conversation = Conversation.objects.get(
+                id=conversation_id,
+                participants=request.user,
+                is_active=True
+            )
+        except Conversation.DoesNotExist:
+            return Response({
+                'error': 'Conversation not found or access denied'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Mark messages as read
+        queryset = conversation.messages.filter(is_read=False).exclude(sender=request.user)
+        
+        if message_ids:
+            queryset = queryset.filter(id__in=message_ids)
+        
+        updated_count = queryset.update(
+            is_read=True,
+            read_at=timezone.now()
+        )
+        
+        return Response({
+            'success': True,
+            'message': f'Marked {updated_count} messages as read',
+            'updated_count': updated_count
+        })
+    
+    except Exception as e:
+        logger.error(f"Error marking messages as read: {str(e)}")
+        return Response({
+            'error': 'Failed to mark messages as read'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# ===========================================================================
+# AI INTERVIEW SESSION MANAGEMENT
+# =============================================================================
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_interview_session_status(request, session_id):
+    """
+    Get the current status and progress of an interview session
+    """
+    try:
+        # Get interview session
+        try:
+            session = InterviewSession.objects.get(
+                id=session_id,
+                application__job_seeker=request.user
+            )
+        except InterviewSession.DoesNotExist:
+            return Response({
+                'error': 'Interview session not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        from .models import AIInterviewQuestion
+        
+        # Get session progress
+        total_questions = AIInterviewQuestion.objects.filter(interview_session=session).count()
+        answered_questions = AIInterviewQuestion.objects.filter(
+            interview_session=session,
+            candidate_answer__isnull=False
+        ).exclude(candidate_answer='').count()
+        
+        # Get current question if session is in progress
+        current_question = None
+        if session.status == 'in_progress':
+            current_question_obj = AIInterviewQuestion.objects.filter(
+                interview_session=session,
+                candidate_answer__isnull=True
+            ).first()
+            
+            if current_question_obj:
+                current_question = {
+                    'id': current_question_obj.id,
+                    'question_text': current_question_obj.question_text,
+                    'question_type': current_question_obj.question_type,
+                    'difficulty_level': current_question_obj.difficulty_level
+                }
+        
+        return Response({
+            'success': True,
+            'session_id': session.id,
+            'status': session.status,
+            'interview_type': session.interview_type,
+            'progress': {
+                'total_questions': total_questions,
+                'answered_questions': answered_questions,
+                'completion_percentage': round((answered_questions / total_questions) * 100, 1) if total_questions > 0 else 0,
+                'current_question': current_question
+            },
+            'session_info': {
+                'scheduled_at': session.scheduled_at,
+                'duration_minutes': session.duration_minutes,
+                'job_title': session.application.job_post.title,
+                'company': session.application.job_post.recruiter.recruiter_profile.company_name
+            }
+        })
+    
+    except Exception as e:
+        logger.error(f"Error getting interview session status: {str(e)}")
+        return Response({
+            'error': 'Failed to get interview session status',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_interview_questions(request, session_id):
+    """
+    Get all questions for an interview session
+    """
+    try:
+        # Get interview session
+        try:
+            session = InterviewSession.objects.get(
+                id=session_id,
+                application__job_seeker=request.user
+            )
+        except InterviewSession.DoesNotExist:
+            return Response({
+                'error': 'Interview session not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        from .models import AIInterviewQuestion
+        
+        # Get all questions for the session
+        questions = AIInterviewQuestion.objects.filter(
+            interview_session=session
+        ).order_by('created_at')
+        
+        questions_data = []
+        for question in questions:
+            question_data = {
+                'id': question.id,
+                'question_text': question.question_text,
+                'question_type': question.question_type,
+                'difficulty_level': question.difficulty_level,
+                'has_answer': bool(question.candidate_answer),
+                'ai_score': question.ai_score if question.candidate_answer else None,
+                'time_taken_seconds': question.time_taken_seconds if question.candidate_answer else None
+            }
+            
+            # Include answer and score only if question has been answered
+            if question.candidate_answer:
+                question_data['candidate_answer'] = question.candidate_answer
+            
+            questions_data.append(question_data)
+        
+        return Response({
+            'success': True,
+            'session_id': session.id,
+            'questions': questions_data,
+            'total_questions': len(questions_data)
+        })
+    
+    except Exception as e:
+        logger.error(f"Error getting interview questions: {str(e)}")
+        return Response({
+            'error': 'Failed to get interview questions',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def pause_interview_session(request, session_id):
+    """
+    Pause an active interview session
+    """
+    try:
+        # Get interview session
+        try:
+            session = InterviewSession.objects.get(
+                id=session_id,
+                application__job_seeker=request.user,
+                status='in_progress'
+            )
+        except InterviewSession.DoesNotExist:
+            return Response({
+                'error': 'Active interview session not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Update session status to paused (we'll use a custom status)
+        session.notes = session.notes or ''
+        if 'PAUSED' not in session.notes:
+            session.notes += f'\nPAUSED at {timezone.now().isoformat()}'
+        session.save()
+        
+        logger.info(f"Interview session {session_id} paused")
+        
+        return Response({
+            'success': True,
+            'session_id': session.id,
+            'status': 'paused',
+            'message': 'Interview session paused successfully'
+        })
+    
+    except Exception as e:
+        logger.error(f"Error pausing interview session: {str(e)}")
+        return Response({
+            'error': 'Failed to pause interview session',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def resume_interview_session(request, session_id):
+    """
+    Resume a paused interview session
+    """
+    try:
+        # Get interview session
+        try:
+            session = InterviewSession.objects.get(
+                id=session_id,
+                application__job_seeker=request.user,
+                status='in_progress'
+            )
+        except InterviewSession.DoesNotExist:
+            return Response({
+                'error': 'Interview session not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Check if session was paused
+        if not session.notes or 'PAUSED' not in session.notes:
+            return Response({
+                'error': 'Interview session is not paused'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Update session notes to indicate resumption
+        session.notes += f'\nRESUMED at {timezone.now().isoformat()}'
+        session.save()
+        
+        logger.info(f"Interview session {session_id} resumed")
+        
+        return Response({
+            'success': True,
+            'session_id': session.id,
+            'status': 'in_progress',
+            'message': 'Interview session resumed successfully'
+        })
+    
+    except Exception as e:
+        logger.error(f"Error resuming interview session: {str(e)}")
+        return Response({
+            'error': 'Failed to resume interview session',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def cancel_interview_session(request, session_id):
+    """
+    Cancel an interview session
+    """
+    try:
+        # Get interview session
+        try:
+            session = InterviewSession.objects.get(
+                id=session_id,
+                application__job_seeker=request.user,
+                status='in_progress'
+            )
+        except InterviewSession.DoesNotExist:
+            return Response({
+                'error': 'Active interview session not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Get cancellation reason
+        reason = request.data.get('reason', 'Cancelled by candidate')
+        
+        # Update session status
+        session.status = 'cancelled'
+        session.notes = session.notes or ''
+        session.notes += f'\nCANCELLED at {timezone.now().isoformat()}: {reason}'
+        session.save()
+        
+        # Create notification for the recruiter
+        from .models import Notification
+        Notification.objects.create(
+            recipient=session.application.job_post.recruiter,
+            notification_type='interview_cancelled',
+            title='AI Interview Cancelled',
+            message=f'The AI interview for {session.application.job_seeker.username} has been cancelled.',
+            job_post=session.application.job_post,
+            application=session.application,
+            data={
+                'session_id': str(session.id),
+                'reason': reason,
+                'interview_type': session.interview_type
+            }
+        )
+        
+        logger.info(f"Interview session {session_id} cancelled: {reason}")
+        
+        return Response({
+            'success': True,
+            'session_id': session.id,
+            'status': 'cancelled',
+            'message': 'Interview session cancelled successfully'
+        })
+    
+    except Exception as e:
+        logger.error(f"Error cancelling interview session: {str(e)}")
+        return Response({
+            'error': 'Failed to cancel interview session',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_interview_sessions(request):
+    """
+    Get all interview sessions for the authenticated user
+    """
+    try:
+        # Get user's interview sessions
+        sessions = InterviewSession.objects.filter(
+            application__job_seeker=request.user
+        ).select_related(
+            'application__job_post',
+            'application__job_post__recruiter__recruiter_profile'
+        ).order_by('-created_at')
+        
+        sessions_data = []
+        for session in sessions:
+            from .models import AIInterviewQuestion
+            
+            # Get session statistics
+            total_questions = AIInterviewQuestion.objects.filter(interview_session=session).count()
+            answered_questions = AIInterviewQuestion.objects.filter(
+                interview_session=session,
+                candidate_answer__isnull=False
+            ).exclude(candidate_answer='').count()
+            
+            session_data = {
+                'id': session.id,
+                'interview_type': session.interview_type,
+                'status': session.status,
+                'scheduled_at': session.scheduled_at,
+                'duration_minutes': session.duration_minutes,
+                'rating': session.rating,
+                'job_info': {
+                    'title': session.application.job_post.title,
+                    'company': session.application.job_post.recruiter.recruiter_profile.company_name,
+                    'location': session.application.job_post.location
+                },
+                'progress': {
+                    'total_questions': total_questions,
+                    'answered_questions': answered_questions,
+                    'completion_percentage': round((answered_questions / total_questions) * 100, 1) if total_questions > 0 else 0
+                },
+                'created_at': session.created_at,
+                'updated_at': session.updated_at
+            }
+            sessions_data.append(session_data)
+        
+        return Response({
+            'success': True,
+            'sessions': sessions_data,
+            'total_sessions': len(sessions_data)
+        })
+    
+    except Exception as e:
+        logger.error(f"Error getting user interview sessions: {str(e)}")
+        return Response({
+            'error': 'Failed to get interview sessions',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def cleanup_expired_sessions(request):
+    """
+    Cleanup expired or abandoned interview sessions
+    """
+    try:
+        # Only allow admin users to run cleanup
+        if not request.user.is_staff:
+            return Response({
+                'error': 'Permission denied'
+            }, status=status.HTTP_403_FORBIDDEN)
+        
+        # Find sessions that have been in progress for more than 2 hours
+        cutoff_time = timezone.now() - timedelta(hours=2)
+        expired_sessions = InterviewSession.objects.filter(
+            status='in_progress',
+            created_at__lt=cutoff_time
+        )
+        
+        expired_count = expired_sessions.count()
+        
+        # Update expired sessions to cancelled
+        expired_sessions.update(
+            status='cancelled',
+            notes=models.F('notes') + f'\nAUTO-CANCELLED due to inactivity at {timezone.now().isoformat()}'
+        )
+        
+        logger.info(f"Cleaned up {expired_count} expired interview sessions")
+        
+        return Response({
+            'success': True,
+            'cleaned_up_sessions': expired_count,
+            'message': f'Successfully cleaned up {expired_count} expired sessions'
+        })
+    
+    except Exception as e:
+        logger.error(f"Error cleaning up expired sessions: {str(e)}")
+        return Response({
+            'error': 'Failed to cleanup expired sessions',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Resume Template Views
+
+class ResumeTemplateViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing resume templates.
+    Provides CRUD operations for resume templates with filtering and search.
+    """
+    queryset = ResumeTemplate.objects.filter(is_active=True)
+    permission_classes = [IsAuthenticated]
+    
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        # For now, allow all authenticated users to perform all actions
+        # In production, you might want to restrict create/update/delete to admins
+        permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
+    
+    def get_serializer_class(self):
+        """Return appropriate serializer based on action"""
+        if self.action == 'list':
+            return ResumeTemplateListSerializer
+        return ResumeTemplateSerializer
+    
+    def get_queryset(self):
+        """Filter templates based on user permissions and query parameters"""
+        queryset = ResumeTemplate.objects.filter(is_active=True)
+        
+        # Filter by category
+        category = self.request.query_params.get('category')
+        if category:
+            queryset = queryset.filter(category=category)
+        
+        # Filter by premium status
+        is_premium = self.request.query_params.get('is_premium')
+        if is_premium is not None:
+            queryset = queryset.filter(is_premium=is_premium.lower() == 'true')
+        
+        # Search by name or description
+        search = self.request.query_params.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(name__icontains=search) | Q(description__icontains=search)
+            )
+        
+        # Order by popularity or creation date
+        ordering = self.request.query_params.get('ordering', '-created_at')
+        if ordering == 'popular':
+            queryset = queryset.order_by('-usage_count', '-created_at')
+        elif ordering == 'name':
+            queryset = queryset.order_by('name')
+        else:
+            queryset = queryset.order_by(ordering)
+        
+        return queryset
+    
+    def perform_create(self, serializer):
+        """Set the created_by field when creating a template"""
+        serializer.save(created_by=self.request.user)
+    
+    @action(detail=True, methods=['post'])
+    def use_template(self, request, pk=None):
+        """
+        Increment usage count when a template is used.
+        """
+        try:
+            template = self.get_object()
+            template.increment_usage_count()
+            
+            return Response({
+                'success': True,
+                'message': 'Template usage recorded',
+                'usage_count': template.usage_count + 1
+            })
+        except Exception as e:
+            logger.error(f"Error recording template usage: {str(e)}")
+            return Response({
+                'error': 'Failed to record template usage',
+                'details': str(e) if settings.DEBUG else None
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    @action(detail=False, methods=['get'])
+    def categories(self, request):
+        """
+        Get available template categories with counts.
+        """
+        try:
+            categories = ResumeTemplate.objects.filter(is_active=True).values('category').annotate(
+                count=Count('id'),
+                category_display=models.Case(
+                    *[models.When(category=choice[0], then=models.Value(choice[1])) 
+                      for choice in ResumeTemplate.TEMPLATE_CATEGORIES],
+                    default=models.Value('Unknown'),
+                    output_field=models.CharField()
+                )
+            ).order_by('category')
+            
+            return Response({
+                'categories': list(categories)
+            })
+        except Exception as e:
+            logger.error(f"Error fetching template categories: {str(e)}")
+            return Response({
+                'error': 'Failed to fetch categories',
+                'details': str(e) if settings.DEBUG else None
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    @action(detail=False, methods=['get'])
+    def popular(self, request):
+        """
+        Get popular templates based on usage count.
+        """
+        try:
+            popular_templates = self.get_queryset().filter(
+                usage_count__gt=0
+            ).order_by('-usage_count')[:10]
+            
+            serializer = ResumeTemplateListSerializer(popular_templates, many=True)
+            return Response({
+                'popular_templates': serializer.data
+            })
+        except Exception as e:
+            logger.error(f"Error fetching popular templates: {str(e)}")
+            return Response({
+                'error': 'Failed to fetch popular templates',
+                'details': str(e) if settings.DEBUG else None
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class ResumeTemplateVersionViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing resume template versions.
+    """
+    serializer_class = ResumeTemplateVersionSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        """Filter versions by template"""
+        template_id = self.request.query_params.get('template_id')
+        if template_id:
+            return ResumeTemplateVersion.objects.filter(template_id=template_id)
+        return ResumeTemplateVersion.objects.all()
+    
+    def perform_create(self, serializer):
+        """Set the created_by field when creating a version"""
+        serializer.save(created_by=self.request.user)
+    
+    @action(detail=True, methods=['post'])
+    def make_current(self, request, pk=None):
+        """
+        Make this version the current version of the template.
+        """
+        try:
+            version = self.get_object()
+            version.make_current()
+            
+            return Response({
+                'success': True,
+                'message': f'Version {version.version_number} is now current',
+                'current_version': version.version_number
+            })
+        except Exception as e:
+            logger.error(f"Error making version current: {str(e)}")
+            return Response({
+                'error': 'Failed to make version current',
+                'details': str(e) if settings.DEBUG else None
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UserResumeTemplateViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing user's customized resume templates.
+    """
+    serializer_class = UserResumeTemplateSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        """Return only the current user's templates"""
+        return UserResumeTemplate.objects.filter(
+            user=self.request.user,
+            is_active=True
+        ).order_by('-updated_at')
+    
+    def perform_create(self, serializer):
+        """Set the user field when creating a template"""
+        serializer.save(user=self.request.user)
+    
+    @action(detail=True, methods=['post'])
+    def duplicate(self, request, pk=None):
+        """
+        Create a duplicate of the user's template.
+        """
+        try:
+            original_template = self.get_object()
+            
+            # Create a new name for the duplicate
+            duplicate_name = f"{original_template.name} (Copy)"
+            counter = 1
+            while UserResumeTemplate.objects.filter(
+                user=request.user, 
+                name=duplicate_name
+            ).exists():
+                duplicate_name = f"{original_template.name} (Copy {counter})"
+                counter += 1
+            
+            # Create the duplicate
+            duplicate = UserResumeTemplate.objects.create(
+                user=request.user,
+                base_template=original_template.base_template,
+                name=duplicate_name,
+                customized_data=original_template.customized_data.copy(),
+                customized_sections=original_template.customized_sections.copy() if original_template.customized_sections else []
+            )
+            
+            serializer = self.get_serializer(duplicate)
+            return Response({
+                'success': True,
+                'message': 'Template duplicated successfully',
+                'template': serializer.data
+            }, status=status.HTTP_201_CREATED)
+            
+        except Exception as e:
+            logger.error(f"Error duplicating template: {str(e)}")
+            return Response({
+                'error': 'Failed to duplicate template',
+                'details': str(e) if settings.DEBUG else None
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    @action(detail=True, methods=['get'])
+    def preview(self, request, pk=None):
+        """
+        Get a preview of the template with merged data.
+        """
+        try:
+            template = self.get_object()
+            
+            return Response({
+                'template_data': template.get_merged_template_data(),
+                'sections': template.get_merged_sections(),
+                'base_template': {
+                    'id': template.base_template.id,
+                    'name': template.base_template.name,
+                    'category': template.base_template.category
+                }
+            })
+        except Exception as e:
+            logger.error(f"Error generating template preview: {str(e)}")
+            return Response({
+                'error': 'Failed to generate preview',
+                'details': str(e) if settings.DEBUG else None
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_template_preview(request, template_id):
+    """
+    Get a preview of a resume template with sample data.
+    """
+    from django.http import Http404
+    
+    try:
+        template = get_object_or_404(ResumeTemplate, id=template_id, is_active=True)
+        
+        # Sample data for preview
+        sample_data = {
+            'personal_info': {
+                'name': 'John Doe',
+                'email': 'john.doe@example.com',
+                'phone': '+1 (555) 123-4567',
+                'location': 'New York, NY',
+                'linkedin': 'linkedin.com/in/johndoe'
+            },
+            'summary': 'Experienced software developer with 5+ years of experience in full-stack development.',
+            'experience': [
+                {
+                    'title': 'Senior Software Developer',
+                    'company': 'Tech Company Inc.',
+                    'location': 'New York, NY',
+                    'start_date': '2020-01',
+                    'end_date': 'Present',
+                    'description': 'Led development of web applications using React and Node.js.'
+                }
+            ],
+            'education': [
+                {
+                    'degree': 'Bachelor of Science in Computer Science',
+                    'school': 'University of Technology',
+                    'location': 'New York, NY',
+                    'graduation_date': '2019-05'
+                }
+            ],
+            'skills': ['JavaScript', 'React', 'Node.js', 'Python', 'SQL']
+        }
+        
+        return Response({
+            'template': ResumeTemplateSerializer(template).data,
+            'sample_data': sample_data,
+            'preview_html': generate_template_preview_html(template, sample_data)
+        })
+        
+    except Http404:
+        # Re-raise Http404 to let Django handle it properly
+        raise
+    except Exception as e:
+        logger.error(f"Error generating template preview: {str(e)}")
+        return Response({
+            'error': 'Failed to generate template preview',
+            'details': str(e) if settings.DEBUG else None
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+def generate_template_preview_html(template, data):
+    """
+    Generate HTML preview of a resume template with data.
+    This is a simplified version - in production, you'd use a proper template engine.
+    """
+    try:
+        # Basic HTML structure based on template category
+        if template.category == 'modern':
+            html = f"""
+            <div class="resume-preview modern-template">
+                <header class="header">
+                    <h1>{data['personal_info']['name']}</h1>
+                    <div class="contact-info">
+                        <span>{data['personal_info']['email']}</span>
+                        <span>{data['personal_info']['phone']}</span>
+                        <span>{data['personal_info']['location']}</span>
+                    </div>
+                </header>
+                <section class="summary">
+                    <h2>Professional Summary</h2>
+                    <p>{data.get('summary', '')}</p>
+                </section>
+                <section class="experience">
+                    <h2>Experience</h2>
+                    {''.join([f'<div class="job"><h3>{exp["title"]}</h3><p>{exp["company"]} - {exp["location"]}</p><p>{exp["description"]}</p></div>' for exp in data.get('experience', [])])}
+                </section>
+                <section class="education">
+                    <h2>Education</h2>
+                    {''.join([f'<div class="education-item"><h3>{edu["degree"]}</h3><p>{edu["school"]}</p></div>' for edu in data.get('education', [])])}
+                </section>
+                <section class="skills">
+                    <h2>Skills</h2>
+                    <div class="skills-list">{''.join([f'<span class="skill">{skill}</span>' for skill in data.get('skills', [])])}</div>
+                </section>
+            </div>
+            """
+        else:
+            # Default/classic template
+            html = f"""
+            <div class="resume-preview classic-template">
+                <div class="header">
+                    <h1>{data['personal_info']['name']}</h1>
+                    <p>{data['personal_info']['email']} | {data['personal_info']['phone']} | {data['personal_info']['location']}</p>
+                </div>
+                <div class="section">
+                    <h2>PROFESSIONAL SUMMARY</h2>
+                    <p>{data.get('summary', '')}</p>
+                </div>
+                <div class="section">
+                    <h2>EXPERIENCE</h2>
+                    {''.join([f'<div><h3>{exp["title"]}</h3><p><strong>{exp["company"]}</strong> - {exp["location"]}</p><p>{exp["description"]}</p></div>' for exp in data.get('experience', [])])}
+                </div>
+                <div class="section">
+                    <h2>EDUCATION</h2>
+                    {''.join([f'<div><h3>{edu["degree"]}</h3><p>{edu["school"]}</p></div>' for edu in data.get('education', [])])}
+                </div>
+                <div class="section">
+                    <h2>SKILLS</h2>
+                    <p>{', '.join(data.get('skills', []))}</p>
+                </div>
+            </div>
+            """
+        
+        return html
+        
+    except Exception as e:
+        logger.error(f"Error generating preview HTML: {str(e)}")
+        return f"<div class='error'>Preview generation failed: {str(e)}</div>"

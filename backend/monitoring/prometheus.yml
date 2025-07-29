@@ -1,55 +1,21 @@
-# =============================================================================
-# Prometheus Configuration for HireWise Backend Monitoring
-# =============================================================================
-
 global:
-  scrape_interval: 15s
   evaluation_interval: 15s
-
-rule_files:
-  - "alert_rules.yml"
-
-alerting:
-  alertmanagers:
-    - static_configs:
-        - targets:
-          - alertmanager:9093
-
+  scrape_interval: 15s
+rule_files: []
 scrape_configs:
-  # HireWise Backend Application
-  - job_name: 'hirewise-backend'
-    static_configs:
-      - targets: ['web:8000']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-    scrape_timeout: 10s
-
-  # PostgreSQL Database
-  - job_name: 'postgresql'
-    static_configs:
-      - targets: ['db:5432']
-    scrape_interval: 30s
-
-  # Redis Cache
-  - job_name: 'redis'
-    static_configs:
-      - targets: ['redis:6379']
-    scrape_interval: 30s
-
-  # Nginx Reverse Proxy
-  - job_name: 'nginx'
-    static_configs:
-      - targets: ['nginx:80']
-    scrape_interval: 30s
-
-  # Node Exporter (System Metrics)
-  - job_name: 'node-exporter'
-    static_configs:
-      - targets: ['node-exporter:9100']
-    scrape_interval: 30s
-
-  # Celery Workers
-  - job_name: 'celery'
-    static_configs:
-      - targets: ['celery:5555']  # Flower monitoring
-    scrape_interval: 30s
+- job_name: hirewise-django
+  metrics_path: /api/metrics/
+  scrape_interval: 30s
+  static_configs:
+  - targets:
+    - localhost:8000
+- job_name: hirewise-celery
+  scrape_interval: 30s
+  static_configs:
+  - targets:
+    - localhost:5555
+- job_name: redis
+  scrape_interval: 30s
+  static_configs:
+  - targets:
+    - localhost:6379

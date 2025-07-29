@@ -14,6 +14,9 @@ router.register(r'applications', views.ApplicationViewSet, basename='application
 router.register(r'interview-sessions', views.InterviewSessionViewSet, basename='interview-session')
 router.register(r'skills', views.SkillViewSet, basename='skill')
 router.register(r'user-skills', views.UserSkillViewSet, basename='user-skill')
+router.register(r'resume-templates', views.ResumeTemplateViewSet, basename='resume-template')
+router.register(r'resume-template-versions', views.ResumeTemplateVersionViewSet, basename='resume-template-version')
+router.register(r'user-resume-templates', views.UserResumeTemplateViewSet, basename='user-resume-template')
 
 urlpatterns = [
     # JWT Authentication endpoints
@@ -97,11 +100,16 @@ urlpatterns = [
     # Notification endpoints
     path('notifications/', views.NotificationListView.as_view(), name='notifications-list'),
     path('notifications/<uuid:notification_id>/', views.NotificationDetailView.as_view(), name='notification-detail'),
+    path('notifications/<uuid:notification_id>/mark-read/', views.mark_notification_read, name='mark-notification-read'),
     path('notifications/mark-all-read/', views.mark_all_notifications_read, name='mark-all-notifications-read'),
     path('notifications/unread-count/', views.get_unread_notifications_count, name='unread-notifications-count'),
+    path('notifications/preferences/', views.notification_preferences, name='notification-preferences'),
+    path('notifications/cleanup-expired/', views.cleanup_expired_notifications, name='cleanup-expired-notifications'),
+    path('notifications/deliver-queued/', views.deliver_queued_notifications, name='deliver-queued-notifications'),
     
     # Resume builder endpoints
     path('resume-builder/templates/', views.ResumeTemplateListView.as_view(), name='resume-templates'),
+    path('resume-builder/templates/<uuid:template_id>/preview/', views.get_template_preview, name='template-preview'),
     path('resume-builder/generate/', views.generate_resume_content, name='generate-resume-content'),
     path('resume-builder/export/', views.export_resume, name='export-resume'),
     path('resume-builder/suggestions/', views.get_resume_suggestions, name='resume-suggestions'),
@@ -111,6 +119,15 @@ urlpatterns = [
     path('ai-interview/<uuid:session_id>/response/', views.submit_ai_interview_response, name='submit-ai-interview-response'),
     path('ai-interview/<uuid:session_id>/end/', views.end_ai_interview, name='end-ai-interview'),
     path('ai-interview/<uuid:session_id>/feedback/', views.get_ai_interview_feedback, name='ai-interview-feedback'),
+    
+    # AI Interview Session Management endpoints
+    path('ai-interview/<uuid:session_id>/status/', views.get_interview_session_status, name='interview-session-status'),
+    path('ai-interview/<uuid:session_id>/questions/', views.get_interview_questions, name='interview-questions'),
+    path('ai-interview/<uuid:session_id>/pause/', views.pause_interview_session, name='pause-interview-session'),
+    path('ai-interview/<uuid:session_id>/resume/', views.resume_interview_session, name='resume-interview-session'),
+    path('ai-interview/<uuid:session_id>/cancel/', views.cancel_interview_session, name='cancel-interview-session'),
+    path('ai-interview/sessions/', views.get_user_interview_sessions, name='user-interview-sessions'),
+    path('ai-interview/cleanup-expired/', views.cleanup_expired_sessions, name='cleanup-expired-sessions'),
     
     # Message endpoints
     path('messages/conversations/', views.ConversationListView.as_view(), name='conversations-list'),

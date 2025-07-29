@@ -1,5 +1,5 @@
 """
-Custom middleware for error handling, logging, and rate limiting
+Custom middleware for error handling, logging, rate limiting, and WebSocket JWT authentication
 """
 
 import time
@@ -12,13 +12,20 @@ from django.core.cache import cache
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth import get_user_model
 from rest_framework import status
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from channels.middleware import BaseMiddleware
+from channels.db import database_sync_to_async
+from urllib.parse import parse_qs
 import logging
 
 from .logging_config import api_logger, security_logger, performance_logger
 from .exceptions import RateLimitException
 
 logger = logging.getLogger(__name__)
+User = get_user_model()
 
 
 class RequestTrackingMiddleware(MiddlewareMixin):
@@ -500,3 +507,173 @@ class ErrorMonitoringMiddleware(MiddlewareMixin):
                 'timestamp': timezone.now().isoformat()
             }
         )
+
+class JWTAuthMiddleware(BaseMiddleware):
+    """
+    Custom middleware for JWT authentication in WebSocket connections.
+    Authenticates users using JWT tokens from query parameters or headers.
+    """
+    
+    def __init__(self, inner):
+        super().__init__(inner)
+    
+    async def __call__(self, scope, receive, send):
+        # Only process WebSocket connections
+        if scope["type"] == "websocket":
+            # Try to authenticate the user
+            scope["user"] = await self.get_user_from_jwt(scope)
+        
+        return await super().__call__(scope, receive, send)
+    
+    @database_sync_to_async
+    def get_user_from_jwt(self, scope):
+        """
+        Extract and validate JWT token from WebSocket connection.
+        """
+        try:
+            # Try to get token from query parameters first
+            query_string = scope.get("query_string", b"").decode()
+            query_params = parse_qs(query_string)
+            token = query_params.get("token", [None])[0]
+            
+            # If no token in query params, try headers
+            if not token:
+                headers = dict(scope.get("headers", []))
+                auth_header = headers.get(b"authorization", b"").decode()
+                if auth_header.startswith("Bearer "):
+                    token = auth_header[7:]  # Remove "Bearer " prefix
+            
+            # If still no token, return anonymous user
+            if not token:
+                logger.debug("No JWT token found in WebSocket connection")
+                return AnonymousUser()
+            
+            # Validate the JWT token
+            try:
+                access_token = AccessToken(token)
+                user_id = access_token["user_id"]
+                
+                # Get user from database
+                user = User.objects.select_related(
+                    'jobseeker_profile', 
+                    'recruiter_profile'
+                ).get(id=user_id)
+                
+                logger.info(f"WebSocket JWT authentication successful for user {user.id}")
+                return user
+                
+            except (InvalidToken, TokenError) as e:
+                logger.warning(f"Invalid JWT token in WebSocket connection: {e}")
+                return AnonymousUser()
+            except User.DoesNotExist:
+                logger.warning(f"User not found for JWT token user_id: {user_id}")
+                return AnonymousUser()
+                
+        except Exception as e:
+            logger.error(f"Unexpected error during WebSocket JWT authentication: {e}")
+            return AnonymousUser()
+
+
+class WebSocketConnectionManager:
+    """
+    Manager for tracking WebSocket connections and providing connection utilities.
+    """
+    
+    def __init__(self):
+        # Store active connections by user ID
+        self.active_connections = {}
+        # Store connection metadata
+        self.connection_metadata = {}
+    
+    def add_connection(self, user_id, channel_name, connection_info=None):
+        """
+        Add a new WebSocket connection for a user.
+        """
+        if user_id not in self.active_connections:
+            self.active_connections[user_id] = set()
+        
+        self.active_connections[user_id].add(channel_name)
+        
+        # Store connection metadata
+        self.connection_metadata[channel_name] = {
+            'user_id': user_id,
+            'connected_at': timezone.now(),
+            'last_activity': timezone.now(),
+            'connection_info': connection_info or {}
+        }
+        
+        logger.info(f"WebSocket connection added for user {user_id}: {channel_name}")
+    
+    def remove_connection(self, user_id, channel_name):
+        """
+        Remove a WebSocket connection for a user.
+        """
+        if user_id in self.active_connections:
+            self.active_connections[user_id].discard(channel_name)
+            
+            # Remove user entry if no more connections
+            if not self.active_connections[user_id]:
+                del self.active_connections[user_id]
+        
+        # Remove connection metadata
+        if channel_name in self.connection_metadata:
+            del self.connection_metadata[channel_name]
+        
+        logger.info(f"WebSocket connection removed for user {user_id}: {channel_name}")
+    
+    def get_user_connections(self, user_id):
+        """
+        Get all active connections for a user.
+        """
+        return self.active_connections.get(user_id, set())
+    
+    def is_user_online(self, user_id):
+        """
+        Check if a user has any active WebSocket connections.
+        """
+        return user_id in self.active_connections and len(self.active_connections[user_id]) > 0
+    
+    def get_online_users(self):
+        """
+        Get list of all users with active connections.
+        """
+        return list(self.active_connections.keys())
+    
+    def update_last_activity(self, channel_name):
+        """
+        Update last activity timestamp for a connection.
+        """
+        if channel_name in self.connection_metadata:
+            self.connection_metadata[channel_name]['last_activity'] = timezone.now()
+    
+    def get_connection_info(self, channel_name):
+        """
+        Get connection metadata for a channel.
+        """
+        return self.connection_metadata.get(channel_name, {})
+    
+    def cleanup_stale_connections(self, max_age_minutes=30):
+        """
+        Clean up connections that haven't been active for a specified time.
+        """
+        cutoff_time = timezone.now() - timezone.timedelta(minutes=max_age_minutes)
+        stale_channels = []
+        
+        for channel_name, metadata in self.connection_metadata.items():
+            if metadata.get('last_activity', timezone.now()) < cutoff_time:
+                stale_channels.append(channel_name)
+        
+        for channel_name in stale_channels:
+            metadata = self.connection_metadata[channel_name]
+            user_id = metadata.get('user_id')
+            if user_id:
+                self.remove_connection(user_id, channel_name)
+        
+        if stale_channels:
+            logger.info(f"Cleaned up {len(stale_channels)} stale WebSocket connections")
+        
+        return len(stale_channels)
+
+
+# Global connection manager instance
+websocket_connection_manager = WebSocketConnectionManager()

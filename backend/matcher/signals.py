@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 from .models import JobPost, Application, Notification, NotificationPreference, NotificationTemplate
-from .notification_utils import notification_broadcaster
+from .notification_service import notification_service
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -37,17 +37,8 @@ def job_posted_notification(sender, instance, created, **kwargs):
             if hasattr(instance.recruiter, 'recruiter_profile'):
                 company_name = instance.recruiter.recruiter_profile.company_name
             
-            # Create persistent notifications for relevant job seekers
-            _create_job_posted_notifications(instance, company_name, skills_required)
-            
-            # Send real-time notification to all job seekers
-            notification_broadcaster.notify_job_posted(
-                job_id=str(instance.id),
-                job_title=instance.title,
-                company=company_name,
-                location=instance.location or "Not specified",
-                skills_required=skills_required
-            )
+            # Use the new notification service to send job posted notifications
+            notification_service.send_job_posted_notification(instance)
             
             logger.info(f"Job posted notification sent for job {instance.id}: {instance.title}")
             
@@ -64,20 +55,8 @@ def application_notification(sender, instance, created, **kwargs):
     """
     try:
         if created:
-            # New application received - notify recruiter
-            recruiter = instance.job_post.recruiter
-            applicant_name = f"{instance.job_seeker.first_name} {instance.job_seeker.last_name}".strip()
-            if not applicant_name:
-                applicant_name = instance.job_seeker.username
-            
-            notification_broadcaster.notify_application_received(
-                recruiter_id=str(recruiter.id),
-                application_id=str(instance.id),
-                job_id=str(instance.job_post.id),
-                applicant_name=applicant_name,
-                job_title=instance.job_post.title
-            )
-            
+            # Use the new notification service to send application received notification
+            notification_service.send_application_received_notification(instance)
             logger.info(f"Application received notification sent for application {instance.id}")
             
         else:
@@ -87,15 +66,8 @@ def application_notification(sender, instance, created, **kwargs):
                 new_status = instance.status
                 
                 if old_status != new_status:
-                    # Status changed - notify job seeker
-                    notification_broadcaster.notify_application_status_changed(
-                        job_seeker_id=str(instance.job_seeker.id),
-                        application_id=str(instance.id),
-                        old_status=old_status,
-                        new_status=new_status,
-                        job_title=instance.job_post.title
-                    )
-                    
+                    # Use the new notification service to send status change notification
+                    notification_service.send_application_status_notification(instance, old_status, new_status)
                     logger.info(f"Application status change notification sent for application {instance.id}: {old_status} -> {new_status}")
     
     except Exception as e:
@@ -130,15 +102,13 @@ def match_score_notification(sender, job_seeker_id, job_id, job_title, match_sco
     Requirement 5.4: WHEN an AI match score is calculated THEN the system SHALL notify the user via WebSocket
     """
     try:
-        # Create persistent notification
-        _create_match_score_notification(job_seeker_id, job_id, job_title, match_score)
+        from .models import JobPost
         
-        notification_broadcaster.notify_match_score_calculated(
-            job_seeker_id=str(job_seeker_id),
-            job_id=str(job_id),
-            job_title=job_title,
-            match_score=match_score
-        )
+        # Get the job post
+        job_post = JobPost.objects.get(id=job_id)
+        
+        # Use the new notification service to send match score notification
+        notification_service.send_match_score_notification(job_seeker_id, job_post, match_score)
         
         logger.info(f"Match score notification sent for job seeker {job_seeker_id}, job {job_id}: {match_score}%")
         

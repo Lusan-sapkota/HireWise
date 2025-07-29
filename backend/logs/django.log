@@ -2230,3 +2230,793 @@ INFO 2025-07-27 17:11:30,565 cache_utils 168474 128744441245952 Cache warm-up co
 INFO 2025-07-27 17:14:54,093 file_optimization 169608 139525157155072 File optimization completed: 5400 -> 99 bytes (98.2% reduction)
 INFO 2025-07-27 17:28:17,109 autoreload 168303 135780852896000 /home/lusan/Documents/HireWise/backend/matcher/urls.py changed, reloading.
 INFO 2025-07-27 17:28:17,814 autoreload 173589 128885753360640 Watching for file changes with StatReloader
+INFO 2025-07-29 03:10:45,413 setup_dev_environment 26344 124443552825600 🚀 Starting HireWise Development Environment Setup
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600 ============================================================
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600 📁 Creating necessary directories...
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600    ✓ Created logs
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600    ✓ Created media
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600    ✓ Created media/resumes
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600    ✓ Created media/pdf
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600    ✓ Created media/temp
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600    ✓ Created static
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600    ✓ Created staticfiles
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600    ✓ Created matcher/models
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600 ✅ Directories created successfully
+INFO 2025-07-29 03:10:45,414 setup_dev_environment 26344 124443552825600 🔍 Checking dependencies...
+INFO 2025-07-29 03:10:45,415 setup_dev_environment 26344 124443552825600    ✓ django
+WARNING 2025-07-29 03:10:45,415 setup_dev_environment 26344 124443552825600    ❌ djangorestframework - MISSING
+INFO 2025-07-29 03:10:45,415 setup_dev_environment 26344 124443552825600    ✓ celery
+INFO 2025-07-29 03:10:45,415 setup_dev_environment 26344 124443552825600    ✓ redis
+INFO 2025-07-29 03:10:45,415 setup_dev_environment 26344 124443552825600    ✓ channels
+INFO 2025-07-29 03:10:45,457 setup_dev_environment 26344 124443552825600    ✓ psycopg
+INFO 2025-07-29 03:10:45,742 setup_dev_environment 26344 124443552825600    ✓ google.generativeai
+ERROR 2025-07-29 03:10:45,742 setup_dev_environment 26344 124443552825600 Missing packages: djangorestframework
+ERROR 2025-07-29 03:10:45,742 setup_dev_environment 26344 124443552825600 Please install missing packages with: pip install -r requirements.txt
+ERROR 2025-07-29 03:10:45,742 setup_dev_environment 26344 124443552825600 ❌ Setup failed: Missing required dependencies
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336 🚀 Starting HireWise Development Environment Setup
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336 ============================================================
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336 📁 Creating necessary directories...
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336    ✓ Created logs
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336    ✓ Created media
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336    ✓ Created media/resumes
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336    ✓ Created media/pdf
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336    ✓ Created media/temp
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336    ✓ Created static
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336    ✓ Created staticfiles
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336    ✓ Created matcher/models
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336 ✅ Directories created successfully
+INFO 2025-07-29 03:11:05,478 setup_dev_environment 26555 133765775790336 🔍 Checking dependencies...
+INFO 2025-07-29 03:11:05,479 setup_dev_environment 26555 133765775790336    ✓ django
+INFO 2025-07-29 03:11:05,479 setup_dev_environment 26555 133765775790336    ✓ rest_framework
+INFO 2025-07-29 03:11:05,479 setup_dev_environment 26555 133765775790336    ✓ celery
+INFO 2025-07-29 03:11:05,479 setup_dev_environment 26555 133765775790336    ✓ redis
+INFO 2025-07-29 03:11:05,479 setup_dev_environment 26555 133765775790336    ✓ channels
+INFO 2025-07-29 03:11:05,513 setup_dev_environment 26555 133765775790336    ✓ psycopg
+INFO 2025-07-29 03:11:05,732 setup_dev_environment 26555 133765775790336    ✓ google.generativeai
+INFO 2025-07-29 03:11:05,732 setup_dev_environment 26555 133765775790336 ✅ All dependencies are installed
+INFO 2025-07-29 03:11:05,732 setup_dev_environment 26555 133765775790336 🗄️  Setting up database...
+INFO 2025-07-29 03:11:05,732 setup_dev_environment 26555 133765775790336    ✓ Database connection successful
+INFO 2025-07-29 03:11:05,732 setup_dev_environment 26555 133765775790336    📋 Running database migrations...
+INFO 2025-07-29 03:11:06,517 setup_dev_environment 26555 133765775790336    ✓ Database migrations completed
+INFO 2025-07-29 03:11:06,518 setup_dev_environment 26555 133765775790336    📊 Creating initial development data...
+WARNING 2025-07-29 03:11:06,518 setup_dev_environment 26555 133765775790336    ⚠️  Could not create initial data: Cannot resolve keyword 'name' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+INFO 2025-07-29 03:11:06,518 setup_dev_environment 26555 133765775790336 ✅ Database setup completed
+INFO 2025-07-29 03:11:06,518 setup_dev_environment 26555 133765775790336 🔴 Verifying Redis connection...
+INFO 2025-07-29 03:11:06,531 setup_dev_environment 26555 133765775790336    ✓ Django cache (Redis) working correctly
+INFO 2025-07-29 03:11:06,532 setup_dev_environment 26555 133765775790336    ✓ Direct Redis connection successful
+INFO 2025-07-29 03:11:06,532 setup_dev_environment 26555 133765775790336    ✓ Redis version: 7.0.15
+INFO 2025-07-29 03:11:06,532 setup_dev_environment 26555 133765775790336 ✅ Redis verification completed
+INFO 2025-07-29 03:11:06,533 setup_dev_environment 26555 133765775790336 🌿 Setting up Celery...
+INFO 2025-07-29 03:11:06,533 setup_dev_environment 26555 133765775790336    ✓ Celery app imported successfully
+INFO 2025-07-29 03:11:06,534 setup_dev_environment 26555 133765775790336    ✓ Broker URL: redis://localhost:6379/1
+INFO 2025-07-29 03:11:06,534 setup_dev_environment 26555 133765775790336    ✓ Result backend: redis://localhost:6379/2
+INFO 2025-07-29 03:11:07,557 setup_dev_environment 26555 133765775790336    ⚠️  No Celery workers running (this is normal for setup)
+INFO 2025-07-29 03:11:07,557 setup_dev_environment 26555 133765775790336    ✓ Created Celery management scripts
+INFO 2025-07-29 03:11:07,557 setup_dev_environment 26555 133765775790336 ✅ Celery setup completed
+INFO 2025-07-29 03:11:07,557 setup_dev_environment 26555 133765775790336 📝 Setting up logging infrastructure...
+INFO 2025-07-29 03:11:07,557 setup_dev_environment 26555 133765775790336 AI logger test - setup completed
+INFO 2025-07-29 03:11:07,557 setup_dev_environment 26555 133765775790336 API logger test - setup completed
+INFO 2025-07-29 03:11:07,557 setup_dev_environment 26555 133765775790336    ✓ Logging configuration verified
+INFO 2025-07-29 03:11:07,557 setup_dev_environment 26555 133765775790336 ✅ Logging infrastructure setup completed
+INFO 2025-07-29 03:11:07,557 setup_dev_environment 26555 133765775790336 🏥 Running health checks...
+WARNING 2025-07-29 03:11:07,616 setup_dev_environment 26555 133765775790336    ⚠️  Some health checks failed (status: 503)
+INFO 2025-07-29 03:11:07,616 setup_dev_environment 26555 133765775790336 ✅ Health checks completed
+INFO 2025-07-29 03:11:07,616 setup_dev_environment 26555 133765775790336 👤 Setting up superuser...
+INFO 2025-07-29 03:11:07,618 setup_dev_environment 26555 133765775790336    📝 Creating development superuser...
+INFO 2025-07-29 03:11:07,618 setup_dev_environment 26555 133765775790336    Username: admin
+INFO 2025-07-29 03:11:07,618 setup_dev_environment 26555 133765775790336    Email: admin@hirewise.dev
+INFO 2025-07-29 03:11:07,618 setup_dev_environment 26555 133765775790336    Password: admin123
+INFO 2025-07-29 03:11:07,855 signals 26555 133765775790336 Created notification preferences for user 1e0b9ab4-b27a-45be-a734-100f01d65b58
+INFO 2025-07-29 03:11:07,855 setup_dev_environment 26555 133765775790336    ✓ Development superuser created
+INFO 2025-07-29 03:11:07,855 setup_dev_environment 26555 133765775790336 ✅ Superuser setup completed
+INFO 2025-07-29 03:11:07,855 setup_dev_environment 26555 133765775790336 ============================================================
+INFO 2025-07-29 03:11:07,855 setup_dev_environment 26555 133765775790336 ✅ Setup completed successfully! (8/8 steps)
+INFO 2025-07-29 03:11:07,855 setup_dev_environment 26555 133765775790336 🎉 Your HireWise development environment is ready!
+INFO 2025-07-29 03:11:07,855 setup_dev_environment 26555 133765775790336 
+Next steps:
+INFO 2025-07-29 03:11:07,855 setup_dev_environment 26555 133765775790336 1. Start Redis: redis-server
+INFO 2025-07-29 03:11:07,855 setup_dev_environment 26555 133765775790336 2. Start Celery worker: celery -A hirewise worker --loglevel=info
+INFO 2025-07-29 03:11:07,855 setup_dev_environment 26555 133765775790336 3. Start Django server: python manage.py runserver
+INFO 2025-07-29 03:14:06,912 setup_monitoring 31809 134717116256512 🔍 Starting HireWise Monitoring Infrastructure Setup
+INFO 2025-07-29 03:14:06,912 setup_monitoring 31809 134717116256512 ============================================================
+INFO 2025-07-29 03:14:06,912 setup_monitoring 31809 134717116256512 📋 Setting up log rotation...
+INFO 2025-07-29 03:14:06,912 setup_monitoring 31809 134717116256512    ✓ Created logrotate configuration
+INFO 2025-07-29 03:14:06,913 setup_monitoring 31809 134717116256512    ✓ Created log analysis script
+INFO 2025-07-29 03:14:06,913 setup_monitoring 31809 134717116256512 ✅ Log rotation setup completed
+INFO 2025-07-29 03:14:06,913 setup_monitoring 31809 134717116256512 ⚙️  Creating monitoring configuration...
+INFO 2025-07-29 03:14:06,913 setup_monitoring 31809 134717116256512    ✓ Created Prometheus configuration
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512    ✓ Created Grafana dashboard configuration
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 ✅ Monitoring configuration created
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 🏥 Setting up health check endpoints...
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512    ✓ Created health check management command
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512    ✓ Created health monitoring script
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 ✅ Health check endpoints setup completed
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 ⚡ Setting up performance monitoring...
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512    ✓ Created performance monitoring script
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 ✅ Performance monitoring setup completed
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 🚨 Setting up error tracking...
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512    ✓ Created error tracking script
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 ✅ Error tracking setup completed
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 📊 Creating monitoring dashboard...
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512    ✓ Created monitoring dashboard
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512    ✓ Created master monitoring script
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 ✅ Monitoring dashboard created
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 ============================================================
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 ✅ Monitoring setup completed! (6/6 steps)
+INFO 2025-07-29 03:14:06,914 setup_monitoring 31809 134717116256512 🎉 Your HireWise monitoring infrastructure is ready!
+INFO 2025-07-29 03:33:39,110 signals 38398 136595318845696 Created notification preferences for user 2cfc56b7-f601-407e-988f-9c80e5cc3063
+ERROR 2025-07-29 03:33:39,122 middleware 38398 136595318845696 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:33:39,159 utils 38398 136595318845696 Verification email sent to test@example.com
+INFO 2025-07-29 03:33:39,159 logging_config 38398 136595318845696 API request: POST /api/v1/auth/request-email-verification/
+INFO 2025-07-29 03:33:39,418 signals 38398 136595318845696 Created notification preferences for user cd03ffd6-2330-44da-be5c-98df92d70546
+ERROR 2025-07-29 03:33:39,420 middleware 38398 136595318845696 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 03:33:39,422 logging_config 38398 136595318845696 API request error: POST /api/v1/auth/request-email-verification/
+WARNING 2025-07-29 03:33:39,423 log 38398 136595318845696 Bad Request: /api/v1/auth/request-email-verification/
+INFO 2025-07-29 03:33:39,673 signals 38398 136595318845696 Created notification preferences for user 4768d238-36ac-4f73-abbd-1149976eae46
+ERROR 2025-07-29 03:33:39,674 middleware 38398 136595318845696 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 03:33:39,676 logging_config 38398 136595318845696 API request error: POST /api/v1/auth/request-email-verification/
+WARNING 2025-07-29 03:33:39,676 log 38398 136595318845696 Bad Request: /api/v1/auth/request-email-verification/
+INFO 2025-07-29 03:33:39,914 signals 38398 136595318845696 Created notification preferences for user da5bc0a9-a0e2-4d01-abe9-a738ba042f6b
+ERROR 2025-07-29 03:33:39,916 middleware 38398 136595318845696 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:33:39,919 utils 38398 136595318845696 Welcome email sent to test@example.com
+INFO 2025-07-29 03:33:39,920 logging_config 38398 136595318845696 API request: POST /api/v1/auth/verify-email/
+INFO 2025-07-29 03:33:40,153 signals 38398 136595318845696 Created notification preferences for user 780c6816-ebce-40f7-b47f-e8614623c8cd
+ERROR 2025-07-29 03:33:40,154 middleware 38398 136595318845696 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 03:33:40,156 logging_config 38398 136595318845696 API request error: POST /api/v1/auth/verify-email/
+WARNING 2025-07-29 03:33:40,157 log 38398 136595318845696 Bad Request: /api/v1/auth/verify-email/
+INFO 2025-07-29 03:33:40,380 signals 38398 136595318845696 Created notification preferences for user b192f2f7-4bc4-4a0a-97cf-5216a2fb9d2d
+ERROR 2025-07-29 03:33:40,381 middleware 38398 136595318845696 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 03:33:40,383 logging_config 38398 136595318845696 API request error: POST /api/v1/auth/verify-email/
+WARNING 2025-07-29 03:33:40,383 log 38398 136595318845696 Bad Request: /api/v1/auth/verify-email/
+INFO 2025-07-29 03:33:40,603 signals 38398 136595318845696 Created notification preferences for user 93ef6fe3-dc5c-42e8-b0a6-1ca2b2c83ee9
+ERROR 2025-07-29 03:33:40,604 middleware 38398 136595318845696 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 03:33:40,606 logging_config 38398 136595318845696 API request error: POST /api/v1/auth/verify-email/
+WARNING 2025-07-29 03:33:40,606 log 38398 136595318845696 Bad Request: /api/v1/auth/verify-email/
+INFO 2025-07-29 03:36:42,267 signals 39688 133124388000000 Created notification preferences for user 6c895cd1-6078-46a3-8a3e-640c3a075d36
+ERROR 2025-07-29 03:36:42,269 middleware 39688 133124388000000 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:36:42,300 utils 39688 133124388000000 Password reset email sent to test@example.com
+INFO 2025-07-29 03:36:42,300 logging_config 39688 133124388000000 API request: POST /api/v1/auth/request-password-reset/
+INFO 2025-07-29 03:36:42,588 signals 39688 133124388000000 Created notification preferences for user 1d733dc5-76e6-4ed3-b91d-cd9a7291e88c
+ERROR 2025-07-29 03:36:42,589 middleware 39688 133124388000000 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 03:36:42,591 logging_config 39688 133124388000000 API request error: POST /api/v1/auth/request-password-reset/
+WARNING 2025-07-29 03:36:42,591 log 39688 133124388000000 Bad Request: /api/v1/auth/request-password-reset/
+INFO 2025-07-29 03:36:42,882 signals 39688 133124388000000 Created notification preferences for user 39b8c4c1-e2f2-4f29-905a-a12bd38e1098
+ERROR 2025-07-29 03:36:42,883 middleware 39688 133124388000000 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 03:36:42,887 logging_config 39688 133124388000000 API request error: POST /api/v1/auth/request-password-reset/
+WARNING 2025-07-29 03:36:42,887 log 39688 133124388000000 Bad Request: /api/v1/auth/request-password-reset/
+INFO 2025-07-29 03:36:43,185 signals 39688 133124388000000 Created notification preferences for user e8242930-8ce8-42f7-86dc-5c1aea284359
+ERROR 2025-07-29 03:36:43,186 middleware 39688 133124388000000 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 03:36:43,190 logging_config 39688 133124388000000 API request error: POST /api/v1/auth/reset-password/
+WARNING 2025-07-29 03:36:43,190 log 39688 133124388000000 Bad Request: /api/v1/auth/reset-password/
+INFO 2025-07-29 03:36:43,477 signals 39688 133124388000000 Created notification preferences for user b75496e1-513f-4a0d-b5a8-e38a0e8872f3
+ERROR 2025-07-29 03:36:43,479 middleware 39688 133124388000000 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:36:43,774 logging_config 39688 133124388000000 API request: POST /api/v1/auth/reset-password/
+INFO 2025-07-29 03:36:44,556 signals 39688 133124388000000 Created notification preferences for user f373e1e0-b977-4b22-a202-ce5755ee9da9
+ERROR 2025-07-29 03:36:44,557 middleware 39688 133124388000000 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 03:36:44,559 logging_config 39688 133124388000000 API request error: POST /api/v1/auth/reset-password/
+WARNING 2025-07-29 03:36:44,559 log 39688 133124388000000 Bad Request: /api/v1/auth/reset-password/
+INFO 2025-07-29 03:36:44,830 signals 39688 133124388000000 Created notification preferences for user b9c0c0fc-dedf-4dbd-a769-c0e216fa3e20
+ERROR 2025-07-29 03:36:44,831 middleware 39688 133124388000000 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 03:36:44,833 middleware 39688 133124388000000 High error rate detected: 10 errors with status 400 in 5 minutes
+WARNING 2025-07-29 03:36:44,833 logging_config 39688 133124388000000 API request error: POST /api/v1/auth/reset-password/
+WARNING 2025-07-29 03:36:44,833 log 39688 133124388000000 Bad Request: /api/v1/auth/reset-password/
+INFO 2025-07-29 03:36:45,097 signals 39688 133124388000000 Created notification preferences for user 1c33e040-b42b-4be5-bb36-f0a6caff8ac2
+ERROR 2025-07-29 03:36:45,097 middleware 39688 133124388000000 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 03:36:45,099 middleware 39688 133124388000000 High error rate detected: 11 errors with status 400 in 5 minutes
+WARNING 2025-07-29 03:36:45,099 logging_config 39688 133124388000000 API request error: POST /api/v1/auth/reset-password/
+WARNING 2025-07-29 03:36:45,100 log 39688 133124388000000 Bad Request: /api/v1/auth/reset-password/
+INFO 2025-07-29 03:39:56,787 signals 41011 124150062874880 Created notification preferences for user b4d61a10-973d-4fe4-b4d2-116d393c8a8f
+INFO 2025-07-29 03:39:57,053 signals 41011 124150062874880 Created notification preferences for user 731ed48a-b10c-4bcc-8629-dea04ed2f0a4
+ERROR 2025-07-29 03:39:57,054 middleware 41011 124150062874880 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 03:39:57,314 middleware 41011 124150062874880 High error rate detected: 12 errors with status 400 in 5 minutes
+WARNING 2025-07-29 03:39:57,314 logging_config 41011 124150062874880 API request error: POST /api/v1/auth/change-password/
+WARNING 2025-07-29 03:39:57,315 log 41011 124150062874880 Bad Request: /api/v1/auth/change-password/
+INFO 2025-07-29 03:39:57,559 signals 41011 124150062874880 Created notification preferences for user 628db9dd-ca6a-45ed-8c8e-637de43530c5
+INFO 2025-07-29 03:39:57,793 signals 41011 124150062874880 Created notification preferences for user 0c97ecce-5955-49d9-b8e7-b97a188448bd
+ERROR 2025-07-29 03:39:57,794 middleware 41011 124150062874880 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:39:58,239 logging_config 41011 124150062874880 API request: POST /api/v1/auth/change-password/
+INFO 2025-07-29 03:39:58,859 signals 41011 124150062874880 Created notification preferences for user e43cbe3a-3e39-403f-8f97-45fcdb1bdfa1
+INFO 2025-07-29 03:39:59,060 signals 41011 124150062874880 Created notification preferences for user 4beee28a-7d38-4929-91f1-714c74f1b38e
+ERROR 2025-07-29 03:39:59,061 middleware 41011 124150062874880 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 03:39:59,075 exceptions 41011 124150062874880 Unhandled Exception: Authentication credentials were not provided.
+WARNING 2025-07-29 03:39:59,076 logging_config 41011 124150062874880 API request error: POST /api/v1/auth/change-password/
+WARNING 2025-07-29 03:39:59,076 log 41011 124150062874880 Unauthorized: /api/v1/auth/change-password/
+INFO 2025-07-29 03:39:59,297 signals 41011 124150062874880 Created notification preferences for user e70caaeb-e217-438e-ac08-5a5677ddfa81
+INFO 2025-07-29 03:39:59,528 signals 41011 124150062874880 Created notification preferences for user e6a0e55f-b06c-4158-9f5e-de842aeba61d
+ERROR 2025-07-29 03:39:59,529 middleware 41011 124150062874880 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 03:39:59,766 middleware 41011 124150062874880 High error rate detected: 13 errors with status 400 in 5 minutes
+WARNING 2025-07-29 03:39:59,766 logging_config 41011 124150062874880 API request error: POST /api/v1/auth/change-password/
+WARNING 2025-07-29 03:39:59,767 log 41011 124150062874880 Bad Request: /api/v1/auth/change-password/
+INFO 2025-07-29 03:40:00,012 signals 41011 124150062874880 Created notification preferences for user b5c4e2c1-ead3-4fce-b6e3-dc2cba380590
+INFO 2025-07-29 03:40:00,257 signals 41011 124150062874880 Created notification preferences for user 31ed118b-92de-40fe-a08d-8b62f7ea91ad
+ERROR 2025-07-29 03:40:00,258 middleware 41011 124150062874880 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:40:00,259 logging_config 41011 124150062874880 API request: DELETE /api/v1/auth/delete-account/
+INFO 2025-07-29 03:40:00,499 signals 41011 124150062874880 Created notification preferences for user 8749479c-a8a2-4cff-ae22-301d720ace48
+INFO 2025-07-29 03:40:00,729 signals 41011 124150062874880 Created notification preferences for user b4dba350-43ff-4cb2-b9ea-8bfb58ca6708
+ERROR 2025-07-29 03:40:00,730 middleware 41011 124150062874880 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 03:40:00,731 exceptions 41011 124150062874880 Unhandled Exception: Authentication credentials were not provided.
+WARNING 2025-07-29 03:40:00,732 logging_config 41011 124150062874880 API request error: DELETE /api/v1/auth/delete-account/
+WARNING 2025-07-29 03:40:00,732 log 41011 124150062874880 Unauthorized: /api/v1/auth/delete-account/
+INFO 2025-07-29 03:40:00,961 signals 41011 124150062874880 Created notification preferences for user d59cd9b6-10b6-4fbc-9a7d-b87c8b10a1f7
+INFO 2025-07-29 03:40:01,184 signals 41011 124150062874880 Created notification preferences for user 5428bd03-d6e6-4eba-838b-0665ad19cd30
+ERROR 2025-07-29 03:40:01,185 middleware 41011 124150062874880 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:40:01,187 logging_config 41011 124150062874880 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 03:40:01,408 signals 41011 124150062874880 Created notification preferences for user 9f5157c7-5029-43b4-ad4b-1e2c06b061b0
+INFO 2025-07-29 03:40:01,622 signals 41011 124150062874880 Created notification preferences for user c2040556-fd55-45fd-9d17-04df44f2bfe1
+ERROR 2025-07-29 03:40:01,622 middleware 41011 124150062874880 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 03:40:01,625 middleware 41011 124150062874880 High error rate detected: 14 errors with status 400 in 5 minutes
+ERROR 2025-07-29 03:40:01,625 middleware 41011 124150062874880 Error logging API request: You cannot access body after reading from request's data stream
+WARNING 2025-07-29 03:40:01,625 log 41011 124150062874880 Bad Request: /api/v1/auth/profile/
+INFO 2025-07-29 03:40:01,847 signals 41011 124150062874880 Created notification preferences for user 88c6da9d-a04f-4f40-aaf8-5d2a2ecf6a2b
+INFO 2025-07-29 03:40:02,074 signals 41011 124150062874880 Created notification preferences for user 0ab0a51a-3b52-4dff-aa79-059ab9ea875d
+ERROR 2025-07-29 03:40:02,075 middleware 41011 124150062874880 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 03:40:02,077 middleware 41011 124150062874880 Error logging API request: You cannot access body after reading from request's data stream
+INFO 2025-07-29 03:40:02,311 signals 41011 124150062874880 Created notification preferences for user dc72a5f6-7573-453d-ac94-1850ffc47fd6
+INFO 2025-07-29 03:40:02,552 signals 41011 124150062874880 Created notification preferences for user e8ab00c6-a974-4f34-ad8a-e2256a92955f
+ERROR 2025-07-29 03:40:02,553 middleware 41011 124150062874880 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 03:40:02,556 middleware 41011 124150062874880 Error logging API request: You cannot access body after reading from request's data stream
+INFO 2025-07-29 03:42:00,095 signals 42434 138814098702592 Created notification preferences for user a763150c-f40a-48db-ac00-b4d67e9ba383
+INFO 2025-07-29 03:42:00,283 signals 42434 138814098702592 Created notification preferences for user 046730b3-62d8-4c78-a3ac-4e130eb1d848
+ERROR 2025-07-29 03:42:00,306 middleware 42434 138814098702592 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:42:00,325 file_utils 42434 138814098702592 File validation passed: test_profile.jpg
+CRITICAL 2025-07-29 03:42:00,326 middleware 42434 138814098702592 High error rate detected: 15 errors with status 400 in 5 minutes
+ERROR 2025-07-29 03:42:00,326 middleware 42434 138814098702592 Error logging API request: You cannot access body after reading from request's data stream
+WARNING 2025-07-29 03:42:00,326 log 42434 138814098702592 Bad Request: /api/v1/auth/profile/
+INFO 2025-07-29 03:42:35,100 signals 42819 135148329951488 Created notification preferences for user 879cbe50-9bde-4dd2-8a45-0504720385c5
+INFO 2025-07-29 03:42:35,302 signals 42819 135148329951488 Created notification preferences for user 7e5754b5-8d16-4d4f-bc8e-7ec2cc834c32
+ERROR 2025-07-29 03:42:35,313 middleware 42819 135148329951488 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:42:35,334 file_utils 42819 135148329951488 File validation passed: test_profile.jpg
+CRITICAL 2025-07-29 03:42:35,335 middleware 42819 135148329951488 High error rate detected: 16 errors with status 400 in 5 minutes
+ERROR 2025-07-29 03:42:35,335 middleware 42819 135148329951488 Error logging API request: You cannot access body after reading from request's data stream
+WARNING 2025-07-29 03:42:35,335 log 42819 135148329951488 Bad Request: /api/v1/auth/profile/
+INFO 2025-07-29 03:44:16,686 signals 43439 139339605909760 Created notification preferences for user 9c2511ba-23fd-4f5a-a896-dc669aa9785e
+INFO 2025-07-29 03:44:16,938 signals 43439 139339605909760 Created notification preferences for user 9bde757b-5d13-4ed8-a116-ac430bf3ffb0
+ERROR 2025-07-29 03:44:16,946 middleware 43439 139339605909760 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:44:16,967 file_utils 43439 139339605909760 File validation passed: test_profile.jpg
+INFO 2025-07-29 03:44:16,973 file_optimization 43439 139339605909760 File optimization completed: 8229 -> 4804 bytes (41.6% reduction)
+ERROR 2025-07-29 03:44:16,976 middleware 43439 139339605909760 Error logging API request: You cannot access body after reading from request's data stream
+INFO 2025-07-29 03:45:18,551 signals 43762 136597471699200 Created notification preferences for user 599f80c4-00be-4d6f-b69d-8697a6b1d8bb
+INFO 2025-07-29 03:45:18,813 signals 43762 136597471699200 Created notification preferences for user 3cae7077-fe47-43b4-b8ea-1fe63be00af9
+ERROR 2025-07-29 03:45:18,822 middleware 43762 136597471699200 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 03:45:18,857 middleware 43762 136597471699200 High error rate detected: 17 errors with status 400 in 5 minutes
+ERROR 2025-07-29 03:45:18,857 middleware 43762 136597471699200 Error logging API request: You cannot access body after reading from request's data stream
+WARNING 2025-07-29 03:45:18,858 log 43762 136597471699200 Bad Request: /api/v1/auth/profile/
+INFO 2025-07-29 03:46:19,438 signals 44052 126301337112832 Created notification preferences for user c733dd45-44b5-41de-a4dc-ce50c799ea7c
+INFO 2025-07-29 03:46:19,671 signals 44052 126301337112832 Created notification preferences for user 87f93125-15ce-4100-9a7b-ad466094fca3
+ERROR 2025-07-29 03:46:19,672 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 03:46:19,904 middleware 44052 126301337112832 High error rate detected: 18 errors with status 400 in 5 minutes
+WARNING 2025-07-29 03:46:19,905 logging_config 44052 126301337112832 API request error: POST /api/v1/auth/change-password/
+WARNING 2025-07-29 03:46:19,905 log 44052 126301337112832 Bad Request: /api/v1/auth/change-password/
+INFO 2025-07-29 03:46:20,133 signals 44052 126301337112832 Created notification preferences for user 2176db15-bb4a-40ae-aabc-e8dafddd0122
+INFO 2025-07-29 03:46:20,355 signals 44052 126301337112832 Created notification preferences for user 553e1af4-7461-4ce8-9821-4a53ea040f5a
+ERROR 2025-07-29 03:46:20,356 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:46:20,843 logging_config 44052 126301337112832 API request: POST /api/v1/auth/change-password/
+INFO 2025-07-29 03:46:21,528 signals 44052 126301337112832 Created notification preferences for user 72a0513b-f281-4ccf-a39c-074cb645dc98
+INFO 2025-07-29 03:46:21,738 signals 44052 126301337112832 Created notification preferences for user 18d81e35-470f-4296-9b0d-95a6f6ab52b2
+ERROR 2025-07-29 03:46:21,738 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 03:46:21,742 exceptions 44052 126301337112832 Unhandled Exception: Authentication credentials were not provided.
+WARNING 2025-07-29 03:46:21,743 logging_config 44052 126301337112832 API request error: POST /api/v1/auth/change-password/
+WARNING 2025-07-29 03:46:21,744 log 44052 126301337112832 Unauthorized: /api/v1/auth/change-password/
+INFO 2025-07-29 03:46:21,974 signals 44052 126301337112832 Created notification preferences for user 0df05dd3-a055-4880-81c2-76c094105086
+INFO 2025-07-29 03:46:22,203 signals 44052 126301337112832 Created notification preferences for user af985e0c-b795-4d00-9845-c0aa84da027f
+ERROR 2025-07-29 03:46:22,204 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 03:46:22,448 middleware 44052 126301337112832 High error rate detected: 19 errors with status 400 in 5 minutes
+WARNING 2025-07-29 03:46:22,448 logging_config 44052 126301337112832 API request error: POST /api/v1/auth/change-password/
+WARNING 2025-07-29 03:46:22,448 log 44052 126301337112832 Bad Request: /api/v1/auth/change-password/
+INFO 2025-07-29 03:46:22,692 signals 44052 126301337112832 Created notification preferences for user 2098e781-28a1-40b0-bc2c-7e71bd63f2df
+INFO 2025-07-29 03:46:22,940 signals 44052 126301337112832 Created notification preferences for user 8b76d894-d0ca-4642-aa35-4748c1e77705
+ERROR 2025-07-29 03:46:22,941 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:46:22,942 logging_config 44052 126301337112832 API request: DELETE /api/v1/auth/delete-account/
+INFO 2025-07-29 03:46:23,178 signals 44052 126301337112832 Created notification preferences for user 01ed42ec-b5fb-47e2-bd16-1ada76f66fbd
+INFO 2025-07-29 03:46:23,415 signals 44052 126301337112832 Created notification preferences for user 007cf0ea-b9bb-4a75-b634-6ca8cdb508d1
+ERROR 2025-07-29 03:46:23,415 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 03:46:23,417 exceptions 44052 126301337112832 Unhandled Exception: Authentication credentials were not provided.
+WARNING 2025-07-29 03:46:23,418 logging_config 44052 126301337112832 API request error: DELETE /api/v1/auth/delete-account/
+WARNING 2025-07-29 03:46:23,418 log 44052 126301337112832 Unauthorized: /api/v1/auth/delete-account/
+INFO 2025-07-29 03:46:23,643 signals 44052 126301337112832 Created notification preferences for user 7383ec4c-1c09-4bda-8d04-3d4bf9e14e40
+INFO 2025-07-29 03:46:23,874 signals 44052 126301337112832 Created notification preferences for user 4afd2ad9-be5e-44f6-a0c4-b5c0a72ecda9
+ERROR 2025-07-29 03:46:23,874 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:46:23,877 logging_config 44052 126301337112832 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 03:46:24,108 signals 44052 126301337112832 Created notification preferences for user 9aac7dd9-1b36-4cc5-a84f-d2c6e62f74ac
+INFO 2025-07-29 03:46:24,343 signals 44052 126301337112832 Created notification preferences for user 24b44dd4-feb9-4a89-b1dc-cb480dcf84d2
+ERROR 2025-07-29 03:46:24,351 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 03:46:24,383 middleware 44052 126301337112832 High error rate detected: 20 errors with status 400 in 5 minutes
+ERROR 2025-07-29 03:46:24,383 middleware 44052 126301337112832 Error logging API request: You cannot access body after reading from request's data stream
+WARNING 2025-07-29 03:46:24,383 log 44052 126301337112832 Bad Request: /api/v1/auth/profile/
+INFO 2025-07-29 03:46:24,606 signals 44052 126301337112832 Created notification preferences for user 9a4d8902-4368-4e5d-a46f-8d5e4bc2ffd7
+INFO 2025-07-29 03:46:24,824 signals 44052 126301337112832 Created notification preferences for user a298e98c-8609-4ef2-971a-a756ee027c0a
+ERROR 2025-07-29 03:46:24,826 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 03:46:24,829 file_utils 44052 126301337112832 File validation passed: test_profile.jpg
+INFO 2025-07-29 03:46:24,834 file_optimization 44052 126301337112832 File optimization completed: 8229 -> 4804 bytes (41.6% reduction)
+ERROR 2025-07-29 03:46:24,835 middleware 44052 126301337112832 Error logging API request: You cannot access body after reading from request's data stream
+INFO 2025-07-29 03:46:25,048 signals 44052 126301337112832 Created notification preferences for user e0340d16-6b30-4ab2-afb1-8f90f2a35ecc
+INFO 2025-07-29 03:46:25,255 signals 44052 126301337112832 Created notification preferences for user 29b7c030-6e6a-4a9d-b90a-15d8e7bbf780
+ERROR 2025-07-29 03:46:25,255 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 03:46:25,257 middleware 44052 126301337112832 High error rate detected: 21 errors with status 400 in 5 minutes
+ERROR 2025-07-29 03:46:25,258 middleware 44052 126301337112832 Error logging API request: You cannot access body after reading from request's data stream
+WARNING 2025-07-29 03:46:25,258 log 44052 126301337112832 Bad Request: /api/v1/auth/profile/
+INFO 2025-07-29 03:46:25,469 signals 44052 126301337112832 Created notification preferences for user 7095aed3-0b74-4ceb-b3dd-70d76a5b756d
+INFO 2025-07-29 03:46:25,695 signals 44052 126301337112832 Created notification preferences for user 935f1171-59cc-408e-a0d9-2d9bc761b0ea
+ERROR 2025-07-29 03:46:25,696 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 03:46:25,698 middleware 44052 126301337112832 Error logging API request: You cannot access body after reading from request's data stream
+INFO 2025-07-29 03:46:25,928 signals 44052 126301337112832 Created notification preferences for user 6818667a-af97-4794-94d1-64fa1c752834
+INFO 2025-07-29 03:46:26,155 signals 44052 126301337112832 Created notification preferences for user 2b7d3182-6fc8-4c2f-96f2-a4f1ce6433b1
+ERROR 2025-07-29 03:46:26,155 middleware 44052 126301337112832 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 03:46:26,158 middleware 44052 126301337112832 Error logging API request: You cannot access body after reading from request's data stream
+INFO 2025-07-29 04:02:13,530 signals 59676 136367145181440 Created notification preferences for user c3317b22-9479-42df-acef-04511dd3d70b
+INFO 2025-07-29 04:02:13,531 utils 59676 136367145181440 Password reset email sent to test@example.com
+INFO 2025-07-29 04:02:13,761 signals 59676 136367145181440 Created notification preferences for user 40c9b8da-7fab-4722-96e3-167b55260256
+INFO 2025-07-29 04:02:13,762 utils 59676 136367145181440 Verification email sent to test@example.com
+INFO 2025-07-29 04:02:13,989 signals 59676 136367145181440 Created notification preferences for user 8f204d33-294f-417a-8949-4a337bfab446
+INFO 2025-07-29 04:02:13,989 utils 59676 136367145181440 Welcome email sent to test@example.com
+INFO 2025-07-29 04:02:14,224 signals 59676 136367145181440 Created notification preferences for user f48492a0-11a6-47ba-9f67-7f98df6284b2
+ERROR 2025-07-29 04:02:14,226 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:02:14,261 utils 59676 136367145181440 Verification email sent to test@example.com
+INFO 2025-07-29 04:02:14,261 logging_config 59676 136367145181440 API request: POST /api/v1/auth/request-email-verification/
+INFO 2025-07-29 04:02:14,462 signals 59676 136367145181440 Created notification preferences for user b8c019a7-e5ef-40a2-bf23-ddd9a4467dee
+ERROR 2025-07-29 04:02:14,463 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 04:02:14,465 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/request-email-verification/
+WARNING 2025-07-29 04:02:14,465 log 59676 136367145181440 Bad Request: /api/v1/auth/request-email-verification/
+INFO 2025-07-29 04:02:14,675 signals 59676 136367145181440 Created notification preferences for user 190b8b4d-57aa-45a1-87cc-cfe3e1206367
+ERROR 2025-07-29 04:02:14,677 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 04:02:14,678 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/request-email-verification/
+WARNING 2025-07-29 04:02:14,679 log 59676 136367145181440 Bad Request: /api/v1/auth/request-email-verification/
+INFO 2025-07-29 04:02:14,901 signals 59676 136367145181440 Created notification preferences for user cf9e779d-0de1-4f61-ba6b-e2688991c84a
+ERROR 2025-07-29 04:02:14,902 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:02:14,906 utils 59676 136367145181440 Welcome email sent to test@example.com
+INFO 2025-07-29 04:02:14,907 logging_config 59676 136367145181440 API request: POST /api/v1/auth/verify-email/
+INFO 2025-07-29 04:02:15,135 signals 59676 136367145181440 Created notification preferences for user 055cb983-5bc1-4074-8433-dbfd3e5d165c
+ERROR 2025-07-29 04:02:15,136 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 04:02:15,138 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/verify-email/
+WARNING 2025-07-29 04:02:15,138 log 59676 136367145181440 Bad Request: /api/v1/auth/verify-email/
+INFO 2025-07-29 04:02:15,359 signals 59676 136367145181440 Created notification preferences for user 780fa13b-ed25-45e2-b7cb-9958c5ae0a2c
+ERROR 2025-07-29 04:02:15,360 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 04:02:15,362 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/verify-email/
+WARNING 2025-07-29 04:02:15,362 log 59676 136367145181440 Bad Request: /api/v1/auth/verify-email/
+INFO 2025-07-29 04:02:15,573 signals 59676 136367145181440 Created notification preferences for user 6e16904d-db15-4a93-b151-2953386525e1
+ERROR 2025-07-29 04:02:15,574 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 04:02:15,575 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/verify-email/
+WARNING 2025-07-29 04:02:15,575 log 59676 136367145181440 Bad Request: /api/v1/auth/verify-email/
+INFO 2025-07-29 04:02:15,779 signals 59676 136367145181440 Created notification preferences for user 6d079866-53e6-4580-a669-fb41c0c153d8
+ERROR 2025-07-29 04:02:15,779 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:02:15,782 utils 59676 136367145181440 Password reset email sent to test@example.com
+INFO 2025-07-29 04:02:15,782 logging_config 59676 136367145181440 API request: POST /api/v1/auth/request-password-reset/
+INFO 2025-07-29 04:02:15,981 signals 59676 136367145181440 Created notification preferences for user 6f279769-edf4-4693-a059-40b3a717283a
+ERROR 2025-07-29 04:02:15,982 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 04:02:15,984 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/request-password-reset/
+WARNING 2025-07-29 04:02:15,984 log 59676 136367145181440 Bad Request: /api/v1/auth/request-password-reset/
+INFO 2025-07-29 04:02:16,175 signals 59676 136367145181440 Created notification preferences for user 9b264e47-c350-4f5b-8ccb-33a034c10b04
+ERROR 2025-07-29 04:02:16,176 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 04:02:16,178 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/request-password-reset/
+WARNING 2025-07-29 04:02:16,178 log 59676 136367145181440 Bad Request: /api/v1/auth/request-password-reset/
+INFO 2025-07-29 04:02:16,365 signals 59676 136367145181440 Created notification preferences for user d6efb96e-c239-4d47-9c12-38b42e50afe6
+ERROR 2025-07-29 04:02:16,366 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 04:02:16,368 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/reset-password/
+WARNING 2025-07-29 04:02:16,368 log 59676 136367145181440 Bad Request: /api/v1/auth/reset-password/
+INFO 2025-07-29 04:02:16,559 signals 59676 136367145181440 Created notification preferences for user c1db0894-5f67-447b-9500-146a0ef6b147
+ERROR 2025-07-29 04:02:16,560 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:02:16,780 logging_config 59676 136367145181440 API request: POST /api/v1/auth/reset-password/
+INFO 2025-07-29 04:02:17,432 signals 59676 136367145181440 Created notification preferences for user 05bfc11a-1f7e-42c4-9c16-bef5988ac062
+ERROR 2025-07-29 04:02:17,432 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 04:02:17,435 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/reset-password/
+WARNING 2025-07-29 04:02:17,435 log 59676 136367145181440 Bad Request: /api/v1/auth/reset-password/
+INFO 2025-07-29 04:02:17,644 signals 59676 136367145181440 Created notification preferences for user b39dd418-1f41-4eee-80a9-ab555276836f
+ERROR 2025-07-29 04:02:17,645 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 04:02:17,646 middleware 59676 136367145181440 High error rate detected: 10 errors with status 400 in 5 minutes
+WARNING 2025-07-29 04:02:17,646 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/reset-password/
+WARNING 2025-07-29 04:02:17,647 log 59676 136367145181440 Bad Request: /api/v1/auth/reset-password/
+INFO 2025-07-29 04:02:17,849 signals 59676 136367145181440 Created notification preferences for user 9d7d37bd-e8f8-4ea3-8a75-f7f81b624796
+ERROR 2025-07-29 04:02:17,849 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 04:02:17,852 middleware 59676 136367145181440 High error rate detected: 11 errors with status 400 in 5 minutes
+WARNING 2025-07-29 04:02:17,852 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/reset-password/
+WARNING 2025-07-29 04:02:17,852 log 59676 136367145181440 Bad Request: /api/v1/auth/reset-password/
+INFO 2025-07-29 04:02:18,044 signals 59676 136367145181440 Created notification preferences for user 3611263d-a7d5-48fc-b0dd-cae05b562d8b
+INFO 2025-07-29 04:02:18,265 signals 59676 136367145181440 Created notification preferences for user ad945ac9-6a19-4797-a055-28660b53e145
+INFO 2025-07-29 04:02:18,473 signals 59676 136367145181440 Created notification preferences for user 96404a92-5c13-47aa-8c2c-feba9a443300
+INFO 2025-07-29 04:02:18,687 signals 59676 136367145181440 Created notification preferences for user 1d5a2e7d-e295-45bd-8edc-313ad76a9097
+INFO 2025-07-29 04:02:18,886 signals 59676 136367145181440 Created notification preferences for user a3b912b6-1e58-4dea-a428-6d2838b4d078
+INFO 2025-07-29 04:02:19,089 signals 59676 136367145181440 Created notification preferences for user efffdd21-d313-4711-8316-4bd1832ede22
+ERROR 2025-07-29 04:02:19,090 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 04:02:19,282 middleware 59676 136367145181440 High error rate detected: 12 errors with status 400 in 5 minutes
+WARNING 2025-07-29 04:02:19,282 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/change-password/
+WARNING 2025-07-29 04:02:19,282 log 59676 136367145181440 Bad Request: /api/v1/auth/change-password/
+INFO 2025-07-29 04:02:19,483 signals 59676 136367145181440 Created notification preferences for user 2ba1851a-38a0-42a4-82d7-f70f0907caf3
+INFO 2025-07-29 04:02:19,677 signals 59676 136367145181440 Created notification preferences for user 4d8c8b92-b3cb-428d-b589-93290afad7ab
+ERROR 2025-07-29 04:02:19,678 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:02:20,085 logging_config 59676 136367145181440 API request: POST /api/v1/auth/change-password/
+INFO 2025-07-29 04:02:20,684 signals 59676 136367145181440 Created notification preferences for user a3c6344b-306d-4119-9fab-ba1ae2455485
+INFO 2025-07-29 04:02:20,883 signals 59676 136367145181440 Created notification preferences for user 89d99b5d-5988-4f06-98df-e3d30542b5f6
+ERROR 2025-07-29 04:02:20,883 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 04:02:20,885 exceptions 59676 136367145181440 Unhandled Exception: Authentication credentials were not provided.
+WARNING 2025-07-29 04:02:20,885 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/change-password/
+WARNING 2025-07-29 04:02:20,885 log 59676 136367145181440 Unauthorized: /api/v1/auth/change-password/
+INFO 2025-07-29 04:02:21,088 signals 59676 136367145181440 Created notification preferences for user b6159bdf-0f5e-4bba-b9d3-3aa15ff45395
+INFO 2025-07-29 04:02:21,280 signals 59676 136367145181440 Created notification preferences for user c6e86c60-6649-4ec5-83a1-852a445912e7
+ERROR 2025-07-29 04:02:21,281 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 04:02:21,490 middleware 59676 136367145181440 High error rate detected: 13 errors with status 400 in 5 minutes
+WARNING 2025-07-29 04:02:21,490 logging_config 59676 136367145181440 API request error: POST /api/v1/auth/change-password/
+WARNING 2025-07-29 04:02:21,490 log 59676 136367145181440 Bad Request: /api/v1/auth/change-password/
+INFO 2025-07-29 04:02:21,689 signals 59676 136367145181440 Created notification preferences for user daf8ab42-92dd-4d6d-9811-9a1f6e5e33db
+INFO 2025-07-29 04:02:21,913 signals 59676 136367145181440 Created notification preferences for user baeec495-99f2-4bd6-98ff-e8ec05fc44f2
+ERROR 2025-07-29 04:02:21,914 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:02:21,915 logging_config 59676 136367145181440 API request: DELETE /api/v1/auth/delete-account/
+INFO 2025-07-29 04:02:22,132 signals 59676 136367145181440 Created notification preferences for user 9ac54b88-e28d-4560-8847-7e3f4eb8b101
+INFO 2025-07-29 04:02:22,369 signals 59676 136367145181440 Created notification preferences for user 2eb21b01-5e55-4440-a118-bf63b19b2652
+ERROR 2025-07-29 04:02:22,370 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 04:02:22,371 exceptions 59676 136367145181440 Unhandled Exception: Authentication credentials were not provided.
+WARNING 2025-07-29 04:02:22,372 logging_config 59676 136367145181440 API request error: DELETE /api/v1/auth/delete-account/
+WARNING 2025-07-29 04:02:22,372 log 59676 136367145181440 Unauthorized: /api/v1/auth/delete-account/
+INFO 2025-07-29 04:02:22,602 signals 59676 136367145181440 Created notification preferences for user ea1b9c4d-f57b-4502-95a2-c6b08ca5a9c6
+INFO 2025-07-29 04:02:22,858 signals 59676 136367145181440 Created notification preferences for user 3b8028ae-85a7-44c2-9d51-a77d998a15fe
+ERROR 2025-07-29 04:02:22,859 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:02:22,861 logging_config 59676 136367145181440 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 04:02:23,105 signals 59676 136367145181440 Created notification preferences for user 08d01dcf-519d-44a4-a861-0693c52d607c
+INFO 2025-07-29 04:02:23,357 signals 59676 136367145181440 Created notification preferences for user af1687f7-b5c1-4a5d-98e9-9fe6edb3a793
+ERROR 2025-07-29 04:02:23,365 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 04:02:23,397 middleware 59676 136367145181440 High error rate detected: 14 errors with status 400 in 5 minutes
+ERROR 2025-07-29 04:02:23,397 middleware 59676 136367145181440 Error logging API request: You cannot access body after reading from request's data stream
+WARNING 2025-07-29 04:02:23,397 log 59676 136367145181440 Bad Request: /api/v1/auth/profile/
+INFO 2025-07-29 04:02:23,628 signals 59676 136367145181440 Created notification preferences for user a5f65e86-94a3-49c7-b766-f757bb93b5d3
+INFO 2025-07-29 04:02:23,850 signals 59676 136367145181440 Created notification preferences for user 317f9456-3d45-419c-880d-9ca091d7d8f0
+ERROR 2025-07-29 04:02:23,852 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:02:23,855 file_utils 59676 136367145181440 File validation passed: test_profile.jpg
+INFO 2025-07-29 04:02:23,860 file_optimization 59676 136367145181440 File optimization completed: 8229 -> 4804 bytes (41.6% reduction)
+ERROR 2025-07-29 04:02:23,863 middleware 59676 136367145181440 Error logging API request: You cannot access body after reading from request's data stream
+INFO 2025-07-29 04:02:24,082 signals 59676 136367145181440 Created notification preferences for user 2803f492-6d20-4ef7-b5b6-f5fe123a2609
+INFO 2025-07-29 04:02:24,295 signals 59676 136367145181440 Created notification preferences for user aa562efa-76bb-4aa0-b72d-a5e8f1155dfb
+ERROR 2025-07-29 04:02:24,296 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+CRITICAL 2025-07-29 04:02:24,297 middleware 59676 136367145181440 High error rate detected: 15 errors with status 400 in 5 minutes
+ERROR 2025-07-29 04:02:24,298 middleware 59676 136367145181440 Error logging API request: You cannot access body after reading from request's data stream
+WARNING 2025-07-29 04:02:24,298 log 59676 136367145181440 Bad Request: /api/v1/auth/profile/
+INFO 2025-07-29 04:02:24,508 signals 59676 136367145181440 Created notification preferences for user 5eb60913-77fb-42ee-bdd6-37012c836884
+INFO 2025-07-29 04:02:24,713 signals 59676 136367145181440 Created notification preferences for user b71811b7-6c9e-4ad6-9ee5-a2c6fd033047
+ERROR 2025-07-29 04:02:24,714 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 04:02:24,717 middleware 59676 136367145181440 Error logging API request: You cannot access body after reading from request's data stream
+INFO 2025-07-29 04:02:24,921 signals 59676 136367145181440 Created notification preferences for user 9b77eee8-ceb2-4ffd-8b5a-ffab84d5ed0a
+INFO 2025-07-29 04:02:25,126 signals 59676 136367145181440 Created notification preferences for user 0cd21e5f-4f82-4bfa-b7a1-7eef14b38a93
+ERROR 2025-07-29 04:02:25,127 middleware 59676 136367145181440 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 04:02:25,129 middleware 59676 136367145181440 Error logging API request: You cannot access body after reading from request's data stream
+INFO 2025-07-29 04:02:25,347 signals 59676 136367145181440 Created notification preferences for user 10c89033-6f5d-4c2a-bb73-1cae5f060e00
+INFO 2025-07-29 04:02:25,570 signals 59676 136367145181440 Created notification preferences for user bebca2a2-8267-43f0-9956-80e528dbbc9d
+INFO 2025-07-29 04:02:25,800 signals 59676 136367145181440 Created notification preferences for user ef65d919-0085-4cb1-9ddb-b534e4356f4e
+INFO 2025-07-29 04:02:26,053 signals 59676 136367145181440 Created notification preferences for user abee1a2e-6a8b-4625-9b38-0a104add6a78
+INFO 2025-07-29 04:02:26,302 signals 59676 136367145181440 Created notification preferences for user 16cc0224-d4ff-410f-b8ca-7859ec4a890c
+INFO 2025-07-29 04:02:26,559 signals 59676 136367145181440 Created notification preferences for user 5247c2cb-bbe2-4ddf-a404-87020501288d
+INFO 2025-07-29 04:02:26,822 signals 59676 136367145181440 Created notification preferences for user f2f29474-da7a-4e14-917b-dcdd10ae60a8
+INFO 2025-07-29 04:02:27,090 signals 59676 136367145181440 Created notification preferences for user 7a00eba6-7518-4828-8e07-5c7dee4fae1e
+INFO 2025-07-29 04:02:27,364 signals 59676 136367145181440 Created notification preferences for user 75e25c95-039a-43ca-9f27-2c7f81d1c7fd
+INFO 2025-07-29 04:02:27,644 signals 59676 136367145181440 Created notification preferences for user 9180615c-de91-4e64-82da-a1c587892841
+INFO 2025-07-29 04:02:27,929 signals 59676 136367145181440 Created notification preferences for user 9edca867-d982-4c35-8532-fca3e3732591
+INFO 2025-07-29 04:02:28,221 signals 59676 136367145181440 Created notification preferences for user 1bb7f8be-231a-4a48-9560-d6af345c2346
+INFO 2025-07-29 04:02:28,518 signals 59676 136367145181440 Created notification preferences for user 8ef03173-73b7-41b3-9b0d-a238858763a1
+INFO 2025-07-29 04:02:28,825 signals 59676 136367145181440 Created notification preferences for user 659f411a-3cdc-41fc-b25c-ba93fc562658
+INFO 2025-07-29 04:02:29,134 signals 59676 136367145181440 Created notification preferences for user 60cc998c-6041-4fa1-85aa-8b5b0d2be4f5
+INFO 2025-07-29 04:02:29,456 signals 59676 136367145181440 Created notification preferences for user 54f7047b-fb43-43d7-b990-97dbb90154c1
+INFO 2025-07-29 04:02:29,782 signals 59676 136367145181440 Created notification preferences for user b3aeec79-c74c-48ed-94f3-1997d57467ef
+INFO 2025-07-29 04:02:30,117 signals 59676 136367145181440 Created notification preferences for user 086672c3-058d-49e5-adcf-0a3371a6b035
+WARNING 2025-07-29 04:03:55,444 ml_services 61462 140432172392704 Gemini API key not configured
+INFO 2025-07-29 04:03:55,722 signals 61462 140432172392704 Created notification preferences for user f85c7e05-1991-4b40-9bbe-5a6838df8972
+WARNING 2025-07-29 04:06:03,376 ml_services 62351 131449458282752 Gemini API key not configured
+INFO 2025-07-29 04:06:03,602 signals 62351 131449458282752 Created notification preferences for user 2b3bf345-fe76-4866-a11b-5c0e1e0c3cfd
+INFO 2025-07-29 04:06:03,829 signals 62351 131449458282752 Created notification preferences for user ea0dd732-401e-42b8-86c0-f6f38bc92000
+INFO 2025-07-29 04:06:03,851 signals 62351 131449458282752 Created 10 job posted notifications
+INFO 2025-07-29 04:06:03,855 notification_utils 62351 131449458282752 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-29 04:06:03,855 signals 62351 131449458282752 Job posted notification sent for job 0a8f3bc6-3a0b-47dc-926e-10b83f08903f: Senior Python Developer
+INFO 2025-07-29 04:06:03,862 notification_utils 62351 131449458282752 Notification sent to group user_ea0dd732-401e-42b8-86c0-f6f38bc92000: application_received_notification
+INFO 2025-07-29 04:06:03,862 signals 62351 131449458282752 Application received notification sent for application 680c7eeb-8722-4029-862c-eb5ef7d9fb2d
+INFO 2025-07-29 04:06:03,865 signals 62351 131449458282752 Created application received notification for recruiter ea0dd732-401e-42b8-86c0-f6f38bc92000
+ERROR 2025-07-29 04:06:03,877 ml_services 62351 131449458282752 Error generating session analysis: name 'models' is not defined
+WARNING 2025-07-29 04:06:24,814 ml_services 62583 123539443941632 Gemini API key not configured
+INFO 2025-07-29 04:06:25,010 signals 62583 123539443941632 Created notification preferences for user 500ea5f4-56bc-403d-a162-1fab00b05c46
+INFO 2025-07-29 04:06:25,199 signals 62583 123539443941632 Created notification preferences for user 6308b09f-ed0f-44a8-89a1-3b4473f27d72
+INFO 2025-07-29 04:06:25,212 signals 62583 123539443941632 Created 10 job posted notifications
+INFO 2025-07-29 04:06:25,216 notification_utils 62583 123539443941632 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-29 04:06:25,216 signals 62583 123539443941632 Job posted notification sent for job 929b682f-cf86-42e1-bc5f-1922816b8220: Senior Python Developer
+INFO 2025-07-29 04:06:25,221 notification_utils 62583 123539443941632 Notification sent to group user_6308b09f-ed0f-44a8-89a1-3b4473f27d72: application_received_notification
+INFO 2025-07-29 04:06:25,222 signals 62583 123539443941632 Application received notification sent for application 3b024814-0c80-497e-b29b-4e19031be89e
+INFO 2025-07-29 04:06:25,224 signals 62583 123539443941632 Created application received notification for recruiter 6308b09f-ed0f-44a8-89a1-3b4473f27d72
+ERROR 2025-07-29 04:06:25,235 ml_services 62583 123539443941632 Error calculating comprehensive score: name 'answered_queen' is not defined
+WARNING 2025-07-29 04:08:28,002 ml_services 63343 124948003008768 Gemini API key not configured
+INFO 2025-07-29 04:08:28,216 signals 63343 124948003008768 Created notification preferences for user d2bee8a5-f034-4032-914c-6f04698b98c7
+INFO 2025-07-29 04:08:28,418 signals 63343 124948003008768 Created notification preferences for user 524b9739-60f0-45c6-babb-03393b547245
+INFO 2025-07-29 04:08:28,431 signals 63343 124948003008768 Created 10 job posted notifications
+INFO 2025-07-29 04:08:28,434 notification_utils 63343 124948003008768 Notification sent to group role_job_seeker: job_posted_notification
+INFO 2025-07-29 04:08:28,434 signals 63343 124948003008768 Job posted notification sent for job eddb5756-7332-487e-87e2-2c4607b35717: Senior Python Developer
+INFO 2025-07-29 04:08:28,440 notification_utils 63343 124948003008768 Notification sent to group user_524b9739-60f0-45c6-babb-03393b547245: application_received_notification
+INFO 2025-07-29 04:08:28,440 signals 63343 124948003008768 Application received notification sent for application ccf733a0-76c5-463b-9932-704ea3f78a66
+INFO 2025-07-29 04:08:28,442 signals 63343 124948003008768 Created application received notification for recruiter 524b9739-60f0-45c6-babb-03393b547245
+INFO 2025-07-29 04:17:16,188 signals 76455 131877161144576 Created notification preferences for user 144c0c5b-f8fc-4f33-805c-df31160edb37
+INFO 2025-07-29 04:17:16,374 signals 76455 131877161144576 Created notification preferences for user c81ca6fd-baff-4565-b174-dad981882d4d
+INFO 2025-07-29 04:17:16,601 signals 76455 131877161144576 Created notification preferences for user 69ec1c78-a40d-48f6-a8b6-6f6f84b2b945
+INFO 2025-07-29 04:17:16,787 signals 76455 131877161144576 Created notification preferences for user 80763766-c644-4f0c-9e2c-16d02e777bae
+INFO 2025-07-29 04:17:16,975 signals 76455 131877161144576 Created notification preferences for user 4ca817db-a3d2-453b-a1a3-1c9723be0072
+INFO 2025-07-29 04:17:17,170 signals 76455 131877161144576 Created notification preferences for user e750477e-dd5c-41a4-8f1f-37a9a74f5464
+INFO 2025-07-29 04:17:17,381 signals 76455 131877161144576 Created notification preferences for user f712dfab-7d7a-4290-97f8-579c051bd178
+INFO 2025-07-29 04:17:17,598 signals 76455 131877161144576 Created notification preferences for user c09b38c0-a491-48ca-9750-9c8986225fb0
+INFO 2025-07-29 04:17:17,829 signals 76455 131877161144576 Created notification preferences for user 132a7146-12ac-4c13-9312-7ae9c1b910d6
+INFO 2025-07-29 04:17:18,067 signals 76455 131877161144576 Created notification preferences for user c5a6b41d-2e28-463e-a74f-9d578191f2b4
+INFO 2025-07-29 04:17:18,307 signals 76455 131877161144576 Created notification preferences for user b53c47dd-d88a-4619-9538-4582ee93a2a1
+INFO 2025-07-29 04:17:18,554 signals 76455 131877161144576 Created notification preferences for user 7abd8927-1259-49aa-bc40-8f50b1a03c98
+INFO 2025-07-29 04:17:18,812 signals 76455 131877161144576 Created notification preferences for user 20746a76-eae4-4bc3-a41a-26aae015a2f2
+INFO 2025-07-29 04:17:19,078 signals 76455 131877161144576 Created notification preferences for user 73401fb8-fa49-4f49-a7ec-2c8a4865f4d1
+INFO 2025-07-29 04:17:19,352 signals 76455 131877161144576 Created notification preferences for user fe8685ea-7636-4952-a65a-a4590690865a
+INFO 2025-07-29 04:17:19,614 signals 76455 131877161144576 Created notification preferences for user af0e5b63-1978-4dee-9bf4-9aff15a13ccb
+INFO 2025-07-29 04:17:19,864 signals 76455 131877161144576 Created notification preferences for user fd4dffe0-e20e-4a51-98e6-f7c80cb7cf71
+INFO 2025-07-29 04:17:20,107 signals 76455 131877161144576 Created notification preferences for user feb7bb5f-79af-482c-adb1-811337cfe51e
+INFO 2025-07-29 04:17:20,345 signals 76455 131877161144576 Created notification preferences for user b13e2517-e6cc-40da-85ca-fa7f40773c19
+INFO 2025-07-29 04:17:20,569 signals 76455 131877161144576 Created notification preferences for user 0f06938a-78c6-4747-b226-059cf9bea79d
+INFO 2025-07-29 04:17:20,791 signals 76455 131877161144576 Created notification preferences for user c77466f1-262b-43ee-b647-613fdf1033b8
+INFO 2025-07-29 04:17:21,008 signals 76455 131877161144576 Created notification preferences for user 0cbe51e9-61ec-4fca-9f78-c3b37cbbf7f8
+INFO 2025-07-29 04:17:21,239 signals 76455 131877161144576 Created notification preferences for user 8f7d73bd-b1ce-49bd-a6f9-e8ebd07cb74c
+INFO 2025-07-29 04:17:21,480 signals 76455 131877161144576 Created notification preferences for user b2a012fc-315b-404a-90f8-d755aa24f032
+INFO 2025-07-29 04:17:21,728 signals 76455 131877161144576 Created notification preferences for user f4f093b0-2ebe-4621-ae21-f69defaed368
+INFO 2025-07-29 04:17:21,981 signals 76455 131877161144576 Created notification preferences for user 42d1b4d9-f66b-4808-9542-034ddf2e191b
+INFO 2025-07-29 04:17:22,223 signals 76455 131877161144576 Created notification preferences for user 9a9c3742-b9b2-48f6-accf-81d5a5e0bd19
+INFO 2025-07-29 04:17:22,462 signals 76455 131877161144576 Created notification preferences for user 2d9590cb-b258-4b00-948d-d8036001ccc1
+INFO 2025-07-29 04:17:22,695 signals 76455 131877161144576 Created notification preferences for user a17ad3e3-7e07-4433-8947-b400f2f45972
+INFO 2025-07-29 04:17:22,922 signals 76455 131877161144576 Created notification preferences for user 8ef2faa3-15ee-496e-a56c-a81b9eef4ca2
+INFO 2025-07-29 04:17:23,144 signals 76455 131877161144576 Created notification preferences for user 7056817a-2221-4ee1-aff6-576ab7acd8f5
+INFO 2025-07-29 04:17:23,364 signals 76455 131877161144576 Created notification preferences for user 7d5f745c-1610-470c-aac0-ee7d16fa64e1
+INFO 2025-07-29 04:17:23,581 signals 76455 131877161144576 Created notification preferences for user bc11a2b9-e235-4f16-9c5f-bfce917aa2c7
+INFO 2025-07-29 04:17:23,801 signals 76455 131877161144576 Created notification preferences for user 471a5e9c-c149-4c3b-b1d5-abd3f8a04acf
+INFO 2025-07-29 04:17:24,038 signals 76455 131877161144576 Created notification preferences for user f4f7a520-4f24-433a-b881-db43283e38ea
+INFO 2025-07-29 04:17:24,289 signals 76455 131877161144576 Created notification preferences for user 2558d507-63e4-474b-b685-2c8c5b67ddb0
+INFO 2025-07-29 04:17:24,543 signals 76455 131877161144576 Created notification preferences for user 85ab1b6d-434e-4f92-a25c-a1f985063e3c
+INFO 2025-07-29 04:17:24,784 signals 76455 131877161144576 Created notification preferences for user 7f93757d-2176-4578-809b-0c36c9ca2e1e
+INFO 2025-07-29 04:17:25,020 signals 76455 131877161144576 Created notification preferences for user 45d3bf7a-b986-47c7-8482-94861b6b71e1
+INFO 2025-07-29 04:17:25,251 signals 76455 131877161144576 Created notification preferences for user 2c474a04-bb5c-43f1-bc89-0e823f8573cb
+INFO 2025-07-29 04:17:25,493 signals 76455 131877161144576 Created notification preferences for user fd9ced65-6f14-46b5-9219-a5f8bcdb7330
+INFO 2025-07-29 04:17:25,744 signals 76455 131877161144576 Created notification preferences for user a01688d6-5998-48fe-b8c5-56d10a7546b5
+INFO 2025-07-29 04:17:26,003 signals 76455 131877161144576 Created notification preferences for user f6c2be09-48d9-4b13-a6b7-d2e70fad3401
+INFO 2025-07-29 04:23:17,446 signals 78830 129730599571712 Created notification preferences for user a42a3ecd-c66f-4ba2-942c-e629e8dab1c0
+INFO 2025-07-29 04:23:17,663 signals 78830 129730599571712 Created notification preferences for user 6b56c330-eec0-4b4d-98f7-f38f008c77ae
+INFO 2025-07-29 04:23:17,885 signals 78830 129730599571712 Created notification preferences for user 1a8c08be-2316-41b0-ae1e-b964eb895813
+INFO 2025-07-29 04:23:18,103 signals 78830 129730599571712 Created notification preferences for user 7ec7461b-ec1d-4849-8429-9bfdc8c3314b
+INFO 2025-07-29 04:23:18,318 signals 78830 129730599571712 Created notification preferences for user 6539ec3b-b9cd-46b7-b95b-6a38769c6589
+INFO 2025-07-29 04:23:18,526 signals 78830 129730599571712 Created notification preferences for user 0c82391f-960e-455f-9a71-73be9cac99cf
+INFO 2025-07-29 04:24:13,096 signals 79219 125001873969408 Created notification preferences for user 5744b758-5b91-4acb-b070-24a65bf4f320
+INFO 2025-07-29 04:26:01,969 signals 79956 135790639780096 Created notification preferences for user 54b59825-b3d0-4801-b84a-292b63e7547b
+INFO 2025-07-29 04:26:16,834 signals 80134 135061930127616 Created notification preferences for user e2ef0aea-09d1-40ed-a555-a0d4d894707a
+INFO 2025-07-29 04:26:17,025 signals 80134 135061930127616 Created notification preferences for user 6555c952-210a-4246-9269-a7a3542e6223
+INFO 2025-07-29 04:26:17,219 signals 80134 135061930127616 Created notification preferences for user 8063e2af-04f2-46ae-bf35-58094f933060
+INFO 2025-07-29 04:26:17,408 signals 80134 135061930127616 Created notification preferences for user 35af87f9-b941-45f4-96b6-475013a7786a
+INFO 2025-07-29 04:26:17,605 signals 80134 135061930127616 Created notification preferences for user b3dd530b-a9be-42b3-a050-81f28970ed4c
+INFO 2025-07-29 04:26:17,814 signals 80134 135061930127616 Created notification preferences for user 22c3e959-6320-482b-94c8-59e0e0111dbb
+INFO 2025-07-29 04:26:18,022 signals 80134 135061930127616 Created notification preferences for user 4bd7053a-b08b-4812-851e-2009baa00ec9
+INFO 2025-07-29 04:26:18,232 signals 80134 135061930127616 Created notification preferences for user 207cba35-0704-4294-af91-03dfc416da6a
+INFO 2025-07-29 04:26:18,447 signals 80134 135061930127616 Created notification preferences for user 2d0236d0-4394-41e1-9b4b-948c08346f13
+INFO 2025-07-29 04:26:18,659 signals 80134 135061930127616 Created notification preferences for user f89e2690-5969-4377-8535-fd94bd6a62aa
+INFO 2025-07-29 04:26:18,867 signals 80134 135061930127616 Created notification preferences for user 458f7103-e407-467d-b3d6-80ad4e23ee76
+INFO 2025-07-29 04:26:19,070 signals 80134 135061930127616 Created notification preferences for user c437879b-2535-4e20-9584-eaf792526252
+INFO 2025-07-29 04:26:19,264 signals 80134 135061930127616 Created notification preferences for user 36a8d9bf-d643-432b-b2a4-bb14fb3df775
+INFO 2025-07-29 04:26:19,462 signals 80134 135061930127616 Created notification preferences for user 83ce3890-32a6-4080-854f-d645df587e73
+INFO 2025-07-29 04:26:19,655 signals 80134 135061930127616 Created notification preferences for user 9ffbf72d-8ded-41e5-b102-d7a9d06e96ca
+INFO 2025-07-29 04:26:47,808 autoreload 80411 127335454626048 Watching for file changes with StatReloader
+INFO 2025-07-29 04:26:48,796 server 80411 127335370634944 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 04:26:48,796 server 80411 127335370634944 Configuring endpoint tcp:port=8000:interface=0.0.0.0
+INFO 2025-07-29 04:26:48,796 server 80411 127335370634944 Listening on TCP address 0.0.0.0:8000
+INFO 2025-07-29 04:27:36,405 signals 80775 125144321802496 Created notification preferences for user 2f899f3d-4bc5-43cf-be69-9fed22094214
+ERROR 2025-07-29 04:27:36,491 middleware 80775 125144321802496 Error in security check: object of type '_io.BytesIO' has no len()
+WARNING 2025-07-29 04:27:37,379 logging_config 80775 125144321802496 API request error: GET /resume-templates/
+WARNING 2025-07-29 04:27:37,379 log 80775 125144321802496 Not Found: /resume-templates/
+INFO 2025-07-29 04:28:15,554 signals 80993 125801808744704 Created notification preferences for user 9110bf56-d49a-4d03-8a75-616540cf64cd
+ERROR 2025-07-29 04:28:15,635 middleware 80993 125801808744704 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:28:16,472 logging_config 80993 125801808744704 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:32:18,039 signals 82851 130870829093120 Created notification preferences for user a1d6d1ee-c72a-45ad-9f53-82a388895f8e
+INFO 2025-07-29 04:32:18,258 signals 82851 130870829093120 Created notification preferences for user 2d9ac0a0-7191-4d7c-aad5-f5cf061e3a24
+ERROR 2025-07-29 04:32:18,305 middleware 82851 130870829093120 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:32:18,311 logging_config 82851 130870829093120 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:32:36,030 signals 83033 138303099105536 Created notification preferences for user 238cf598-5a70-4a99-ac0f-bb0eac3c6eb3
+INFO 2025-07-29 04:32:36,235 signals 83033 138303099105536 Created notification preferences for user 351ee84a-eedb-46b0-bab3-569ec79287ea
+ERROR 2025-07-29 04:32:36,264 middleware 83033 138303099105536 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:32:36,269 logging_config 83033 138303099105536 API request: POST /api/resume-templates/
+INFO 2025-07-29 04:32:36,471 signals 83033 138303099105536 Created notification preferences for user 7c907781-5e5b-44e1-91a7-efa4dbc82209
+INFO 2025-07-29 04:32:36,682 signals 83033 138303099105536 Created notification preferences for user c0b5d624-7c6d-4371-a4e6-260b9851e1ce
+ERROR 2025-07-29 04:32:36,683 middleware 83033 138303099105536 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:32:36,686 logging_config 83033 138303099105536 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:32:36,923 signals 83033 138303099105536 Created notification preferences for user 88b599b0-cd86-42e2-89da-37ffe8243b06
+INFO 2025-07-29 04:32:37,144 signals 83033 138303099105536 Created notification preferences for user a1ab2047-f786-4efd-b394-d62628cde783
+ERROR 2025-07-29 04:32:37,146 middleware 83033 138303099105536 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:32:37,148 logging_config 83033 138303099105536 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:32:37,368 signals 83033 138303099105536 Created notification preferences for user d4f651d6-8a14-4747-accb-bc98428c3e1f
+INFO 2025-07-29 04:32:37,586 signals 83033 138303099105536 Created notification preferences for user bf1f431a-473c-4876-9f00-04909406c49a
+ERROR 2025-07-29 04:32:37,588 middleware 83033 138303099105536 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:32:37,591 logging_config 83033 138303099105536 API request: GET /api/resume-templates/popular/
+INFO 2025-07-29 04:32:37,801 signals 83033 138303099105536 Created notification preferences for user a95af3fc-2f00-4929-99f7-ff9469266eed
+INFO 2025-07-29 04:32:38,010 signals 83033 138303099105536 Created notification preferences for user b6d13405-84e8-492a-a2d5-2169756d2e62
+ERROR 2025-07-29 04:32:38,012 middleware 83033 138303099105536 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:32:38,014 logging_config 83033 138303099105536 API request: GET /api/resume-templates/categories/
+INFO 2025-07-29 04:32:38,217 signals 83033 138303099105536 Created notification preferences for user 9632f436-b12e-49a9-8625-b4c5e4fed54a
+INFO 2025-07-29 04:32:38,413 signals 83033 138303099105536 Created notification preferences for user 838ecd03-4e88-4786-9879-6d9e7e9d10ce
+ERROR 2025-07-29 04:32:38,414 middleware 83033 138303099105536 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:32:38,417 logging_config 83033 138303099105536 API request: GET /api/resume-templates/aeec4808-6a26-4872-9ea1-0d0f30e05c41/
+INFO 2025-07-29 04:32:38,620 signals 83033 138303099105536 Created notification preferences for user baf9369b-3a11-4f7d-be7a-65247cf6c0dd
+INFO 2025-07-29 04:32:38,835 signals 83033 138303099105536 Created notification preferences for user 0deee916-4baa-4b2d-b3bb-b1213a17281d
+ERROR 2025-07-29 04:32:38,836 middleware 83033 138303099105536 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:32:38,839 logging_config 83033 138303099105536 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:32:39,060 signals 83033 138303099105536 Created notification preferences for user cef7323e-3a54-4ec0-a3f2-e0244336feee
+INFO 2025-07-29 04:32:39,274 signals 83033 138303099105536 Created notification preferences for user cd2fc977-3667-4026-b7ab-2c097717064f
+ERROR 2025-07-29 04:32:39,275 middleware 83033 138303099105536 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:32:39,278 logging_config 83033 138303099105536 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:32:39,495 signals 83033 138303099105536 Created notification preferences for user 870f540e-02c7-4c63-bc0d-3aebb8f915eb
+INFO 2025-07-29 04:32:39,705 signals 83033 138303099105536 Created notification preferences for user e22b0c4e-ddd5-45a5-a430-e49ee5335e58
+ERROR 2025-07-29 04:32:39,706 middleware 83033 138303099105536 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 04:32:39,709 exceptions 83033 138303099105536 Unhandled Exception: Authentication credentials were not provided.
+WARNING 2025-07-29 04:32:39,709 logging_config 83033 138303099105536 API request error: GET /api/resume-templates/
+WARNING 2025-07-29 04:32:39,710 log 83033 138303099105536 Unauthorized: /api/resume-templates/
+INFO 2025-07-29 04:32:39,922 signals 83033 138303099105536 Created notification preferences for user db08a2e1-b65e-4e08-9aef-88dc57145020
+INFO 2025-07-29 04:32:40,125 signals 83033 138303099105536 Created notification preferences for user 802f1ad7-4124-4a92-a7f6-580e8b6e2df1
+ERROR 2025-07-29 04:32:40,126 middleware 83033 138303099105536 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:32:40,129 logging_config 83033 138303099105536 API request: POST /api/resume-templates/1c5cf3a6-c4f4-4825-807c-3c526cc58c5b/use_template/
+INFO 2025-07-29 04:33:12,320 signals 83241 140260620230912 Created notification preferences for user 8590a38e-3176-41de-8679-8f7bce17a35a
+INFO 2025-07-29 04:33:12,511 signals 83241 140260620230912 Created notification preferences for user 53fcff05-84b8-4a86-a85e-f7682c126cf1
+ERROR 2025-07-29 04:33:12,555 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:12,559 logging_config 83241 140260620230912 API request: POST /api/resume-templates/
+INFO 2025-07-29 04:33:12,754 signals 83241 140260620230912 Created notification preferences for user 6a3894e5-40b7-48c3-a7c5-ac2e785649e4
+INFO 2025-07-29 04:33:12,950 signals 83241 140260620230912 Created notification preferences for user c0cb3885-8684-45b5-ab0d-87d7dbac1c66
+ERROR 2025-07-29 04:33:12,951 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:12,954 logging_config 83241 140260620230912 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:33:13,142 signals 83241 140260620230912 Created notification preferences for user 7cfed988-754a-42e5-8648-49e3e9431be1
+INFO 2025-07-29 04:33:13,332 signals 83241 140260620230912 Created notification preferences for user 72d07b38-6335-425b-95a1-d75147f955d9
+ERROR 2025-07-29 04:33:13,334 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:13,336 logging_config 83241 140260620230912 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:33:13,530 signals 83241 140260620230912 Created notification preferences for user e0faad4e-7836-4ebd-801a-49e07fae416f
+INFO 2025-07-29 04:33:13,725 signals 83241 140260620230912 Created notification preferences for user b5e41295-ffab-4843-b1fa-d8f547bf0e7f
+ERROR 2025-07-29 04:33:13,727 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:13,730 logging_config 83241 140260620230912 API request: GET /api/resume-templates/popular/
+INFO 2025-07-29 04:33:13,926 signals 83241 140260620230912 Created notification preferences for user 91176f89-42e8-4b0e-8da7-bb0cbc9e7dbb
+INFO 2025-07-29 04:33:14,121 signals 83241 140260620230912 Created notification preferences for user e8fdf97b-60fb-4d02-af6f-a6f3ea1f3db1
+ERROR 2025-07-29 04:33:14,122 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:14,125 logging_config 83241 140260620230912 API request: GET /api/resume-templates/categories/
+INFO 2025-07-29 04:33:14,319 signals 83241 140260620230912 Created notification preferences for user 74700a16-b447-4dd9-9fed-be140524f675
+INFO 2025-07-29 04:33:14,511 signals 83241 140260620230912 Created notification preferences for user 4df31690-8afe-4537-a187-2ed7e22aac63
+ERROR 2025-07-29 04:33:14,512 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:14,515 logging_config 83241 140260620230912 API request: GET /api/resume-templates/7c514e12-cbce-42c9-b80a-2e6304fe5057/
+INFO 2025-07-29 04:33:14,708 signals 83241 140260620230912 Created notification preferences for user 345ee097-f93f-4734-8742-08b878d8c454
+INFO 2025-07-29 04:33:14,898 signals 83241 140260620230912 Created notification preferences for user c26994d1-cf91-40b1-88ca-ad86d73a94cd
+ERROR 2025-07-29 04:33:14,899 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:14,902 logging_config 83241 140260620230912 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:33:15,094 signals 83241 140260620230912 Created notification preferences for user 7274e795-d2c1-4d16-98d9-da93844bbefd
+INFO 2025-07-29 04:33:15,284 signals 83241 140260620230912 Created notification preferences for user 4f898a47-0da2-42cc-8a42-e86e662746e4
+ERROR 2025-07-29 04:33:15,285 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:15,289 logging_config 83241 140260620230912 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:33:15,481 signals 83241 140260620230912 Created notification preferences for user bc1856bb-d2a7-4c3e-a828-5563bbe09807
+INFO 2025-07-29 04:33:15,673 signals 83241 140260620230912 Created notification preferences for user 80a5d0f7-6be0-4b70-b0e1-fca5cafe58d6
+ERROR 2025-07-29 04:33:15,674 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 04:33:15,675 exceptions 83241 140260620230912 Unhandled Exception: Authentication credentials were not provided.
+WARNING 2025-07-29 04:33:15,676 logging_config 83241 140260620230912 API request error: GET /api/resume-templates/
+WARNING 2025-07-29 04:33:15,676 log 83241 140260620230912 Unauthorized: /api/resume-templates/
+INFO 2025-07-29 04:33:15,870 signals 83241 140260620230912 Created notification preferences for user a1d01815-adcc-4912-bc29-38162f096432
+INFO 2025-07-29 04:33:16,063 signals 83241 140260620230912 Created notification preferences for user d7bb7360-9cca-4758-a364-0a06dad851f4
+ERROR 2025-07-29 04:33:16,065 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:16,067 logging_config 83241 140260620230912 API request: POST /api/resume-templates/af25a004-9b52-4b35-8220-10f4fb8adb91/use_template/
+INFO 2025-07-29 04:33:16,267 signals 83241 140260620230912 Created notification preferences for user 05d0a1bd-417a-418b-a68e-27eb6c93dcec
+INFO 2025-07-29 04:33:16,469 signals 83241 140260620230912 Created notification preferences for user 8e8bfe40-9030-4be5-af11-c6ea288c6da7
+INFO 2025-07-29 04:33:16,682 signals 83241 140260620230912 Created notification preferences for user e24689f3-3fc2-448a-b8be-c115558cc70e
+INFO 2025-07-29 04:33:16,901 signals 83241 140260620230912 Created notification preferences for user 6b77604d-d72d-481d-b6bb-8598f3cb9f3f
+INFO 2025-07-29 04:33:17,129 signals 83241 140260620230912 Created notification preferences for user ab82872b-4cdd-4ecc-add5-36b0a1fdbb98
+INFO 2025-07-29 04:33:17,367 signals 83241 140260620230912 Created notification preferences for user e1ac9bff-7bb3-40a4-a8e6-066a1ea38f52
+INFO 2025-07-29 04:33:17,605 signals 83241 140260620230912 Created notification preferences for user 04578c06-93d4-45a7-b964-eed29ae4964c
+INFO 2025-07-29 04:33:17,839 signals 83241 140260620230912 Created notification preferences for user 93931600-bb01-42e9-a49d-b4391a61eaba
+INFO 2025-07-29 04:33:18,076 signals 83241 140260620230912 Created notification preferences for user 361f117a-3103-40e8-a5aa-db757a62d20f
+INFO 2025-07-29 04:33:18,321 signals 83241 140260620230912 Created notification preferences for user d06b103d-57cd-4e30-be1f-c1b7ddf7d45d
+INFO 2025-07-29 04:33:18,571 signals 83241 140260620230912 Created notification preferences for user 207d32f4-da25-4871-9cc4-a0a51badd9bf
+INFO 2025-07-29 04:33:18,831 signals 83241 140260620230912 Created notification preferences for user ae015b17-6a8e-4856-b67a-5051a5cc523a
+ERROR 2025-07-29 04:33:18,833 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:18,837 logging_config 83241 140260620230912 API request: GET /api/resume-builder/templates/ead30add-7fdc-4f52-81b2-af832222ea0e/preview/
+INFO 2025-07-29 04:33:19,097 signals 83241 140260620230912 Created notification preferences for user 9fb76b3a-bfb3-4c32-9e1c-f52bee8c8e82
+ERROR 2025-07-29 04:33:19,098 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 04:33:19,100 views 83241 140260620230912 Error generating template preview: No ResumeTemplate matches the given query.
+ERROR 2025-07-29 04:33:19,102 logging_config 83241 140260620230912 API request failed: GET /api/resume-builder/templates/00b8398a-9779-466e-87d9-697a8bafcc6b/preview/
+ERROR 2025-07-29 04:33:19,102 log 83241 140260620230912 Internal Server Error: /api/resume-builder/templates/00b8398a-9779-466e-87d9-697a8bafcc6b/preview/
+INFO 2025-07-29 04:33:19,355 signals 83241 140260620230912 Created notification preferences for user 3e8e5416-4d13-46ee-a740-993f11cb6c02
+ERROR 2025-07-29 04:33:19,357 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:19,360 logging_config 83241 140260620230912 API request: POST /api/user-resume-templates/
+INFO 2025-07-29 04:33:19,610 signals 83241 140260620230912 Created notification preferences for user f639226b-3edc-4404-a967-a35e9c90b495
+ERROR 2025-07-29 04:33:19,612 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:19,616 logging_config 83241 140260620230912 API request: POST /api/user-resume-templates/1/duplicate/
+INFO 2025-07-29 04:33:19,863 signals 83241 140260620230912 Created notification preferences for user 08dff274-23d7-4154-b24b-54d02c7e52c8
+ERROR 2025-07-29 04:33:19,865 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:19,870 logging_config 83241 140260620230912 API request: GET /api/user-resume-templates/
+INFO 2025-07-29 04:33:20,119 signals 83241 140260620230912 Created notification preferences for user 9987b458-49dd-4837-aadc-19a812a8757c
+ERROR 2025-07-29 04:33:20,120 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:20,123 logging_config 83241 140260620230912 API request: GET /api/user-resume-templates/1/preview/
+INFO 2025-07-29 04:33:20,362 signals 83241 140260620230912 Created notification preferences for user 09ae94be-61b8-4c05-8920-d4620de4ac64
+INFO 2025-07-29 04:33:20,594 signals 83241 140260620230912 Created notification preferences for user 93dbd285-852e-4595-92dd-df6c0cd3b39f
+ERROR 2025-07-29 04:33:20,595 middleware 83241 140260620230912 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:33:20,598 logging_config 83241 140260620230912 API request: GET /api/user-resume-templates/
+INFO 2025-07-29 04:33:20,821 signals 83241 140260620230912 Created notification preferences for user 9403b00b-ac3c-487a-aedb-172f1a2643c5
+INFO 2025-07-29 04:33:21,045 signals 83241 140260620230912 Created notification preferences for user 042b4fe2-b9d8-469b-a40c-f866ba9ff049
+INFO 2025-07-29 04:33:21,269 signals 83241 140260620230912 Created notification preferences for user 79790c86-0323-4480-8fb0-7fd774ec349b
+INFO 2025-07-29 04:33:21,487 signals 83241 140260620230912 Created notification preferences for user b3e69dec-c4cf-477a-9f6e-4d595c4fb3b8
+INFO 2025-07-29 04:34:58,610 signals 84172 129896058638592 Created notification preferences for user 2827a076-f1fa-4d7f-90f2-dd99cf515c23
+ERROR 2025-07-29 04:34:58,714 middleware 84172 129896058638592 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 04:34:58,721 exceptions 84172 129896058638592 Unhandled Exception: No ResumeTemplate matches the given query.
+WARNING 2025-07-29 04:34:58,722 logging_config 84172 129896058638592 API request error: GET /api/resume-builder/templates/4989b9e9-8ad8-49ba-a103-2937caffd4d6/preview/
+WARNING 2025-07-29 04:34:58,722 log 84172 129896058638592 Not Found: /api/resume-builder/templates/4989b9e9-8ad8-49ba-a103-2937caffd4d6/preview/
+INFO 2025-07-29 04:35:20,515 signals 84414 137696348246272 Created notification preferences for user b0f6f8db-5167-47a9-a6bb-cc533de6a35e
+INFO 2025-07-29 04:35:20,703 signals 84414 137696348246272 Created notification preferences for user facbaf79-603e-4eca-bac5-149b0c20c8d7
+ERROR 2025-07-29 04:35:20,730 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:20,734 logging_config 84414 137696348246272 API request: POST /api/resume-templates/
+INFO 2025-07-29 04:35:20,917 signals 84414 137696348246272 Created notification preferences for user 4b93e0aa-ab2b-4390-a395-5c0621be1022
+INFO 2025-07-29 04:35:21,111 signals 84414 137696348246272 Created notification preferences for user f13140c7-93b3-4ef6-b836-bb12c28261ea
+ERROR 2025-07-29 04:35:21,112 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:21,115 logging_config 84414 137696348246272 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:35:21,305 signals 84414 137696348246272 Created notification preferences for user 4ac34fb6-8e4a-4ece-94fd-55505c06ef2e
+INFO 2025-07-29 04:35:21,496 signals 84414 137696348246272 Created notification preferences for user ef513ef8-9688-489d-b773-a1aefc94158f
+ERROR 2025-07-29 04:35:21,498 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:21,500 logging_config 84414 137696348246272 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:35:21,694 signals 84414 137696348246272 Created notification preferences for user 220b76c6-c3cb-4204-822c-1cd3f76dd423
+INFO 2025-07-29 04:35:21,887 signals 84414 137696348246272 Created notification preferences for user 9c2ca17d-1aa3-421e-8adc-02c701e0284d
+ERROR 2025-07-29 04:35:21,889 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:21,892 logging_config 84414 137696348246272 API request: GET /api/resume-templates/popular/
+INFO 2025-07-29 04:35:22,087 signals 84414 137696348246272 Created notification preferences for user 2b845810-87be-4e38-97ea-cedc38a0aa3c
+INFO 2025-07-29 04:35:22,283 signals 84414 137696348246272 Created notification preferences for user 93a14d04-ed7f-4ef6-99ae-5d664766e913
+ERROR 2025-07-29 04:35:22,284 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:22,287 logging_config 84414 137696348246272 API request: GET /api/resume-templates/categories/
+INFO 2025-07-29 04:35:22,486 signals 84414 137696348246272 Created notification preferences for user f1f3200f-dbdd-48dd-967e-c1391f329d1e
+INFO 2025-07-29 04:35:22,681 signals 84414 137696348246272 Created notification preferences for user a3630070-f6bb-4257-a393-d8a2d254c5c7
+ERROR 2025-07-29 04:35:22,683 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:22,686 logging_config 84414 137696348246272 API request: GET /api/resume-templates/7f1c0692-579b-4d0d-8e9c-e3d1b3fc0a9c/
+INFO 2025-07-29 04:35:22,881 signals 84414 137696348246272 Created notification preferences for user 5b881e46-0e61-49bf-8337-3dca762a49bb
+INFO 2025-07-29 04:35:23,076 signals 84414 137696348246272 Created notification preferences for user a6a120a5-c89a-4180-96dd-db341730aae3
+ERROR 2025-07-29 04:35:23,077 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:23,080 logging_config 84414 137696348246272 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:35:23,276 signals 84414 137696348246272 Created notification preferences for user 51bd8faa-3666-402f-9472-3329c2250556
+INFO 2025-07-29 04:35:23,476 signals 84414 137696348246272 Created notification preferences for user 241b0e63-8bf3-4877-9e85-b72d2010bd1a
+ERROR 2025-07-29 04:35:23,477 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:23,480 logging_config 84414 137696348246272 API request: GET /api/resume-templates/
+INFO 2025-07-29 04:35:23,673 signals 84414 137696348246272 Created notification preferences for user 6f8c8133-2b8c-4c7c-851c-5f17f3d2a620
+INFO 2025-07-29 04:35:23,863 signals 84414 137696348246272 Created notification preferences for user 4269783a-22ae-400a-9250-6f24f565406f
+ERROR 2025-07-29 04:35:23,864 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 04:35:23,866 exceptions 84414 137696348246272 Unhandled Exception: Authentication credentials were not provided.
+WARNING 2025-07-29 04:35:23,867 logging_config 84414 137696348246272 API request error: GET /api/resume-templates/
+WARNING 2025-07-29 04:35:23,867 log 84414 137696348246272 Unauthorized: /api/resume-templates/
+INFO 2025-07-29 04:35:24,061 signals 84414 137696348246272 Created notification preferences for user a8f9f774-1463-4692-acbb-9d44851a073c
+INFO 2025-07-29 04:35:24,258 signals 84414 137696348246272 Created notification preferences for user fa425553-3063-41b5-a494-db9de1fa34c7
+ERROR 2025-07-29 04:35:24,259 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:24,261 logging_config 84414 137696348246272 API request: POST /api/resume-templates/2bdfd3ab-0a54-4f53-b7a8-33e84733822e/use_template/
+INFO 2025-07-29 04:35:24,458 signals 84414 137696348246272 Created notification preferences for user 2edcb63f-d835-4337-b003-f0cec6d40e85
+INFO 2025-07-29 04:35:24,656 signals 84414 137696348246272 Created notification preferences for user 43aeed78-4bda-4920-8617-fe23e473a0a0
+INFO 2025-07-29 04:35:24,858 signals 84414 137696348246272 Created notification preferences for user e8e308d2-7d23-4957-b0fb-d3459c6f3082
+INFO 2025-07-29 04:35:25,053 signals 84414 137696348246272 Created notification preferences for user aaf591b9-625a-4586-90ac-eb75bd15d65f
+INFO 2025-07-29 04:35:25,248 signals 84414 137696348246272 Created notification preferences for user b2bff1d7-d9c7-4f10-9afa-c15625a6f12a
+INFO 2025-07-29 04:35:25,439 signals 84414 137696348246272 Created notification preferences for user 868f1d35-f555-406e-ad3c-70912a5e3307
+INFO 2025-07-29 04:35:25,630 signals 84414 137696348246272 Created notification preferences for user ce2faef3-cfa1-493d-a4b0-cff0470ad2cb
+INFO 2025-07-29 04:35:25,824 signals 84414 137696348246272 Created notification preferences for user e012f7f5-af2a-4ac4-848b-0dca3f472af1
+INFO 2025-07-29 04:35:26,016 signals 84414 137696348246272 Created notification preferences for user 15e76590-fcf8-4683-853d-f19c8c525e51
+INFO 2025-07-29 04:35:26,206 signals 84414 137696348246272 Created notification preferences for user d3f4f7c9-1d23-4bdb-8a17-03803445ae6e
+INFO 2025-07-29 04:35:26,395 signals 84414 137696348246272 Created notification preferences for user 111d6b91-56b0-46a8-84ae-459d9d71dad1
+INFO 2025-07-29 04:35:26,587 signals 84414 137696348246272 Created notification preferences for user f4456a61-a922-4680-bcb5-987118cada14
+ERROR 2025-07-29 04:35:26,589 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:26,591 logging_config 84414 137696348246272 API request: GET /api/resume-builder/templates/bb09acc6-671f-4421-b4b4-8351f9063014/preview/
+INFO 2025-07-29 04:35:26,788 signals 84414 137696348246272 Created notification preferences for user 732141df-b652-4355-8534-4cf8eeb77ffd
+ERROR 2025-07-29 04:35:26,789 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+ERROR 2025-07-29 04:35:26,792 exceptions 84414 137696348246272 Unhandled Exception: No ResumeTemplate matches the given query.
+WARNING 2025-07-29 04:35:26,793 logging_config 84414 137696348246272 API request error: GET /api/resume-builder/templates/95205669-60c5-432d-8163-4704a95390e1/preview/
+WARNING 2025-07-29 04:35:26,793 log 84414 137696348246272 Not Found: /api/resume-builder/templates/95205669-60c5-432d-8163-4704a95390e1/preview/
+INFO 2025-07-29 04:35:26,991 signals 84414 137696348246272 Created notification preferences for user 3cc39b2d-a669-4ded-83b1-7e363a068a98
+ERROR 2025-07-29 04:35:26,992 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:26,996 logging_config 84414 137696348246272 API request: POST /api/user-resume-templates/
+INFO 2025-07-29 04:35:27,188 signals 84414 137696348246272 Created notification preferences for user 7dbcd2d9-dfa0-4dd3-8a3e-acc52fb6af43
+ERROR 2025-07-29 04:35:27,190 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:27,193 logging_config 84414 137696348246272 API request: POST /api/user-resume-templates/1/duplicate/
+INFO 2025-07-29 04:35:27,386 signals 84414 137696348246272 Created notification preferences for user 57383663-1635-4eed-a05e-609c6df9217e
+ERROR 2025-07-29 04:35:27,387 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:27,391 logging_config 84414 137696348246272 API request: GET /api/user-resume-templates/
+INFO 2025-07-29 04:35:27,586 signals 84414 137696348246272 Created notification preferences for user b254ae8a-44e7-4437-9fe3-88fddc907c1d
+ERROR 2025-07-29 04:35:27,587 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:27,590 logging_config 84414 137696348246272 API request: GET /api/user-resume-templates/1/preview/
+INFO 2025-07-29 04:35:27,789 signals 84414 137696348246272 Created notification preferences for user 531a5b02-7114-4354-8796-6012d2f6d53b
+INFO 2025-07-29 04:35:27,982 signals 84414 137696348246272 Created notification preferences for user bedabb0e-dda4-4160-95d1-b3bb2e14f277
+ERROR 2025-07-29 04:35:27,983 middleware 84414 137696348246272 Error in security check: object of type '_io.BytesIO' has no len()
+INFO 2025-07-29 04:35:27,985 logging_config 84414 137696348246272 API request: GET /api/user-resume-templates/
+INFO 2025-07-29 04:35:28,175 signals 84414 137696348246272 Created notification preferences for user 3a1b4b02-a5ab-4216-9e35-779736a8623f
+INFO 2025-07-29 04:35:28,372 signals 84414 137696348246272 Created notification preferences for user 7f1b3b69-5e79-489c-ae54-b9c55e3006ff
+INFO 2025-07-29 04:35:28,565 signals 84414 137696348246272 Created notification preferences for user 752570fb-bc5f-4e6e-81f3-9f06aec5af67
+INFO 2025-07-29 04:35:28,759 signals 84414 137696348246272 Created notification preferences for user 661b94c4-f075-45ba-ad11-a3aabf4991d6
+INFO 2025-07-29 04:55:43,594 signals 110679 126733764022528 Created notification preferences for user 2899066f-ec76-4a81-be16-90c6ab7e1839
+INFO 2025-07-29 04:55:43,599 notification_service 110679 126733764022528 Notification queued for offline user 2899066f-ec76-4a81-be16-90c6ab7e1839
+INFO 2025-07-29 04:55:43,599 notification_service 110679 126733764022528 Notification created and delivered: 8d5c7b0a-5690-4fea-bd91-0062e49f1350
+ERROR 2025-07-29 04:55:43,602 notification_service 110679 126733764022528 Error getting user notifications: Cannot resolve keyword 'priority_order' into field. Choices are: application, application_id, created_at, data, expires_at, id, is_read, is_sent, job_post, job_post_id, message, notification_type, priority, read_at, recipient, recipient_id, sent_at, title, updated_at
+INFO 2025-07-29 04:56:48,800 notification_service 111078 139368231338240 Notification 8d5c7b0a-5690-4fea-bd91-0062e49f1350 marked as read

@@ -136,8 +136,8 @@ class EmailVerificationTestCase(APITestCase):
     
     def setUp(self):
         self.client = APIClient()
-        self.request_verification_url = reverse('request-email-verification')
-        self.verify_email_url = reverse('verify-email')
+        self.request_verification_url = reverse('v1:request-email-verification')
+        self.verify_email_url = reverse('v1:verify-email')
         
         # Create test user
         self.user = User.objects.create_user(
@@ -252,8 +252,8 @@ class PasswordResetTestCase(APITestCase):
     
     def setUp(self):
         self.client = APIClient()
-        self.request_reset_url = reverse('request-password-reset')
-        self.reset_password_url = reverse('reset-password')
+        self.request_reset_url = reverse('v1:request-password-reset')
+        self.reset_password_url = reverse('v1:reset-password')
         
         # Create test user
         self.user = User.objects.create_user(
@@ -395,9 +395,9 @@ class UserProfileManagementTestCase(APITestCase):
     
     def setUp(self):
         self.client = APIClient()
-        self.change_password_url = reverse('change-password')
-        self.profile_url = reverse('user-profile')
-        self.delete_account_url = reverse('delete-account')
+        self.change_password_url = reverse('v1:change-password')
+        self.profile_url = reverse('v1:user-profile')
+        self.delete_account_url = reverse('v1:delete-account')
         
         # Create test users
         self.job_seeker = User.objects.create_user(
@@ -569,6 +569,65 @@ class UserProfileManagementTestCase(APITestCase):
         response = self.client.delete(self.delete_account_url)
         
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+    
+    def test_profile_picture_upload_valid(self):
+        """Test valid profile picture upload with image validation and resizing"""
+        self.client.force_authenticate(user=self.job_seeker)
+        
+        # Create a simple test image
+        from PIL import Image
+        import io
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        
+        # Create a test image
+        image = Image.new('RGB', (800, 600), color='red')
+        image_io = io.BytesIO()
+        image.save(image_io, format='JPEG')
+        image_io.seek(0)
+        
+        uploaded_file = SimpleUploadedFile(
+            "test_profile.jpg",
+            image_io.getvalue(),
+            content_type="image/jpeg"
+        )
+        
+        data = {
+            'first_name': self.job_seeker.first_name,
+            'last_name': self.job_seeker.last_name,
+            'profile_picture': uploaded_file
+        }
+        
+        response = self.client.patch(self.profile_url, data, format='multipart')
+        
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('message', response.data)
+        
+        # Verify profile picture was uploaded
+        self.job_seeker.refresh_from_db()
+        self.assertTrue(self.job_seeker.profile_picture)
+    
+    def test_profile_picture_upload_too_large(self):
+        """Test profile picture upload with file too large"""
+        self.client.force_authenticate(user=self.job_seeker)
+        
+        # Create a large file (simulate 6MB)
+        from django.core.files.uploadedfile import SimpleUploadedFile
+        
+        large_content = b'x' * (6 * 1024 * 1024)  # 6MB
+        uploaded_file = SimpleUploadedFile(
+            "large_image.jpg",
+            large_content,
+            content_type="image/jpeg"
+        )
+        
+        data = {
+            'profile_picture': uploaded_file
+        }
+        
+        response = self.client.patch(self.profile_url, data, format='multipart')
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('profile_picture', response.data)
 
 
 class UserProfileViewSetTestCase(APITestCase):

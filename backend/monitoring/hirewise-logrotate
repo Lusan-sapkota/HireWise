@@ -1,0 +1,16 @@
+# HireWise Log Rotation Configuration
+/home/*/Documents/HireWise/backend/logs/*.log {
+    daily
+    missingok
+    rotate 30
+    compress
+    delaycompress
+    notifempty
+    create 644 www-data www-data
+    postrotate
+        # Restart Django if running
+        if [ -f /var/run/hirewise.pid ]; then
+            kill -USR1 `cat /var/run/hirewise.pid`
+        fi
+    endscript
+}

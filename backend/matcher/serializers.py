@@ -6,7 +6,9 @@ from django.utils import timezone
 from .models import (
     User, JobSeekerProfile, RecruiterProfile, Resume, JobPost,
     Application, AIAnalysisResult, InterviewSession, Skill, UserSkill,
-    EmailVerificationToken, PasswordResetToken, JobAnalytics, JobView
+    EmailVerificationToken, PasswordResetToken, JobAnalytics, JobView,
+    Notification, ResumeTemplate, ResumeTemplateVersion, UserResumeTemplate,
+    Conversation, Message
 )
 
 
@@ -391,3 +393,218 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
         if value and len(value) < 10:
             raise serializers.ValidationError("Phone number must be at least 10 digits")
         return value
+    
+    def validate_profile_picture(self, value):
+        """Validate profile picture upload"""
+        if value:
+            # Import file validation utilities
+            from .file_utils import FileSecurityValidator
+            from .file_optimization import FileOptimizer
+            
+            # Validate file security
+            validation_result = FileSecurityValidator.validate_file(value, 'image')
+            if not validation_result['is_valid']:
+                raise serializers.ValidationError(
+                    f"Invalid image file: {', '.join(validation_result['errors'])}"
+                )
+            
+            # Check file size (5MB limit)
+            if value.size > 5 * 1024 * 1024:
+                raise serializers.ValidationError("Image file size must be less than 5MB")
+            
+            # Optimize and resize image
+            try:
+                optimizer = FileOptimizer()
+                optimized_file, _ = optimizer.optimize_file(value)
+                return optimized_file
+            except Exception as e:
+                raise serializers.ValidationError(f"Error processing image: {str(e)}")
+        
+        return value
+
+class NotificationSerializer(serializers.ModelSerializer):
+    """Serializer for Notification model"""
+    
+    class Meta:
+        model = Notification
+        fields = [
+            'id', 'recipient', 'notification_type', 'title', 'message',
+            'is_read', 'read_at', 'data', 'created_at'
+        ]
+        read_only_fields = ['id', 'created_at']
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # Add human-readable notification type
+        data['notification_type_display'] = instance.get_notification_type_display()
+        return data
+
+
+class ResumeTemplateSerializer(serializers.ModelSerializer):
+    """Serializer for ResumeTemplate model"""
+    category_display = serializers.CharField(source='get_category_display', read_only=True)
+    created_by_name = serializers.CharField(source='created_by.username', read_only=True)
+    default_sections = serializers.SerializerMethodField()
+    is_popular = serializers.BooleanField(read_only=True)
+    
+    class Meta:
+        model = ResumeTemplate
+        fields = [
+            'id', 'name', 'description', 'category', 'category_display',
+            'template_data', 'preview_image', 'is_active', 'is_premium',
+            'version', 'created_by', 'created_by_name', 'created_at',
+            'updated_at', 'usage_count', 'sections', 'default_sections',
+            'is_popular'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at', 'usage_count']
+    
+    def get_default_sections(self, obj):
+        """Get default sections for the template"""
+        return obj.get_default_sections()
+    
+    def validate_template_data(self, value):
+        """Validate template data structure"""
+        if not isinstance(value, dict):
+            raise serializers.ValidationError("Template data must be a valid JSON object")
+        
+        required_keys = ['styles', 'layout']
+        for key in required_keys:
+            if key not in value:
+                raise serializers.ValidationError(f"Template data must contain '{key}' key")
+        
+        return value
+    
+    def validate_sections(self, value):
+        """Validate sections structure"""
+        if not isinstance(value, list):
+            raise serializers.ValidationError("Sections must be a list")
+        
+        for section in value:
+            if not isinstance(section, dict):
+                raise serializers.ValidationError("Each section must be a dictionary")
+            
+            required_keys = ['name', 'title', 'required', 'order']
+            for key in required_keys:
+                if key not in section:
+                    raise serializers.ValidationError(f"Section must contain '{key}' key")
+        
+        return value
+
+
+class ResumeTemplateVersionSerializer(serializers.ModelSerializer):
+    """Serializer for ResumeTemplateVersion model"""
+    template_name = serializers.CharField(source='template.name', read_only=True)
+    created_by_name = serializers.CharField(source='created_by.username', read_only=True)
+    
+    class Meta:
+        model = ResumeTemplateVersion
+        fields = [
+            'id', 'template', 'template_name', 'version_number',
+            'template_data', 'sections', 'change_notes', 'created_by',
+            'created_by_name', 'created_at', 'is_current'
+        ]
+        read_only_fields = ['id', 'created_at']
+    
+    def validate_version_number(self, value):
+        """Validate version number format"""
+        import re
+        if not re.match(r'^\d+\.\d+(\.\d+)?$', value):
+            raise serializers.ValidationError("Version number must be in format X.Y or X.Y.Z")
+        return value
+
+
+class UserResumeTemplateSerializer(serializers.ModelSerializer):
+    """Serializer for UserResumeTemplate model"""
+    base_template_name = serializers.CharField(source='base_template.name', read_only=True)
+    base_template_category = serializers.CharField(source='base_template.category', read_only=True)
+    merged_template_data = serializers.SerializerMethodField()
+    merged_sections = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = UserResumeTemplate
+        fields = [
+            'id', 'user', 'base_template', 'base_template_name',
+            'base_template_category', 'name', 'customized_data',
+            'customized_sections', 'merged_template_data', 'merged_sections',
+            'is_active', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'user', 'created_at', 'updated_at']
+    
+    def get_merged_template_data(self, obj):
+        """Get merged template data"""
+        return obj.get_merged_template_data()
+    
+    def get_merged_sections(self, obj):
+        """Get merged sections"""
+        return obj.get_merged_sections()
+    
+    def validate_name(self, value):
+        """Validate template name uniqueness for user"""
+        user = self.context['request'].user
+        if UserResumeTemplate.objects.filter(user=user, name=value).exclude(id=self.instance.id if self.instance else None).exists():
+            raise serializers.ValidationError("You already have a template with this name")
+        return value
+
+
+class ResumeTemplateListSerializer(serializers.ModelSerializer):
+    """Lightweight serializer for resume template listings"""
+    category_display = serializers.CharField(source='get_category_display', read_only=True)
+    is_popular = serializers.BooleanField(read_only=True)
+    
+    class Meta:
+        model = ResumeTemplate
+        fields = [
+            'id', 'name', 'description', 'category', 'category_display',
+            'preview_image', 'is_premium', 'usage_count', 'is_popular',
+            'created_at'
+        ]
+
+
+class ConversationSerializer(serializers.ModelSerializer):
+    """Serializer for Conversation model"""
+    participants = UserSerializer(many=True, read_only=True)
+    last_message = serializers.SerializerMethodField()
+    unread_count = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Conversation
+        fields = [
+            'id', 'participants', 'conversation_type', 'subject',
+            'related_job', 'related_application', 'is_active',
+            'last_message', 'unread_count', 'created_at', 'updated_at'
+        ]
+        read_only_fields = ['id', 'created_at', 'updated_at']
+    
+    def get_last_message(self, obj):
+        last_msg = obj.last_message
+        if last_msg:
+            return {
+                'id': str(last_msg.id),
+                'content': last_msg.content,
+                'sender': last_msg.sender.username,
+                'sent_at': last_msg.sent_at
+            }
+        return None
+    
+    def get_unread_count(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.messages.filter(is_read=False).exclude(sender=request.user).count()
+        return 0
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    """Serializer for Message model"""
+    sender = UserSerializer(read_only=True)
+    
+    class Meta:
+        model = Message
+        fields = [
+            'id', 'conversation', 'sender', 'content', 'message_type',
+            'attachment', 'is_read', 'read_at', 'sent_at', 'edited_at'
+        ]
+        read_only_fields = ['id', 'sender', 'sent_at', 'edited_at']
+    
+    def create(self, validated_data):
+        validated_data['sender'] = self.context['request'].user
+        return super().create(validated_data)
