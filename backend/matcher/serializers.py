@@ -608,3 +608,190 @@ class MessageSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data['sender'] = self.context['request'].user
         return super().create(validated_data)
+
+
+# =============================================================================
+# AI RESUME ASSISTANCE SERIALIZERS
+# =============================================================================
+
+class ResumeAnalysisRequestSerializer(serializers.Serializer):
+    """Serializer for resume analysis requests"""
+    resume_content = serializers.CharField(required=True, min_length=50)
+    target_job = serializers.CharField(required=False, allow_blank=True)
+    job_requirements = serializers.ListField(
+        child=serializers.CharField(max_length=500),
+        required=False,
+        allow_empty=True
+    )
+    
+    def validate_resume_content(self, value):
+        if len(value.split()) < 20:
+            raise serializers.ValidationError("Resume content is too short for meaningful analysis")
+        return value
+
+
+class ResumeJobAnalysisRequestSerializer(serializers.Serializer):
+    """Serializer for resume-job analysis requests"""
+    resume_id = serializers.UUIDField(required=True)
+    job_id = serializers.UUIDField(required=True)
+    
+    def validate_resume_id(self, value):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            if request.user.user_type == 'job_seeker':
+                if not Resume.objects.filter(id=value, job_seeker=request.user).exists():
+                    raise serializers.ValidationError("Resume not found or access denied")
+            else:
+                if not Resume.objects.filter(id=value).exists():
+                    raise serializers.ValidationError("Resume not found")
+        return value
+    
+    def validate_job_id(self, value):
+        if not JobPost.objects.filter(id=value, is_active=True).exists():
+            raise serializers.ValidationError("Job post not found or inactive")
+        return value
+
+
+class SkillGapAnalysisRequestSerializer(serializers.Serializer):
+    """Serializer for skill gap analysis requests"""
+    resume_content = serializers.CharField(required=True, min_length=50)
+    job_requirements = serializers.ListField(
+        child=serializers.CharField(max_length=500),
+        required=True,
+        min_length=1
+    )
+    
+    def validate_job_requirements(self, value):
+        if not value:
+            raise serializers.ValidationError("At least one job requirement is required")
+        return value
+
+
+class KeywordOptimizationRequestSerializer(serializers.Serializer):
+    """Serializer for keyword optimization requests"""
+    resume_content = serializers.CharField(required=True, min_length=50)
+    target_job = serializers.CharField(required=False, allow_blank=True)
+    job_requirements = serializers.ListField(
+        child=serializers.CharField(max_length=500),
+        required=False,
+        allow_empty=True
+    )
+    
+    def validate(self, data):
+        if not data.get('target_job') and not data.get('job_requirements'):
+            raise serializers.ValidationError(
+                "Either target_job or job_requirements must be provided"
+            )
+        return data
+
+
+class ResumeScoreRequestSerializer(serializers.Serializer):
+    """Serializer for resume scoring requests"""
+    resume_content = serializers.CharField(required=True, min_length=50)
+
+
+class ResumeContentSuggestionsRequestSerializer(serializers.Serializer):
+    """Serializer for resume content suggestions requests"""
+    job_title = serializers.CharField(required=True, max_length=255)
+    experience_level = serializers.ChoiceField(
+        choices=['entry', 'mid', 'senior', 'lead'],
+        required=True
+    )
+    skills = serializers.ListField(
+        child=serializers.CharField(max_length=100),
+        required=False,
+        allow_empty=True
+    )
+    industry = serializers.CharField(required=False, allow_blank=True, max_length=100)
+    
+    def validate_job_title(self, value):
+        if len(value.strip()) < 3:
+            raise serializers.ValidationError("Job title must be at least 3 characters long")
+        return value.strip()
+
+
+class ResumeAnalysisResponseSerializer(serializers.Serializer):
+    """Serializer for resume analysis responses"""
+    success = serializers.BooleanField()
+    overall_score = serializers.FloatField(required=False)
+    category_scores = serializers.DictField(required=False)
+    strengths = serializers.ListField(child=serializers.CharField(), required=False)
+    weaknesses = serializers.ListField(child=serializers.CharField(), required=False)
+    suggestions = serializers.ListField(child=serializers.CharField(), required=False)
+    keyword_analysis = serializers.DictField(required=False)
+    skill_gap_analysis = serializers.DictField(required=False)
+    improvement_recommendations = serializers.ListField(
+        child=serializers.DictField(),
+        required=False
+    )
+    processing_time = serializers.FloatField(required=False)
+    error = serializers.CharField(required=False)
+
+
+class SkillGapAnalysisResponseSerializer(serializers.Serializer):
+    """Serializer for skill gap analysis responses"""
+    success = serializers.BooleanField()
+    alignment_score = serializers.FloatField(required=False)
+    technical_skills = serializers.DictField(required=False)
+    soft_skills = serializers.DictField(required=False)
+    certifications = serializers.DictField(required=False)
+    priority_gaps = serializers.ListField(child=serializers.CharField(), required=False)
+    error = serializers.CharField(required=False)
+
+
+class KeywordOptimizationResponseSerializer(serializers.Serializer):
+    """Serializer for keyword optimization responses"""
+    success = serializers.BooleanField()
+    score = serializers.FloatField(required=False)
+    found_keywords = serializers.ListField(child=serializers.CharField(), required=False)
+    missing_keywords = serializers.ListField(child=serializers.CharField(), required=False)
+    industry = serializers.CharField(required=False)
+    keyword_density = serializers.FloatField(required=False)
+    error = serializers.CharField(required=False)
+
+
+class ResumeScoreResponseSerializer(serializers.Serializer):
+    """Serializer for resume scoring responses"""
+    success = serializers.BooleanField()
+    overall_score = serializers.FloatField(required=False)
+    category_scores = serializers.DictField(required=False)
+    strengths = serializers.ListField(child=serializers.CharField(), required=False)
+    weaknesses = serializers.ListField(child=serializers.CharField(), required=False)
+    word_count = serializers.IntegerField(required=False)
+    character_count = serializers.IntegerField(required=False)
+    error = serializers.CharField(required=False)
+
+
+class ResumeContentSuggestionsResponseSerializer(serializers.Serializer):
+    """Serializer for resume content suggestions responses"""
+    success = serializers.BooleanField()
+    suggestions = serializers.DictField(required=False)
+    job_title = serializers.CharField(required=False)
+    experience_level = serializers.CharField(required=False)
+    industry = serializers.CharField(required=False)
+    error = serializers.CharField(required=False)
+
+
+class ResumeAnalysisHistorySerializer(serializers.ModelSerializer):
+    """Serializer for resume analysis history"""
+    job_post = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = AIAnalysisResult
+        fields = [
+            'id', 'analysis_type', 'processed_at', 'confidence_score',
+            'processing_time', 'analysis_result', 'job_post'
+        ]
+        read_only_fields = ['id', 'processed_at']
+    
+    def get_job_post(self, obj):
+        if obj.job_post:
+            return {
+                'id': str(obj.job_post.id),
+                'title': obj.job_post.title,
+                'company': (obj.job_post.recruiter.recruiter_profile.company_name 
+                           if hasattr(obj.job_post.recruiter, 'recruiter_profile') 
+                           else 'Unknown')
+            }
+        return None
+        return super().create(validated_data)

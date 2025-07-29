@@ -25,6 +25,8 @@ urlpatterns = [
     path('auth/jwt/logout/', views.jwt_logout_view, name='jwt-logout'),
     path('auth/jwt/token/', views.CustomTokenObtainPairView.as_view(), name='jwt-token-obtain-pair'),
     path('auth/jwt/token/refresh/', views.CustomTokenRefreshView.as_view(), name='jwt-token-refresh'),
+    # Google OAuth endpoint
+    path('auth/google/', views.google_login_view, name='google-login'),
     
     # Legacy authentication endpoints (for backward compatibility)
     path('auth/register/', views.RegisterView.as_view(), name='register'),
@@ -113,6 +115,13 @@ urlpatterns = [
     path('resume-builder/generate/', views.generate_resume_content, name='generate-resume-content'),
     path('resume-builder/export/', views.export_resume, name='export-resume'),
     path('resume-builder/suggestions/', views.get_resume_suggestions, name='resume-suggestions'),
+    
+    # AI Resume Assistance endpoints
+    path('resume-analysis/analyze-for-job/', views.analyze_resume_for_job, name='analyze-resume-for-job'),
+    path('resume-analysis/skill-gap/', views.get_skill_gap_analysis, name='skill-gap-analysis'),
+    path('resume-analysis/score/', views.score_resume_content, name='score-resume-content'),
+    path('resume-analysis/keywords/', views.get_keyword_optimization, name='keyword-optimization'),
+    path('resume-analysis/<uuid:resume_id>/history/', views.get_resume_analysis_history, name='resume-analysis-history'),
     
     # AI Interview endpoints
     path('ai-interview/start/', views.start_ai_interview, name='start-ai-interview'),

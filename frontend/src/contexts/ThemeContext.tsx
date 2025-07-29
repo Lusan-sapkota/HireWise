@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -7,37 +7,48 @@ interface ThemeContextType {
   toggleTheme: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
-};
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>('light');
+  const getInitialTheme = (): Theme => {
+    const stored = localStorage.getItem('hirewise-theme') as Theme | null;
+    if (stored) return stored;
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+    return 'light';
+  };
+
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const [userOverride, setUserOverride] = useState<boolean>(() => !!localStorage.getItem('hirewise-theme'));
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('hirewise-theme') as Theme;
-    if (savedTheme) {
-      setTheme(savedTheme);
+    if (userOverride) return; // Don't listen to system if user toggled
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (e: MediaQueryListEvent) => {
+      setTheme(e.matches ? 'dark' : 'light');
+    };
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, [userOverride]);
+
+  useEffect(() => {
+    if (userOverride) {
+      localStorage.setItem('hirewise-theme', theme);
     }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('hirewise-theme', theme);
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [theme]);
+  }, [theme, userOverride]);
 
   const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    setTheme(prev => {
+      const newTheme = prev === 'light' ? 'dark' : 'light';
+      setUserOverride(true);
+      localStorage.setItem('hirewise-theme', newTheme);
+      return newTheme;
+    });
   };
 
   return (
@@ -46,3 +57,5 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     </ThemeContext.Provider>
   );
 };
+
+// Only export ThemeProvider and ThemeContext from this file for Vite Fast Refresh compatibility

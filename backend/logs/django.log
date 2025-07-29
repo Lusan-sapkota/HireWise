@@ -3020,3 +3020,383 @@ INFO 2025-07-29 04:55:43,599 notification_service 110679 126733764022528 Notific
 INFO 2025-07-29 04:55:43,599 notification_service 110679 126733764022528 Notification created and delivered: 8d5c7b0a-5690-4fea-bd91-0062e49f1350
 ERROR 2025-07-29 04:55:43,602 notification_service 110679 126733764022528 Error getting user notifications: Cannot resolve keyword 'priority_order' into field. Choices are: application, application_id, created_at, data, expires_at, id, is_read, is_sent, job_post, job_post_id, message, notification_type, priority, read_at, recipient, recipient_id, sent_at, title, updated_at
 INFO 2025-07-29 04:56:48,800 notification_service 111078 139368231338240 Notification 8d5c7b0a-5690-4fea-bd91-0062e49f1350 marked as read
+INFO 2025-07-29 16:30:11,427 autoreload 63973 126214524616960 Watching for file changes with StatReloader
+INFO 2025-07-29 16:30:12,711 server 63973 126214431905472 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 16:30:12,711 server 63973 126214431905472 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 16:30:12,712 server 63973 126214431905472 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 16:30:48,440 autoreload 63973 126214524616960 /home/lusan/Documents/HireWise/backend/matcher/views.py changed, reloading.
+INFO 2025-07-29 16:30:49,789 autoreload 66071 137732756427008 Watching for file changes with StatReloader
+INFO 2025-07-29 16:30:51,501 server 66071 137732663776960 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 16:30:51,502 server 66071 137732663776960 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 16:30:51,503 server 66071 137732663776960 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 16:31:43,520 autoreload 66071 137732756427008 /home/lusan/Documents/HireWise/backend/matcher/urls.py changed, reloading.
+INFO 2025-07-29 16:31:44,328 autoreload 66802 130483156238592 Watching for file changes with StatReloader
+INFO 2025-07-29 16:31:45,301 server 66802 130483063367360 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 16:31:45,301 server 66802 130483063367360 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 16:31:45,301 server 66802 130483063367360 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 16:32:46,198 autoreload 66802 130483156238592 /home/lusan/Documents/HireWise/backend/matcher/serializers.py changed, reloading.
+INFO 2025-07-29 16:32:47,464 autoreload 68314 131961278275840 Watching for file changes with StatReloader
+INFO 2025-07-29 16:32:48,648 server 68314 131961185539776 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 16:32:48,648 server 68314 131961185539776 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 16:32:48,649 server 68314 131961185539776 Listening on TCP address 127.0.0.1:8000
+WARNING 2025-07-29 16:35:46,875 ml_services 73429 128502988865792 Gemini API key not configured
+INFO 2025-07-29 16:35:49,332 signals 73429 128502988865792 Created notification preferences for user 0dca27fd-9395-4103-be9f-7168910ca4bf
+INFO 2025-07-29 16:35:49,560 signals 73429 128502988865792 Created notification preferences for user 536b1991-ad68-4ec2-a389-e8e3f817c2f0
+ERROR 2025-07-29 16:35:49,562 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:49,563 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:49,563 signals 73429 128502988865792 Job posted notification sent for job c182de41-2537-4c9e-b48c-0db145a1cc15: Senior Python Developer
+INFO 2025-07-29 16:35:49,817 signals 73429 128502988865792 Created notification preferences for user 75ec61fa-25a8-48c1-a24d-619b34ab23ce
+INFO 2025-07-29 16:35:50,056 signals 73429 128502988865792 Created notification preferences for user 4cbfa649-00a9-4e75-8723-92d69a6e1a6a
+ERROR 2025-07-29 16:35:50,057 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:50,058 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:50,058 signals 73429 128502988865792 Job posted notification sent for job e520352c-2335-4b51-96f7-3047754121c5: Senior Python Developer
+INFO 2025-07-29 16:35:50,290 signals 73429 128502988865792 Created notification preferences for user a1886852-ffbc-4709-8c32-9a5cc07f06a4
+INFO 2025-07-29 16:35:50,516 signals 73429 128502988865792 Created notification preferences for user d6680083-08ce-41d7-95c7-1d30c7d825f8
+ERROR 2025-07-29 16:35:50,517 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:50,517 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:50,517 signals 73429 128502988865792 Job posted notification sent for job 3f3851f5-d13f-4242-85d1-6c23ba6bbd9c: Senior Python Developer
+INFO 2025-07-29 16:35:50,741 signals 73429 128502988865792 Created notification preferences for user 173733b8-8e8e-4ffb-9b0e-65ac4fa54f10
+INFO 2025-07-29 16:35:50,962 signals 73429 128502988865792 Created notification preferences for user 28d7f00f-55a3-42ec-8ea2-937b22513516
+ERROR 2025-07-29 16:35:50,963 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:50,963 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:50,963 signals 73429 128502988865792 Job posted notification sent for job 48a89896-67f6-44bf-a882-2e00ef6dd8c3: Senior Python Developer
+INFO 2025-07-29 16:35:51,178 signals 73429 128502988865792 Created notification preferences for user 7eedf408-8270-4bf2-a4c7-34fb24c06bf1
+INFO 2025-07-29 16:35:51,389 signals 73429 128502988865792 Created notification preferences for user 0e64e807-0a6b-4a9c-8371-d14dc5324d89
+ERROR 2025-07-29 16:35:51,390 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:51,390 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:51,390 signals 73429 128502988865792 Job posted notification sent for job 86a8c0d7-c14f-4e73-915d-bc9806b2e6d2: Senior Python Developer
+INFO 2025-07-29 16:35:51,600 signals 73429 128502988865792 Created notification preferences for user daac8c6b-d52d-4d08-90bd-206adac56950
+INFO 2025-07-29 16:35:51,802 signals 73429 128502988865792 Created notification preferences for user 962f91db-7b69-45c3-b754-0ca64cd6af2b
+ERROR 2025-07-29 16:35:51,803 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:51,803 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:51,804 signals 73429 128502988865792 Job posted notification sent for job 543dfa8e-29d7-4260-99a3-7247bdf9c4d9: Senior Python Developer
+INFO 2025-07-29 16:35:52,008 signals 73429 128502988865792 Created notification preferences for user d405e982-f5c2-42e8-b62d-9aa45d3017cc
+INFO 2025-07-29 16:35:52,208 signals 73429 128502988865792 Created notification preferences for user b7a849bc-594b-446a-8fd8-2790b3080d32
+ERROR 2025-07-29 16:35:52,209 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:52,209 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:52,209 signals 73429 128502988865792 Job posted notification sent for job 1015ffbe-71f7-4ef5-8769-b7177f3086a4: Senior Python Developer
+INFO 2025-07-29 16:35:52,439 signals 73429 128502988865792 Created notification preferences for user f1b67252-6c99-4a33-89b4-f50f65422048
+INFO 2025-07-29 16:35:52,675 signals 73429 128502988865792 Created notification preferences for user a9bc8290-d91b-4cb9-b0e7-5c4921a106a1
+ERROR 2025-07-29 16:35:52,676 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:52,677 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:52,677 signals 73429 128502988865792 Job posted notification sent for job 01ea840c-9fc2-4adb-bc6b-300907b2e266: Senior Python Developer
+INFO 2025-07-29 16:35:52,911 signals 73429 128502988865792 Created notification preferences for user 68ec695b-6336-46a6-8488-b010070569bf
+INFO 2025-07-29 16:35:53,134 signals 73429 128502988865792 Created notification preferences for user b5a15eff-8d5b-42d3-a604-78731758ecd7
+ERROR 2025-07-29 16:35:53,135 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:53,135 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:53,135 signals 73429 128502988865792 Job posted notification sent for job fd4591ce-c805-4bef-9919-49835b1d02a7: Senior Python Developer
+INFO 2025-07-29 16:35:53,353 signals 73429 128502988865792 Created notification preferences for user 48570b95-3d0c-462e-a231-86d1bcec67b2
+INFO 2025-07-29 16:35:53,566 signals 73429 128502988865792 Created notification preferences for user 50d5a751-fd12-48a2-b5d6-a14eb6bbb010
+ERROR 2025-07-29 16:35:53,567 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:53,567 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:53,567 signals 73429 128502988865792 Job posted notification sent for job 4a7a8d37-7fdb-4909-9b16-234cb1d41cc3: Senior Python Developer
+INFO 2025-07-29 16:35:53,778 signals 73429 128502988865792 Created notification preferences for user 13d744cf-3b1c-456f-a3f6-2d102ba6d52c
+INFO 2025-07-29 16:35:53,986 signals 73429 128502988865792 Created notification preferences for user 77c4832a-2b41-4d33-9b7c-e06a11728412
+ERROR 2025-07-29 16:35:53,987 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:53,987 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:53,987 signals 73429 128502988865792 Job posted notification sent for job 0a699bc0-6f83-4e5f-99cc-173a521d9430: Senior Python Developer
+INFO 2025-07-29 16:35:54,219 signals 73429 128502988865792 Created notification preferences for user b34d93bd-98ea-4ebf-b97e-1d0a88d99bbb
+INFO 2025-07-29 16:35:54,451 signals 73429 128502988865792 Created notification preferences for user d38445e5-7a1d-40c1-8e81-d049f6336019
+ERROR 2025-07-29 16:35:54,452 notification_service 73429 128502988865792 Error getting notification template: Cannot resolve keyword 'delivery_method' into field. Choices are: available_variables, created_at, delivery_channel, email_html_template, email_subject_template, id, is_active, is_default, message_template, template_type, title_template, updated_at
+ERROR 2025-07-29 16:35:54,453 notification_service 73429 128502988865792 Error sending job posted notification: 'JobPost' object has no attribute 'company_name'
+INFO 2025-07-29 16:35:54,453 signals 73429 128502988865792 Job posted notification sent for job 1d319df6-f4e2-481b-be82-b9f2002c5b02: Senior Python Developer
+WARNING 2025-07-29 16:35:54,454 ml_services 73429 128502988865792 GEMINI_API_KEY not configured, resume analysis will be limited
+WARNING 2025-07-29 16:35:54,455 ml_services 73429 128502988865792 GEMINI_API_KEY not configured, resume analysis will be limited
+WARNING 2025-07-29 16:35:54,455 ml_services 73429 128502988865792 GEMINI_API_KEY not configured, resume analysis will be limited
+WARNING 2025-07-29 16:35:54,456 ml_services 73429 128502988865792 GEMINI_API_KEY not configured, resume analysis will be limited
+WARNING 2025-07-29 16:35:54,456 ml_services 73429 128502988865792 GEMINI_API_KEY not configured, resume analysis will be limited
+WARNING 2025-07-29 16:35:54,456 ml_services 73429 128502988865792 GEMINI_API_KEY not configured, resume analysis will be limited
+WARNING 2025-07-29 16:35:54,457 ml_services 73429 128502988865792 GEMINI_API_KEY not configured, resume analysis will be limited
+ERROR 2025-07-29 16:36:06,341 ml_services 73429 128502988865792 Error getting AI suggestions: 
+  No API_KEY or ADC found. Please either:
+    - Set the `GOOGLE_API_KEY` environment variable.
+    - Manually pass the key with `genai.configure(api_key=my_api_key)`.
+    - Or set up Application Default Credentials, see https://ai.google.dev/gemini-api/docs/oauth for more information.
+WARNING 2025-07-29 16:36:06,342 ml_services 73429 128502988865792 GEMINI_API_KEY not configured, resume analysis will be limited
+WARNING 2025-07-29 16:36:06,359 ml_services 73429 128502988865792 GEMINI_API_KEY not configured, resume analysis will be limited
+INFO 2025-07-29 16:36:06,359 ml_services 73429 128502988865792 Resume analysis completed with overall score: 56.44444444444444
+WARNING 2025-07-29 16:36:06,359 ml_services 73429 128502988865792 GEMINI_API_KEY not configured, resume analysis will be limited
+INFO 2025-07-29 16:36:06,541 signals 73429 128502988865792 Created notification preferences for user a63ceb25-6818-4158-bbec-fe7cc8b77b93
+WARNING 2025-07-29 16:54:20,898 ml_services 80040 126119078019328 Gemini API key not configured
+WARNING 2025-07-29 16:54:23,040 ml_services 80040 126119078019328 GEMINI_API_KEY not configured, resume analysis will be limited
+INFO 2025-07-29 17:02:28,585 autoreload 86462 130183673966848 Watching for file changes with StatReloader
+INFO 2025-07-29 17:02:29,493 server 86462 130183581296320 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 17:02:29,493 server 86462 130183581296320 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 17:02:29,493 server 86462 130183581296320 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 19:40:21,084 runserver 86462 130183581296320 [mHTTP OPTIONS /api/v1/auth/jwt/register/ 200 [0.00, 127.0.0.1:56616][0m
+INFO 2025-07-29 19:43:25,334 autoreload 86462 130183673966848 /home/lusan/Documents/HireWise/backend/hirewise/settings.py changed, reloading.
+INFO 2025-07-29 19:43:26,094 autoreload 222835 132455106330880 Watching for file changes with StatReloader
+INFO 2025-07-29 19:43:27,124 server 222835 132455013656256 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 19:43:27,124 server 222835 132455013656256 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 19:43:27,125 server 222835 132455013656256 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 19:43:35,580 autoreload 223011 132341328298240 Watching for file changes with StatReloader
+INFO 2025-07-29 19:43:36,452 server 223011 132341235627712 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 19:43:36,452 server 223011 132341235627712 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 19:43:36,453 server 223011 132341235627712 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 19:44:01,802 runserver 223011 132341235627712 [mHTTP OPTIONS /api/v1/auth/jwt/register/ 200 [0.00, 127.0.0.1:53214][0m
+ERROR 2025-07-29 19:44:01,804 middleware 223011 132338907346624 Error in security check: object of type 'bool' has no len()
+WARNING 2025-07-29 19:44:01,842 logging_config 223011 132338907346624 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:44:01,843 log 223011 132338898953920 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:44:01,843 runserver 223011 132341235627712 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.04, 127.0.0.1:53214][0m
+ERROR 2025-07-29 19:45:48,366 middleware 223011 132338907346624 Error in security check: object of type 'bool' has no len()
+WARNING 2025-07-29 19:45:48,370 logging_config 223011 132338907346624 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:45:48,371 log 223011 132338898953920 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:45:48,371 runserver 223011 132341235627712 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:52182][0m
+INFO 2025-07-29 19:50:30,375 autoreload 223011 132341328298240 /home/lusan/Documents/HireWise/backend/matcher/middleware.py changed, reloading.
+INFO 2025-07-29 19:50:31,203 autoreload 224797 125226079621376 Watching for file changes with StatReloader
+INFO 2025-07-29 19:50:32,215 server 224797 125225986950848 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 19:50:32,215 server 224797 125225986950848 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 19:50:32,216 server 224797 125225986950848 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 19:50:37,481 autoreload 224797 125226079621376 /home/lusan/Documents/HireWise/backend/matcher/middleware.py changed, reloading.
+INFO 2025-07-29 19:50:38,211 autoreload 224901 136310545092864 Watching for file changes with StatReloader
+INFO 2025-07-29 19:50:39,119 server 224901 136310452418240 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 19:50:39,119 server 224901 136310452418240 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 19:50:39,120 server 224901 136310452418240 Listening on TCP address 127.0.0.1:8000
+ERROR 2025-07-29 19:50:43,941 middleware 224901 136308124022464 Error in security check: object of type 'bool' has no len()
+WARNING 2025-07-29 19:50:43,961 logging_config 224901 136308124022464 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:43,962 log 224901 136308114581184 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:43,963 runserver 224901 136310452418240 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.02, 127.0.0.1:58772][0m
+ERROR 2025-07-29 19:50:47,246 middleware 224901 136308124022464 Error in security check: object of type 'bool' has no len()
+WARNING 2025-07-29 19:50:47,250 logging_config 224901 136308124022464 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:47,251 log 224901 136308114581184 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:47,251 runserver 224901 136310452418240 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:58772][0m
+ERROR 2025-07-29 19:50:47,419 middleware 224901 136308124022464 Error in security check: object of type 'bool' has no len()
+WARNING 2025-07-29 19:50:47,423 logging_config 224901 136308124022464 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:47,424 log 224901 136308114581184 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:47,424 runserver 224901 136310452418240 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:58772][0m
+ERROR 2025-07-29 19:50:47,596 middleware 224901 136308124022464 Error in security check: object of type 'bool' has no len()
+WARNING 2025-07-29 19:50:47,600 logging_config 224901 136308124022464 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:47,600 log 224901 136308114581184 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:47,601 runserver 224901 136310452418240 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:58772][0m
+ERROR 2025-07-29 19:50:47,747 middleware 224901 136308124022464 Error in security check: object of type 'bool' has no len()
+WARNING 2025-07-29 19:50:47,752 logging_config 224901 136308124022464 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:47,752 log 224901 136308114581184 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:47,753 runserver 224901 136310452418240 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:58772][0m
+ERROR 2025-07-29 19:50:47,891 middleware 224901 136308124022464 Error in security check: object of type 'bool' has no len()
+WARNING 2025-07-29 19:50:47,896 logging_config 224901 136308124022464 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:47,896 log 224901 136308114581184 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:47,896 runserver 224901 136310452418240 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:58772][0m
+ERROR 2025-07-29 19:50:48,059 middleware 224901 136308124022464 Error in security check: object of type 'bool' has no len()
+WARNING 2025-07-29 19:50:48,065 logging_config 224901 136308124022464 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:48,065 log 224901 136308114581184 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:48,066 runserver 224901 136310452418240 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:58772][0m
+INFO 2025-07-29 19:50:53,555 autoreload 225036 130677578969344 Watching for file changes with StatReloader
+INFO 2025-07-29 19:50:54,461 server 225036 130677486134976 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 19:50:54,461 server 225036 130677486134976 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 19:50:54,461 server 225036 130677486134976 Listening on TCP address 127.0.0.1:8000
+ERROR 2025-07-29 19:50:55,657 middleware 225036 130675158021824 Error in security check: object of type 'bool' has no len()
+CRITICAL 2025-07-29 19:50:55,688 middleware 225036 130675158021824 High error rate detected: 10 errors with status 400 in 5 minutes
+WARNING 2025-07-29 19:50:55,689 logging_config 225036 130675158021824 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:55,690 log 225036 130675149629120 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:55,691 runserver 225036 130677486134976 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.04, 127.0.0.1:33768][0m
+ERROR 2025-07-29 19:50:56,775 middleware 225036 130675158021824 Error in security check: object of type 'bool' has no len()
+CRITICAL 2025-07-29 19:50:56,782 middleware 225036 130675158021824 High error rate detected: 11 errors with status 400 in 5 minutes
+WARNING 2025-07-29 19:50:56,782 logging_config 225036 130675158021824 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:56,783 log 225036 130675149629120 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:56,784 runserver 225036 130677486134976 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:33768][0m
+ERROR 2025-07-29 19:50:58,387 middleware 225036 130675158021824 Error in security check: object of type 'bool' has no len()
+CRITICAL 2025-07-29 19:50:58,392 middleware 225036 130675158021824 High error rate detected: 12 errors with status 400 in 5 minutes
+WARNING 2025-07-29 19:50:58,392 logging_config 225036 130675158021824 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:58,393 log 225036 130675149629120 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:58,393 runserver 225036 130677486134976 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:33768][0m
+ERROR 2025-07-29 19:50:58,988 middleware 225036 130675158021824 Error in security check: object of type 'bool' has no len()
+CRITICAL 2025-07-29 19:50:58,992 middleware 225036 130675158021824 High error rate detected: 13 errors with status 400 in 5 minutes
+WARNING 2025-07-29 19:50:58,993 logging_config 225036 130675158021824 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:58,993 log 225036 130675149629120 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:58,994 runserver 225036 130677486134976 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:33768][0m
+ERROR 2025-07-29 19:50:59,548 middleware 225036 130675158021824 Error in security check: object of type 'bool' has no len()
+CRITICAL 2025-07-29 19:50:59,551 middleware 225036 130675158021824 High error rate detected: 14 errors with status 400 in 5 minutes
+WARNING 2025-07-29 19:50:59,552 logging_config 225036 130675158021824 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:59,552 log 225036 130675149629120 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:50:59,552 runserver 225036 130677486134976 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:33768][0m
+ERROR 2025-07-29 19:51:00,165 middleware 225036 130675158021824 Error in security check: object of type 'bool' has no len()
+CRITICAL 2025-07-29 19:51:00,169 middleware 225036 130675158021824 High error rate detected: 15 errors with status 400 in 5 minutes
+WARNING 2025-07-29 19:51:00,169 logging_config 225036 130675158021824 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:51:00,170 log 225036 130675149629120 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:51:00,170 runserver 225036 130677486134976 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:33768][0m
+ERROR 2025-07-29 19:55:38,798 middleware 225036 130675158021824 Error in security check: object of type 'bool' has no len()
+CRITICAL 2025-07-29 19:55:38,803 middleware 225036 130675158021824 High error rate detected: 16 errors with status 400 in 5 minutes
+WARNING 2025-07-29 19:55:38,803 logging_config 225036 130675158021824 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:55:38,804 log 225036 130675149629120 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:55:38,804 runserver 225036 130677486134976 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:53374][0m
+ERROR 2025-07-29 19:56:13,526 middleware 225036 130675158021824 Error in security check: object of type 'bool' has no len()
+CRITICAL 2025-07-29 19:56:13,530 middleware 225036 130675158021824 High error rate detected: 17 errors with status 400 in 5 minutes
+WARNING 2025-07-29 19:56:13,530 logging_config 225036 130675158021824 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:56:13,530 log 225036 130675149629120 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 19:56:13,531 runserver 225036 130677486134976 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.01, 127.0.0.1:53374][0m
+INFO 2025-07-29 19:57:31,153 autoreload 225036 130677578969344 /home/lusan/Documents/HireWise/backend/hirewise/settings.py changed, reloading.
+INFO 2025-07-29 19:57:31,888 autoreload 226697 133635232612608 Watching for file changes with StatReloader
+INFO 2025-07-29 19:57:32,777 server 226697 133635139806912 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 19:57:32,778 server 226697 133635139806912 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 19:57:32,778 server 226697 133635139806912 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 20:07:14,282 autoreload 231549 130807205146880 Watching for file changes with StatReloader
+INFO 2025-07-29 20:07:15,184 server 231549 130807112509120 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 20:07:15,184 server 231549 130807112509120 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 20:07:15,184 server 231549 130807112509120 Listening on TCP address 127.0.0.1:8000
+ERROR 2025-07-29 20:07:37,764 middleware 231549 130804784035520 Error in security check: object of type 'bool' has no len()
+WARNING 2025-07-29 20:07:37,786 logging_config 231549 130804784035520 API request error: POST /api/v1/auth/jwt/register/
+WARNING 2025-07-29 20:07:37,786 log 231549 130804705392320 Bad Request: /api/v1/auth/jwt/register/
+WARNING 2025-07-29 20:07:37,787 runserver 231549 130807112509120 [31;1mHTTP POST /api/v1/auth/jwt/register/ 400 [0.02, 127.0.0.1:59000][0m
+INFO 2025-07-29 20:27:51,217 autoreload 231549 130807205146880 /home/lusan/Documents/HireWise/backend/matcher/views.py changed, reloading.
+INFO 2025-07-29 20:27:52,125 autoreload 238375 140300976537856 Watching for file changes with StatReloader
+INFO 2025-07-29 20:28:27,844 autoreload 238375 140300976537856 /home/lusan/Documents/HireWise/backend/matcher/google_auth.py changed, reloading.
+INFO 2025-07-29 20:28:28,406 autoreload 238597 139137146073344 Watching for file changes with StatReloader
+INFO 2025-07-29 20:30:08,592 autoreload 238597 139137146073344 /home/lusan/Documents/HireWise/backend/matcher/views.py changed, reloading.
+INFO 2025-07-29 20:30:09,177 autoreload 239132 140023337242880 Watching for file changes with StatReloader
+INFO 2025-07-29 20:31:54,888 autoreload 239614 124651157414144 Watching for file changes with StatReloader
+INFO 2025-07-29 20:32:06,313 autoreload 239614 124651157414144 /home/lusan/Documents/HireWise/backend/matcher/views.py changed, reloading.
+INFO 2025-07-29 20:32:06,879 autoreload 239752 129797167796480 Watching for file changes with StatReloader
+INFO 2025-07-29 20:32:36,486 autoreload 239752 129797167796480 /home/lusan/Documents/HireWise/backend/matcher/views.py changed, reloading.
+INFO 2025-07-29 20:32:37,179 autoreload 239915 140418461389056 Watching for file changes with StatReloader
+INFO 2025-07-29 20:32:38,225 server 239915 140418368513728 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 20:32:38,225 server 239915 140418368513728 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 20:32:38,226 server 239915 140418368513728 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 20:32:48,569 autoreload 239915 140418461389056 /home/lusan/Documents/HireWise/backend/matcher/views.py changed, reloading.
+INFO 2025-07-29 20:32:49,401 autoreload 240017 134617269608704 Watching for file changes with StatReloader
+INFO 2025-07-29 20:33:18,080 autoreload 240017 134617269608704 /home/lusan/Documents/HireWise/backend/matcher/views.py changed, reloading.
+INFO 2025-07-29 20:33:18,878 autoreload 240199 132038650372352 Watching for file changes with StatReloader
+INFO 2025-07-29 20:33:19,986 server 240199 132038557705920 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 20:33:19,986 server 240199 132038557705920 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 20:33:19,987 server 240199 132038557705920 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 20:33:41,014 runserver 240199 132038557705920 [mHTTP OPTIONS /api/v1/auth/google/ 200 [0.00, 127.0.0.1:47366][0m
+ERROR 2025-07-29 20:33:41,017 middleware 240199 132036229592768 Error in security check: object of type 'bool' has no len()
+ERROR 2025-07-29 20:33:41,340 exceptions 240199 132036229592768 Unhandled Exception: 'Settings' object has no attribute 'OAUTH_CLIENT_ID'
+CRITICAL 2025-07-29 20:33:41,341 middleware 240199 132036229592768 Critical error detected: 'Settings' object has no attribute 'OAUTH_CLIENT_ID'
+ERROR 2025-07-29 20:33:41,341 middleware 240199 132036229592768 Request exception: 'Settings' object has no attribute 'OAUTH_CLIENT_ID'
+ERROR 2025-07-29 20:33:41,355 log 240199 132036220151488 Internal Server Error: /api/v1/auth/google/
+Traceback (most recent call last):
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 489, in thread_handler
+    raise exc_info[1]
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 253, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 439, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/asgiref/current_thread_executor.py", line 40, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/asgiref/sync.py", line 493, in thread_handler
+    return func(*args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/rest_framework/decorators.py", line 50, in handler
+    return func(*args, **kwargs)
+  File "/home/lusan/Documents/HireWise/backend/matcher/views.py", line 159, in google_login_view
+    data = verify_google_id_token(id_token)
+  File "/home/lusan/Documents/HireWise/backend/matcher/google_auth.py", line 16, in verify_google_id_token
+    if data.get('aud') != settings.OAUTH_CLIENT_ID:
+                          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lusan/Documents/HireWise/backend/.venv/lib/python3.13/site-packages/django/conf/__init__.py", line 83, in __getattr__
+    val = getattr(_wrapped, name)
+AttributeError: 'Settings' object has no attribute 'OAUTH_CLIENT_ID'
+ERROR 2025-07-29 20:33:41,357 logging_config 240199 132036229592768 API request failed: POST /api/v1/auth/google/
+ERROR 2025-07-29 20:33:41,358 runserver 240199 132038557705920 [35;1mHTTP POST /api/v1/auth/google/ 500 [0.34, 127.0.0.1:47366][0m
+INFO 2025-07-29 20:34:49,251 autoreload 240199 132038650372352 /home/lusan/Documents/HireWise/backend/hirewise/settings.py changed, reloading.
+INFO 2025-07-29 20:35:21,625 autoreload 240837 126230274560256 Watching for file changes with StatReloader
+INFO 2025-07-29 20:35:22,517 server 240837 126230181717696 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 20:35:22,517 server 240837 126230181717696 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 20:35:22,518 server 240837 126230181717696 Listening on TCP address 127.0.0.1:8000
+ERROR 2025-07-29 20:36:41,767 middleware 240837 126227853604544 Error in security check: object of type 'bool' has no len()
+INFO 2025-07-29 20:36:42,107 signals 240837 126227853604544 Created notification preferences for user 13ff2e81-ca09-4a8c-ae16-75e73291adfc
+INFO 2025-07-29 20:36:42,118 logging_config 240837 126227853604544 API request: POST /api/v1/auth/google/
+INFO 2025-07-29 20:36:42,119 runserver 240837 126230181717696 [mHTTP POST /api/v1/auth/google/ 200 [0.35, 127.0.0.1:35998][0m
+INFO 2025-07-29 20:51:20,574 autoreload 240837 126230274560256 /home/lusan/Documents/HireWise/backend/matcher/models.py changed, reloading.
+INFO 2025-07-29 20:51:21,452 autoreload 244571 125162639593728 Watching for file changes with StatReloader
+INFO 2025-07-29 20:51:22,556 server 244571 125162546800320 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 20:51:22,556 server 244571 125162546800320 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 20:51:22,557 server 244571 125162546800320 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 20:51:55,189 autoreload 244571 125162639593728 /home/lusan/Documents/HireWise/backend/matcher/models.py changed, reloading.
+INFO 2025-07-29 20:51:56,046 autoreload 244755 135706684109056 Watching for file changes with StatReloader
+INFO 2025-07-29 20:51:57,142 server 244755 135706591209152 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 20:51:57,142 server 244755 135706591209152 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 20:51:57,143 server 244755 135706591209152 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 21:00:13,008 runserver 244755 135706591209152 [mHTTP OPTIONS /api/v1/auth/profile/ 200 [0.00, 127.0.0.1:40258][0m
+INFO 2025-07-29 21:00:13,009 runserver 244755 135706591209152 [mHTTP OPTIONS /api/v1/auth/profile/ 200 [0.00, 127.0.0.1:40274][0m
+ERROR 2025-07-29 21:00:13,012 middleware 244755 135704254342848 Error in security check: object of type 'bool' has no len()
+INFO 2025-07-29 21:00:13,023 logging_config 244755 135704254342848 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:00:13,024 runserver 244755 135706591209152 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:40274][0m
+ERROR 2025-07-29 21:00:13,025 middleware 244755 135704254342848 Error in security check: object of type 'bool' has no len()
+INFO 2025-07-29 21:00:13,029 logging_config 244755 135704254342848 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:00:13,030 runserver 244755 135706591209152 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:40258][0m
+ERROR 2025-07-29 21:00:19,048 middleware 244755 135704254342848 Error in security check: object of type 'bool' has no len()
+INFO 2025-07-29 21:00:19,053 logging_config 244755 135704254342848 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:00:19,054 runserver 244755 135706591209152 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:40258][0m
+ERROR 2025-07-29 21:00:19,055 middleware 244755 135704254342848 Error in security check: object of type 'bool' has no len()
+INFO 2025-07-29 21:00:19,058 logging_config 244755 135704254342848 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:00:19,059 runserver 244755 135706591209152 [mHTTP GET /api/v1/auth/profile/ 200 [0.00, 127.0.0.1:40274][0m
+ERROR 2025-07-29 21:00:24,598 middleware 244755 135704254342848 Error in security check: object of type 'bool' has no len()
+INFO 2025-07-29 21:00:24,603 logging_config 244755 135704254342848 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:00:24,603 runserver 244755 135706591209152 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:40274][0m
+ERROR 2025-07-29 21:00:24,604 middleware 244755 135704262735552 Error in security check: object of type 'bool' has no len()
+INFO 2025-07-29 21:00:24,610 logging_config 244755 135704262735552 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:00:24,610 runserver 244755 135706591209152 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:40258][0m
+ERROR 2025-07-29 21:00:30,751 middleware 244755 135704262735552 Error in security check: object of type 'bool' has no len()
+INFO 2025-07-29 21:00:30,756 logging_config 244755 135704262735552 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:00:30,756 runserver 244755 135706591209152 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:40258][0m
+ERROR 2025-07-29 21:00:30,757 middleware 244755 135704262735552 Error in security check: object of type 'bool' has no len()
+INFO 2025-07-29 21:00:30,763 logging_config 244755 135704262735552 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:00:30,764 runserver 244755 135706591209152 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:40274][0m
+ERROR 2025-07-29 21:00:37,288 middleware 244755 135704262735552 Error in security check: object of type 'bool' has no len()
+INFO 2025-07-29 21:00:37,604 logging_config 244755 135704262735552 API request: POST /api/v1/auth/google/
+INFO 2025-07-29 21:00:37,604 runserver 244755 135706591209152 [mHTTP POST /api/v1/auth/google/ 200 [0.32, 127.0.0.1:40274][0m
+INFO 2025-07-29 21:02:14,498 autoreload 244755 135706684109056 /home/lusan/Documents/HireWise/backend/matcher/middleware.py changed, reloading.
+INFO 2025-07-29 21:02:15,233 autoreload 247935 134607125713152 Watching for file changes with StatReloader
+INFO 2025-07-29 21:02:16,164 server 247935 134607033005760 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 21:02:16,164 server 247935 134607033005760 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 21:02:16,165 server 247935 134607033005760 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 21:02:27,500 autoreload 247935 134607125713152 /home/lusan/Documents/HireWise/backend/matcher/middleware.py changed, reloading.
+INFO 2025-07-29 21:02:28,201 autoreload 248047 139891014738176 Watching for file changes with StatReloader
+INFO 2025-07-29 21:02:29,141 server 248047 139890922002112 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 21:02:29,142 server 248047 139890922002112 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 21:02:29,142 server 248047 139890922002112 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 21:02:58,241 autoreload 248476 139424565346560 Watching for file changes with StatReloader
+INFO 2025-07-29 21:02:59,130 server 248476 139424472606400 HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-07-29 21:02:59,131 server 248476 139424472606400 Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-07-29 21:02:59,131 server 248476 139424472606400 Listening on TCP address 127.0.0.1:8000
+INFO 2025-07-29 21:03:01,332 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:03:01,333 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:44098][0m
+INFO 2025-07-29 21:03:01,339 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:03:01,339 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:44110][0m
+INFO 2025-07-29 21:03:06,130 logging_config 248476 139422145181376 API request: POST /api/v1/auth/google/
+INFO 2025-07-29 21:03:06,130 runserver 248476 139424472606400 [mHTTP POST /api/v1/auth/google/ 200 [0.32, 127.0.0.1:44110][0m
+INFO 2025-07-29 21:03:11,910 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:03:11,910 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:44110][0m
+INFO 2025-07-29 21:03:11,916 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:03:11,916 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:44098][0m
+INFO 2025-07-29 21:03:28,448 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:03:28,449 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:44098][0m
+INFO 2025-07-29 21:03:28,454 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:03:28,455 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.00, 127.0.0.1:44110][0m
+INFO 2025-07-29 21:06:57,305 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:06:57,305 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:45072][0m
+INFO 2025-07-29 21:06:57,311 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:06:57,312 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:45088][0m
+INFO 2025-07-29 21:07:01,225 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:07:01,225 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:45088][0m
+INFO 2025-07-29 21:07:01,230 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:07:01,230 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.00, 127.0.0.1:45072][0m
+INFO 2025-07-29 21:07:02,607 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:07:02,607 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.01, 127.0.0.1:45072][0m
+INFO 2025-07-29 21:07:02,612 logging_config 248476 139422145181376 API request: GET /api/v1/auth/profile/
+INFO 2025-07-29 21:07:02,612 runserver 248476 139424472606400 [mHTTP GET /api/v1/auth/profile/ 200 [0.00, 127.0.0.1:45088][0m

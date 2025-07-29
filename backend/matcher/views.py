@@ -1,3 +1,5 @@
+from .google_auth import verify_google_id_token, get_or_create_user_from_google, generate_tokens_for_user
+from rest_framework.decorators import api_view, permission_classes
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import login, logout
 from django.http import JsonResponse
@@ -148,6 +150,20 @@ def jwt_logout_view(request):
     except Exception as e:
         return Response({'error': f'Error during logout: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def google_login_view(request):
+    id_token = request.data.get('id_token')
+    if not id_token:
+        return Response({'error': 'Missing id_token'}, status=400)
+    data = verify_google_id_token(id_token)
+    if not data:
+        return Response({'error': 'Invalid Google token'}, status=400)
+    user = get_or_create_user_from_google(data)
+    tokens = generate_tokens_for_user(user)
+    from .serializers import UserSerializer
+    user_data = UserSerializer(user).data
+    return Response({'user': user_data, 'tokens': tokens}, status=200)
 
 # Legacy Token Authentication Views (for backward compatibility)
 class RegisterView(generics.CreateAPIView):
@@ -3011,6 +3027,7 @@ def get_resume_suggestions(request):
         # Get request data
         resume_content = request.data.get('resume_content', '')
         target_job = request.data.get('target_job', '')
+        job_requirements = request.data.get('job_requirements', [])
         
         if not resume_content:
             return Response({
@@ -3023,7 +3040,8 @@ def get_resume_suggestions(request):
         # Analyze resume and get suggestions
         analysis = analyze_resume_content(
             resume_content=resume_content,
-            target_job=target_job
+            target_job=target_job,
+            job_requirements=job_requirements
         )
         
         return Response({
@@ -3035,6 +3053,288 @@ def get_resume_suggestions(request):
         logger.error(f"Error getting resume suggestions: {str(e)}")
         return Response({
             'error': 'Failed to get resume suggestions'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def analyze_resume_for_job(request):
+    """
+    Analyze resume against specific job requirements with detailed scoring
+    """
+    try:
+        # Get request data
+        resume_id = request.data.get('resume_id')
+        job_id = request.data.get('job_id')
+        
+        if not resume_id or not job_id:
+            return Response({
+                'error': 'Both resume_id and job_id are required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get resume
+        try:
+            if request.user.user_type == 'job_seeker':
+                resume = Resume.objects.get(id=resume_id, job_seeker=request.user)
+            else:
+                resume = Resume.objects.get(id=resume_id)
+        except Resume.DoesNotExist:
+            return Response({
+                'error': 'Resume not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Get job post
+        try:
+            job_post = JobPost.objects.get(id=job_id, is_active=True)
+        except JobPost.DoesNotExist:
+            return Response({
+                'error': 'Job post not found'
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        # Import AI service
+        from .ml_services import analyze_resume_content
+        
+        # Prepare job requirements
+        job_requirements = []
+        if job_post.requirements:
+            # Simple extraction of requirements
+            req_lines = job_post.requirements.split('\n')
+            for line in req_lines:
+                line = line.strip()
+                if line and (line.startswith('-') or line.startswith('•') or line.startswith('*')):
+                    job_requirements.append(line[1:].strip())
+        
+        # Add skills as requirements
+        if job_post.skills_required:
+            skills = [skill.strip() for skill in job_post.skills_required.split(',')]
+            job_requirements.extend(skills)
+        
+        # Analyze resume
+        analysis_result = analyze_resume_content(
+            resume_content=resume.parsed_text,
+            target_job=f"{job_post.title} - {job_post.description}",
+            job_requirements=job_requirements
+        )
+        
+        if not analysis_result.get('success', False):
+            return Response({
+                'error': 'Resume analysis failed',
+                'details': analysis_result.get('error', 'Unknown error')
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        # Create AI analysis result record
+        AIAnalysisResult.objects.create(
+            resume=resume,
+            job_post=job_post,
+            analysis_type='resume_analysis',
+            input_data=f"Resume analysis for {job_post.title}",
+            analysis_result=analysis_result['analysis'],
+            confidence_score=analysis_result['analysis'].get('overall_score', 0) / 100,
+            processing_time=analysis_result['analysis'].get('processing_time', 0)
+        )
+        
+        return Response({
+            'success': True,
+            'resume_id': str(resume_id),
+            'job_id': str(job_id),
+            'job_title': job_post.title,
+            'company': job_post.recruiter.recruiter_profile.company_name if hasattr(job_post.recruiter, 'recruiter_profile') else 'Unknown',
+            'analysis': analysis_result['analysis']
+        })
+    
+    except Exception as e:
+        logger.error(f"Error analyzing resume for job: {str(e)}")
+        return Response({
+            'error': 'Failed to analyze resume for job'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_skill_gap_analysis(request):
+    """
+    Get detailed skill gap analysis between resume and job requirements
+    """
+    try:
+        # Get request data
+        resume_content = request.data.get('resume_content', '')
+        job_requirements = request.data.get('job_requirements', [])
+        
+        if not resume_content:
+            return Response({
+                'error': 'Resume content is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not job_requirements:
+            return Response({
+                'error': 'Job requirements are required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Import AI service
+        from .ml_services import ResumeAnalysisEngine
+        
+        # Create analyzer instance
+        analyzer = ResumeAnalysisEngine()
+        
+        # Perform skill gap analysis
+        skill_gap_analysis = analyzer._analyze_skill_gaps(resume_content, job_requirements)
+        
+        return Response({
+            'success': True,
+            'skill_gap_analysis': skill_gap_analysis
+        })
+    
+    except Exception as e:
+        logger.error(f"Error getting skill gap analysis: {str(e)}")
+        return Response({
+            'error': 'Failed to get skill gap analysis'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def score_resume_content(request):
+    """
+    Score resume content and provide detailed feedback
+    """
+    try:
+        # Get request data
+        resume_content = request.data.get('resume_content', '')
+        
+        if not resume_content:
+            return Response({
+                'error': 'Resume content is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Import AI service
+        from .ml_services import ResumeAnalysisEngine
+        
+        # Create analyzer instance
+        analyzer = ResumeAnalysisEngine()
+        
+        # Analyze content structure
+        content_analysis = analyzer._analyze_content_structure(resume_content)
+        
+        # Calculate overall score
+        overall_score = analyzer._calculate_overall_score(content_analysis['scores'])
+        
+        return Response({
+            'success': True,
+            'overall_score': round(overall_score, 2),
+            'category_scores': content_analysis['scores'],
+            'strengths': content_analysis['strengths'],
+            'weaknesses': content_analysis['weaknesses'],
+            'word_count': len(resume_content.split()),
+            'character_count': len(resume_content)
+        })
+    
+    except Exception as e:
+        logger.error(f"Error scoring resume content: {str(e)}")
+        return Response({
+            'error': 'Failed to score resume content'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_keyword_optimization(request):
+    """
+    Get keyword optimization suggestions for resume
+    """
+    try:
+        # Get request data
+        resume_content = request.data.get('resume_content', '')
+        target_job = request.data.get('target_job', '')
+        job_requirements = request.data.get('job_requirements', [])
+        
+        if not resume_content:
+            return Response({
+                'error': 'Resume content is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        if not target_job and not job_requirements:
+            return Response({
+                'error': 'Either target_job or job_requirements must be provided'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Import AI service
+        from .ml_services import ResumeAnalysisEngine
+        
+        # Create analyzer instance
+        analyzer = ResumeAnalysisEngine()
+        
+        # Perform keyword analysis
+        keyword_analysis = analyzer._analyze_keywords(resume_content, target_job, job_requirements)
+        
+        return Response({
+            'success': True,
+            'keyword_analysis': keyword_analysis
+        })
+    
+    except Exception as e:
+        logger.error(f"Error getting keyword optimization: {str(e)}")
+        return Response({
+            'error': 'Failed to get keyword optimization'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_resume_analysis_history(request, resume_id):
+    """
+    Get analysis history for a specific resume
+    """
+    try:
+        # Get resume
+        if request.user.user_type == 'job_seeker':
+            resume = Resume.objects.get(id=resume_id, job_seeker=request.user)
+        else:
+            resume = Resume.objects.get(id=resume_id)
+    except Resume.DoesNotExist:
+        return Response({
+            'error': 'Resume not found'
+        }, status=status.HTTP_404_NOT_FOUND)
+    
+    try:
+        # Get all analysis results for this resume
+        analyses = AIAnalysisResult.objects.filter(
+            resume=resume,
+            analysis_type__in=['resume_analysis', 'resume_parse']
+        ).select_related('job_post').order_by('-processed_at')
+        
+        # Prepare response data
+        analysis_history = []
+        for analysis in analyses:
+            analysis_data = {
+                'id': str(analysis.id),
+                'analysis_type': analysis.analysis_type,
+                'processed_at': analysis.processed_at.isoformat(),
+                'confidence_score': analysis.confidence_score,
+                'processing_time': analysis.processing_time,
+                'analysis_result': analysis.analysis_result
+            }
+            
+            if analysis.job_post:
+                analysis_data['job_post'] = {
+                    'id': str(analysis.job_post.id),
+                    'title': analysis.job_post.title,
+                    'company': analysis.job_post.recruiter.recruiter_profile.company_name if hasattr(analysis.job_post.recruiter, 'recruiter_profile') else 'Unknown'
+                }
+            
+            analysis_history.append(analysis_data)
+        
+        return Response({
+            'success': True,
+            'resume_id': str(resume_id),
+            'resume_filename': resume.original_filename,
+            'total_analyses': len(analysis_history),
+            'analysis_history': analysis_history
+        })
+    
+    except Exception as e:
+        logger.error(f"Error getting resume analysis history: {str(e)}")
+        return Response({
+            'error': 'Failed to get resume analysis history'
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

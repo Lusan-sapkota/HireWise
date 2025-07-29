@@ -251,9 +251,8 @@ class SecurityMiddleware(MiddlewareMixin):
     
     def __init__(self, get_response):
         self.get_response = get_response
-        
-        # Suspicious patterns to monitor
-        self.suspicious_patterns = [
+        # Get suspicious patterns from settings, fallback to default list
+        patterns = getattr(settings, 'SECURITY_CONFIG', {}).get('SUSPICIOUS_PATTERNS', [
             'script',
             'javascript:',
             '<script',
@@ -263,8 +262,10 @@ class SecurityMiddleware(MiddlewareMixin):
             'drop table',
             '../',
             '..\\',
-        ]
-        
+        ])
+        if not isinstance(patterns, (list, tuple)):
+            patterns = []
+        self.suspicious_patterns = patterns
         super().__init__(get_response)
     
     def __call__(self, request):
@@ -328,7 +329,7 @@ class SecurityMiddleware(MiddlewareMixin):
         Check for unusual request patterns
         """
         # Check for excessive header size
-        total_header_size = sum(len(k) + len(v) for k, v in request.META.items())
+        total_header_size = sum(len(str(k)) + len(str(v)) for k, v in request.META.items())
         if total_header_size > 8192:  # 8KB header limit
             security_logger.log_suspicious_activity(
                 user_id=str(request.user.id) if hasattr(request, 'user') and request.user.is_authenticated else None,

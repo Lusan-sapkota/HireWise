@@ -1,3 +1,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Centric, modern scrollbar for all modes */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  background: transparent;
+}
+
+
+::-webkit-scrollbar-track {
+  background: #ececf6; /* light mode default */
+  border-radius: 9999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: #181c24;
+  }
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #6B5B95, #4B0082);
+  border-radius: 9999px;
+  border: none;
+  min-height: 40px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #7C6CA6, #5A1C8D);
+}
+
+/* Remove scrollbar buttons */
+::-webkit-scrollbar-button {
+  display: none !important;
+  height: 0 !important;
+  width: 0 !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #6B5B95 transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  * {
+    scrollbar-color: #6B5B95 #181c24;
+  }
+}

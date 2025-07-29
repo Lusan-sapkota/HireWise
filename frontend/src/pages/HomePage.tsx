@@ -2,9 +2,286 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
-import { Bot, Users, Briefcase, TrendingUp, Star, CheckCircle } from 'lucide-react';
+import Footer from '../components/layout/Footer';
+import { 
+  Bot, 
+  Users, 
+  Briefcase, 
+  TrendingUp, 
+  Star, 
+  CheckCircle,
+  Plus,
+  MessageSquare,
+  Share2,
+  BookmarkPlus,
+  Clock,
+  ThumbsUp,
+  Calendar,
+  Target
+} from 'lucide-react';
 
-export const HomePage: React.FC = () => {
+interface HomePageProps {
+  isLoggedIn?: boolean;
+}
+
+export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
+  // Mock data for logged-in users
+  const recentPosts = [
+    {
+      id: 1,
+      author: {
+        name: 'Alex Rodriguez',
+        avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+        title: 'Senior Software Engineer at Google',
+        verified: true
+      },
+      content: 'Just completed an amazing AI interview practice session on HireWise! The feedback was incredibly detailed and helped me identify areas for improvement. Highly recommend it to anyone preparing for tech interviews.',
+      timestamp: '2 hours ago',
+      likes: 24,
+      comments: 8,
+      shares: 3,
+      image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop'
+    },
+    {
+      id: 2,
+      author: {
+        name: 'Sarah Chen',
+        avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+        title: 'Product Manager at Microsoft',
+        verified: true
+      },
+      content: 'Networking tip: Don\'t just connect with people in your field. Some of my best opportunities came from connections in adjacent industries. Diversity in your network leads to diverse opportunities! 🚀',
+      timestamp: '4 hours ago',
+      likes: 47,
+      comments: 15,
+      shares: 12
+    },
+    {
+      id: 3,
+      author: {
+        name: 'David Kim',
+        avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
+        title: 'UX Designer at Adobe',
+        verified: false
+      },
+      content: 'Just got my dream job offer! The AI interview practice on HireWise was a game-changer. It helped me build confidence and refine my answers. Thank you to this amazing community for all the support! 🎉',
+      timestamp: '6 hours ago',
+      likes: 89,
+      comments: 23,
+      shares: 18
+    }
+  ];
+
+  const quickActions = [
+    { icon: Bot, label: 'Practice Interview', href: '/ai-interview', color: 'bg-violet-500' },
+    { icon: Briefcase, label: 'Browse Jobs', href: '/jobs', color: 'bg-blue-500' },
+    { icon: Users, label: 'Network', href: '/dashboard', color: 'bg-green-500' },
+    { icon: MessageSquare, label: 'Messages', href: '/messages', color: 'bg-orange-500' }
+  ];
+
+  const todayStats = {
+    profileViews: 12,
+    newConnections: 3,
+    jobMatches: 5,
+    interviewScore: 85
+  };
+
+  if (isLoggedIn) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        {/* Welcome Header */}
+        <section className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold mb-2">
+                  Welcome back! 👋
+                </h1>
+                <p className="text-indigo-100 text-lg">
+                  Ready to advance your career today?
+                </p>
+              </div>
+              <div className="mt-4 md:mt-0 flex space-x-3">
+                <Link to="/ai-interview">
+                  <Button className="bg-white text-indigo-600 hover:bg-gray-100">
+                    <Bot className="w-4 h-4 mr-2" />
+                    Practice Interview
+                  </Button>
+                </Link>
+                <Button variant="outline" className="border-white text-white hover:bg-white hover:text-indigo-600">
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Post
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Left Sidebar - Quick Actions & Stats */}
+            <div className="lg:col-span-1 space-y-6">
+              {/* Today's Stats */}
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                    <Calendar className="w-5 h-5 mr-2 text-indigo-600" />
+                    Today's Activity
+                  </h3>
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Profile Views</span>
+                      <span className="font-semibold text-gray-900 dark:text-white">{todayStats.profileViews}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">New Connections</span>
+                      <span className="font-semibold text-gray-900 dark:text-white">{todayStats.newConnections}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Job Matches</span>
+                      <span className="font-semibold text-gray-900 dark:text-white">{todayStats.jobMatches}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">Interview Score</span>
+                      <span className="font-semibold text-emerald-600">{todayStats.interviewScore}%</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Actions */}
+              <Card>
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                    <Target className="w-5 h-5 mr-2 text-indigo-600" />
+                    Quick Actions
+                  </h3>
+                  <div className="space-y-3">
+                    {quickActions.map((action, index) => (
+                      <Link
+                        key={index}
+                        to={action.href}
+                        className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                      >
+                        <div className={`w-8 h-8 ${action.color} rounded-lg flex items-center justify-center`}>
+                          <action.icon className="w-4 h-4 text-white" />
+                        </div>
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">
+                          {action.label}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Main Content - Posts Feed */}
+            <div className="lg:col-span-3">
+              <div className="space-y-6">
+                {/* Create Post Card */}
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center space-x-4">
+                      <img
+                        src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
+                        alt="Your avatar"
+                        className="w-12 h-12 rounded-full"
+                      />
+                      <button className="flex-1 text-left px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                        Share your professional insights...
+                      </button>
+                      <Button>
+                        <Plus className="w-4 h-4 mr-2" />
+                        Post
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Recent Posts */}
+                {recentPosts.map((post) => (
+                  <Card key={post.id}>
+                    <CardContent className="p-6">
+                      {/* Post Header */}
+                      <div className="flex items-start space-x-3 mb-4">
+                        <img
+                          src={post.author.avatar}
+                          alt={post.author.name}
+                          className="w-12 h-12 rounded-full"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2">
+                            <h4 className="font-semibold text-gray-900 dark:text-white">
+                              {post.author.name}
+                            </h4>
+                            {post.author.verified && (
+                              <CheckCircle className="w-4 h-4 text-blue-500" />
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {post.author.title}
+                          </p>
+                          <div className="flex items-center space-x-1 mt-1">
+                            <Clock className="w-3 h-3 text-gray-400" />
+                            <span className="text-xs text-gray-400">{post.timestamp}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Post Content */}
+                      <p className="text-gray-900 dark:text-white mb-4 leading-relaxed">
+                        {post.content}
+                      </p>
+
+                      {/* Post Image */}
+                      {post.image && (
+                        <img
+                          src={post.image}
+                          alt="Post content"
+                          className="w-full h-64 object-cover rounded-lg mb-4"
+                        />
+                      )}
+
+                      {/* Post Actions */}
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center space-x-6">
+                          <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                            <ThumbsUp className="w-4 h-4" />
+                            <span className="text-sm">{post.likes}</span>
+                          </button>
+                          <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors">
+                            <MessageSquare className="w-4 h-4" />
+                            <span className="text-sm">{post.comments}</span>
+                          </button>
+                          <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
+                            <Share2 className="w-4 h-4" />
+                            <span className="text-sm">{post.shares}</span>
+                          </button>
+                        </div>
+                        <button className="text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">
+                          <BookmarkPlus className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+
+                {/* Load More */}
+                <div className="text-center">
+                  <Button variant="outline" className="px-8">
+                    Load More Posts
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Original marketing page for logged-out users
   const features = [
     {
       icon: Bot,
@@ -44,7 +321,7 @@ export const HomePage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-indigo-600 via-violet-600 to-indigo-800 text-white py-12 sm:py-16 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,13 +337,13 @@ export const HomePage: React.FC = () => {
               to accelerate your career growth and land your dream job.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
-              <Link to="/dashboard">
-                <Button size="lg" className="bg-white text-indigo-600 hover:bg-gray-100 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto">
+              <Link to="/signup">
+                <Button variant="secondary" size="lg">
                   Get Started Free
                 </Button>
               </Link>
               <Link to="/ai-interview">
-                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-indigo-600 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg w-full sm:w-auto">
+                <Button variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-indigo-600 px-6 sm:px-8 py-2 sm:py-3 text-base sm:text-lg w-full sm:w-auto">
                   Try AI Interview
                 </Button>
               </Link>
@@ -217,13 +494,14 @@ export const HomePage: React.FC = () => {
           <p className="text-lg sm:text-xl mb-6 sm:mb-8 text-indigo-100 max-w-2xl mx-auto px-4">
             Join thousands of professionals who are advancing their careers with HireWise
           </p>
-          <Link to="/dashboard">
-            <Button size="lg" className="bg-white text-indigo-600 hover:bg-gray-100 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg">
+          <Link to="/signup">
+            <Button variant="secondary" size="lg">
               Start Your Journey Today
             </Button>
           </Link>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

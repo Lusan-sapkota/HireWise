@@ -2044,3 +2044,758 @@ def cleanup_interview_sessions():
             'error': str(e),
             'cleanup_timestamp': timezone.now().isoformat()
         }
+
+
+# =============================================================================
+# AI-POWERED RESUME ASSISTANCE SYSTEM
+# =============================================================================
+
+class ResumeAnalysisEngine:
+    """
+    AI-powered resume analysis and improvement engine
+    """
+    
+    def __init__(self):
+        self.gemini_api_key = getattr(settings, 'GEMINI_API_KEY', None)
+        if not self.gemini_api_key:
+            logger.warning("GEMINI_API_KEY not configured, resume analysis will be limited")
+        
+        # Industry-specific keywords and requirements
+        self.industry_keywords = {
+            'technology': [
+                'programming', 'software development', 'coding', 'algorithms', 'data structures',
+                'system design', 'api', 'database', 'cloud', 'devops', 'agile', 'scrum'
+            ],
+            'marketing': [
+                'campaign management', 'digital marketing', 'seo', 'sem', 'social media',
+                'content marketing', 'analytics', 'conversion optimization', 'brand management'
+            ],
+            'finance': [
+                'financial analysis', 'budgeting', 'forecasting', 'risk management',
+                'investment', 'accounting', 'compliance', 'financial modeling'
+            ],
+            'healthcare': [
+                'patient care', 'medical records', 'healthcare compliance', 'clinical experience',
+                'medical terminology', 'patient safety', 'healthcare technology'
+            ],
+            'sales': [
+                'lead generation', 'client relationship', 'sales pipeline', 'negotiation',
+                'crm', 'quota achievement', 'territory management', 'customer acquisition'
+            ]
+        }
+        
+        # Common resume improvement areas
+        self.improvement_categories = [
+            'skills_optimization',
+            'experience_enhancement',
+            'keyword_optimization',
+            'formatting_improvements',
+            'achievement_quantification',
+            'action_verb_usage',
+            'industry_alignment'
+        ]
+    
+    def analyze_resume_content(self, resume_content: str, target_job: str = '', 
+                             job_requirements: List[str] = None) -> Dict[str, Any]:
+        """
+        Comprehensive resume analysis with AI-powered suggestions
+        
+        Args:
+            resume_content: The resume text content
+            target_job: Target job title or description
+            job_requirements: List of specific job requirements
+            
+        Returns:
+            Dictionary containing analysis results and suggestions
+        """
+        start_time = time.time()
+        
+        try:
+            analysis_result = {
+                'overall_score': 0,
+                'category_scores': {},
+                'strengths': [],
+                'weaknesses': [],
+                'suggestions': [],
+                'keyword_analysis': {},
+                'skill_gap_analysis': {},
+                'improvement_recommendations': [],
+                'processing_time': 0
+            }
+            
+            # Basic content analysis
+            content_analysis = self._analyze_content_structure(resume_content)
+            analysis_result['category_scores'].update(content_analysis['scores'])
+            analysis_result['strengths'].extend(content_analysis['strengths'])
+            analysis_result['weaknesses'].extend(content_analysis['weaknesses'])
+            
+            # Keyword optimization analysis
+            if target_job or job_requirements:
+                keyword_analysis = self._analyze_keywords(resume_content, target_job, job_requirements)
+                analysis_result['keyword_analysis'] = keyword_analysis
+                analysis_result['category_scores']['keyword_optimization'] = keyword_analysis['score']
+            
+            # Skill gap analysis
+            if job_requirements:
+                skill_gap = self._analyze_skill_gaps(resume_content, job_requirements)
+                analysis_result['skill_gap_analysis'] = skill_gap
+                analysis_result['category_scores']['skill_alignment'] = skill_gap['alignment_score']
+            
+            # AI-powered content suggestions
+            if self.gemini_api_key:
+                ai_suggestions = self._get_ai_suggestions(resume_content, target_job)
+                analysis_result['suggestions'].extend(ai_suggestions)
+            
+            # Generate improvement recommendations
+            recommendations = self._generate_improvement_recommendations(analysis_result)
+            analysis_result['improvement_recommendations'] = recommendations
+            
+            # Calculate overall score
+            analysis_result['overall_score'] = self._calculate_overall_score(analysis_result['category_scores'])
+            
+            analysis_result['processing_time'] = time.time() - start_time
+            
+            logger.info(f"Resume analysis completed with overall score: {analysis_result['overall_score']}")
+            return analysis_result
+            
+        except Exception as e:
+            logger.error(f"Error in resume analysis: {str(e)}")
+            return {
+                'error': str(e),
+                'processing_time': time.time() - start_time,
+                'overall_score': 0
+            }
+    
+    def _analyze_content_structure(self, resume_content: str) -> Dict[str, Any]:
+        """
+        Analyze the structural elements of the resume
+        """
+        content_lower = resume_content.lower()
+        word_count = len(resume_content.split())
+        
+        scores = {}
+        strengths = []
+        weaknesses = []
+        
+        # Length analysis
+        if 200 <= word_count <= 800:
+            scores['length'] = 85
+            strengths.append("Resume length is appropriate")
+        elif word_count < 200:
+            scores['length'] = 60
+            weaknesses.append("Resume is too short, consider adding more details")
+        else:
+            scores['length'] = 70
+            weaknesses.append("Resume is quite long, consider condensing")
+        
+        # Section presence analysis
+        required_sections = ['experience', 'education', 'skills']
+        optional_sections = ['summary', 'objective', 'projects', 'certifications']
+        
+        section_score = 0
+        for section in required_sections:
+            if section in content_lower:
+                section_score += 30
+                strengths.append(f"Contains {section} section")
+            else:
+                weaknesses.append(f"Missing {section} section")
+        
+        for section in optional_sections:
+            if section in content_lower:
+                section_score += 5
+        
+        scores['sections'] = min(section_score, 100)
+        
+        # Action verb usage
+        action_verbs = [
+            'achieved', 'managed', 'led', 'developed', 'implemented', 'created',
+            'improved', 'increased', 'reduced', 'optimized', 'designed', 'built'
+        ]
+        
+        action_verb_count = sum(1 for verb in action_verbs if verb in content_lower)
+        if action_verb_count >= 5:
+            scores['action_verbs'] = 90
+            strengths.append("Good use of action verbs")
+        elif action_verb_count >= 2:
+            scores['action_verbs'] = 70
+        else:
+            scores['action_verbs'] = 50
+            weaknesses.append("Consider using more action verbs to describe achievements")
+        
+        # Quantification analysis
+        numbers_pattern = r'\d+[%$]?|\d+\.\d+[%$]?'
+        quantifications = re.findall(numbers_pattern, resume_content)
+        
+        if len(quantifications) >= 5:
+            scores['quantification'] = 90
+            strengths.append("Good quantification of achievements")
+        elif len(quantifications) >= 2:
+            scores['quantification'] = 70
+        else:
+            scores['quantification'] = 50
+            weaknesses.append("Consider quantifying your achievements with numbers and percentages")
+        
+        return {
+            'scores': scores,
+            'strengths': strengths,
+            'weaknesses': weaknesses
+        }
+    
+    def _analyze_keywords(self, resume_content: str, target_job: str, 
+                         job_requirements: List[str] = None) -> Dict[str, Any]:
+        """
+        Analyze keyword optimization for target job
+        """
+        resume_lower = resume_content.lower()
+        target_lower = target_job.lower() if target_job else ''
+        
+        # Extract industry from target job
+        industry = self._detect_industry(target_job)
+        industry_keywords = self.industry_keywords.get(industry, [])
+        
+        # Combine all target keywords
+        target_keywords = set()
+        if job_requirements:
+            target_keywords.update([req.lower() for req in job_requirements])
+        
+        # Add industry-specific keywords
+        target_keywords.update(industry_keywords)
+        
+        # Extract keywords from target job description
+        if target_job:
+            job_words = re.findall(r'\b\w+\b', target_lower)
+            # Filter out common words
+            common_words = {'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'}
+            job_keywords = [word for word in job_words if len(word) > 3 and word not in common_words]
+            target_keywords.update(job_keywords[:20])  # Top 20 keywords
+        
+        # Analyze keyword presence
+        found_keywords = []
+        missing_keywords = []
+        
+        for keyword in target_keywords:
+            if keyword in resume_lower:
+                found_keywords.append(keyword)
+            else:
+                missing_keywords.append(keyword)
+        
+        # Calculate keyword score
+        if target_keywords:
+            keyword_score = (len(found_keywords) / len(target_keywords)) * 100
+        else:
+            keyword_score = 75  # Default score if no target keywords
+        
+        return {
+            'score': min(keyword_score, 100),
+            'found_keywords': found_keywords,
+            'missing_keywords': missing_keywords[:10],  # Top 10 missing
+            'industry': industry,
+            'keyword_density': len(found_keywords) / len(resume_content.split()) * 100
+        }
+    
+    def _analyze_skill_gaps(self, resume_content: str, job_requirements: List[str]) -> Dict[str, Any]:
+        """
+        Analyze skill gaps between resume and job requirements
+        """
+        resume_lower = resume_content.lower()
+        
+        # Categorize requirements
+        technical_skills = []
+        soft_skills = []
+        certifications = []
+        
+        soft_skill_keywords = [
+            'communication', 'leadership', 'teamwork', 'problem solving',
+            'analytical', 'creative', 'adaptable', 'organized'
+        ]
+        
+        cert_keywords = ['certified', 'certification', 'license', 'credential']
+        
+        for req in job_requirements:
+            req_lower = req.lower()
+            if any(cert in req_lower for cert in cert_keywords):
+                certifications.append(req)
+            elif any(soft in req_lower for soft in soft_skill_keywords):
+                soft_skills.append(req)
+            else:
+                technical_skills.append(req)
+        
+        # Analyze each category
+        def analyze_category(skills, category_name):
+            found = []
+            missing = []
+            
+            for skill in skills:
+                # Check if skill or any part of it is in resume
+                skill_lower = skill.lower()
+                skill_words = skill_lower.split()
+                
+                # Check exact match or partial match
+                if (skill_lower in resume_lower or 
+                    any(word in resume_lower for word in skill_words if len(word) > 2)):
+                    found.append(skill)
+                else:
+                    missing.append(skill)
+            
+            coverage = len(found) / len(skills) * 100 if skills else 100
+            
+            return {
+                'found': found,
+                'missing': missing,
+                'coverage_percentage': coverage
+            }
+        
+        technical_analysis = analyze_category(technical_skills, 'technical')
+        soft_analysis = analyze_category(soft_skills, 'soft')
+        cert_analysis = analyze_category(certifications, 'certifications')
+        
+        # Calculate overall alignment score
+        total_requirements = len(job_requirements)
+        total_found = len(technical_analysis['found']) + len(soft_analysis['found']) + len(cert_analysis['found'])
+        alignment_score = (total_found / total_requirements * 100) if total_requirements > 0 else 100
+        
+        return {
+            'alignment_score': alignment_score,
+            'technical_skills': technical_analysis,
+            'soft_skills': soft_analysis,
+            'certifications': cert_analysis,
+            'priority_gaps': (technical_analysis['missing'][:3] + 
+                            soft_analysis['missing'][:2] + 
+                            cert_analysis['missing'][:2])
+        }
+    
+    def _get_ai_suggestions(self, resume_content: str, target_job: str) -> List[str]:
+        """
+        Get AI-powered suggestions using Gemini API
+        """
+        try:
+            import google.generativeai as genai
+            genai.configure(api_key=self.gemini_api_key)
+            model = genai.GenerativeModel('gemini-pro')
+            
+            prompt = f"""
+            Analyze this resume and provide specific, actionable improvement suggestions:
+            
+            Resume Content:
+            {resume_content[:2000]}  # Limit content length
+            
+            Target Job: {target_job}
+            
+            Please provide 5-7 specific suggestions for improving this resume, focusing on:
+            1. Content improvements
+            2. Keyword optimization
+            3. Achievement quantification
+            4. Skills highlighting
+            5. Format and structure
+            
+            Format your response as a numbered list of actionable suggestions.
+            """
+            
+            response = model.generate_content(prompt)
+            suggestions_text = response.text
+            
+            # Parse suggestions into list
+            suggestions = []
+            for line in suggestions_text.split('\n'):
+                line = line.strip()
+                if line and (line[0].isdigit() or line.startswith('-') or line.startswith('•')):
+                    # Clean up the suggestion text
+                    suggestion = re.sub(r'^\d+\.?\s*', '', line)
+                    suggestion = re.sub(r'^[-•]\s*', '', suggestion)
+                    if suggestion:
+                        suggestions.append(suggestion)
+            
+            return suggestions[:7]  # Limit to 7 suggestions
+            
+        except Exception as e:
+            logger.error(f"Error getting AI suggestions: {str(e)}")
+            return [
+                "Consider adding more quantified achievements with specific numbers and percentages",
+                "Use stronger action verbs to begin your bullet points",
+                "Tailor your skills section to match the target job requirements",
+                "Add a professional summary highlighting your key qualifications",
+                "Ensure consistent formatting throughout the document"
+            ]
+    
+    def _generate_improvement_recommendations(self, analysis_result: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """
+        Generate prioritized improvement recommendations
+        """
+        recommendations = []
+        category_scores = analysis_result.get('category_scores', {})
+        
+        # Priority recommendations based on scores
+        if category_scores.get('quantification', 100) < 70:
+            recommendations.append({
+                'category': 'Achievement Quantification',
+                'priority': 'high',
+                'description': 'Add specific numbers, percentages, and metrics to your achievements',
+                'examples': [
+                    'Instead of "Improved sales" write "Increased sales by 25% over 6 months"',
+                    'Instead of "Managed team" write "Led team of 8 developers"',
+                    'Instead of "Reduced costs" write "Cut operational costs by $50,000 annually"'
+                ]
+            })
+        
+        if category_scores.get('action_verbs', 100) < 70:
+            recommendations.append({
+                'category': 'Action Verb Usage',
+                'priority': 'medium',
+                'description': 'Use stronger action verbs to describe your accomplishments',
+                'examples': [
+                    'Replace "Responsible for" with "Managed", "Led", or "Oversaw"',
+                    'Use "Implemented", "Developed", "Created" instead of "Worked on"',
+                    'Start bullet points with "Achieved", "Delivered", "Optimized"'
+                ]
+            })
+        
+        if category_scores.get('keyword_optimization', 100) < 70:
+            recommendations.append({
+                'category': 'Keyword Optimization',
+                'priority': 'high',
+                'description': 'Include more relevant keywords from the target job description',
+                'examples': [
+                    'Mirror the language used in the job posting',
+                    'Include industry-specific terminology',
+                    'Add relevant technical skills and tools'
+                ]
+            })
+        
+        if category_scores.get('sections', 100) < 80:
+            recommendations.append({
+                'category': 'Resume Structure',
+                'priority': 'high',
+                'description': 'Improve resume organization and include essential sections',
+                'examples': [
+                    'Add a professional summary at the top',
+                    'Include a dedicated skills section',
+                    'Organize experience in reverse chronological order'
+                ]
+            })
+        
+        # Skill gap recommendations
+        skill_gap = analysis_result.get('skill_gap_analysis', {})
+        if skill_gap.get('alignment_score', 100) < 70:
+            priority_gaps = skill_gap.get('priority_gaps', [])
+            if priority_gaps:
+                recommendations.append({
+                    'category': 'Skill Gap Closure',
+                    'priority': 'high',
+                    'description': 'Address key skill gaps identified in the job requirements',
+                    'examples': [f'Consider highlighting or developing: {", ".join(priority_gaps[:5])}']
+                })
+        
+        # Sort by priority
+        priority_order = {'high': 1, 'medium': 2, 'low': 3}
+        recommendations.sort(key=lambda x: priority_order.get(x['priority'], 3))
+        
+        return recommendations
+    
+    def _detect_industry(self, target_job: str) -> str:
+        """
+        Detect industry from target job description
+        """
+        if not target_job:
+            return 'general'
+        
+        job_lower = target_job.lower()
+        
+        # Industry detection keywords - order matters, more specific first
+        industry_indicators = {
+            'marketing': ['marketing', 'digital marketing', 'campaign', 'brand', 'advertising', 'seo'],
+            'technology': ['software', 'developer', 'engineer', 'programming', 'tech', 'it', 'data'],
+            'finance': ['finance', 'accounting', 'financial', 'analyst', 'banking', 'investment'],
+            'healthcare': ['healthcare', 'medical', 'nurse', 'doctor', 'clinical', 'patient'],
+            'sales': ['sales', 'account', 'business development', 'revenue', 'client']
+        }
+        
+        # Check for marketing keywords first since they're more specific
+        for industry, keywords in industry_indicators.items():
+            if any(keyword in job_lower for keyword in keywords):
+                return industry
+        
+        return 'general'
+    
+    def _calculate_overall_score(self, category_scores: Dict[str, float]) -> float:
+        """
+        Calculate weighted overall resume score
+        """
+        if not category_scores:
+            return 0
+        
+        # Weights for different categories
+        weights = {
+            'length': 0.1,
+            'sections': 0.15,
+            'action_verbs': 0.15,
+            'quantification': 0.2,
+            'keyword_optimization': 0.25,
+            'skill_alignment': 0.15
+        }
+        
+        weighted_score = 0
+        total_weight = 0
+        
+        for category, score in category_scores.items():
+            weight = weights.get(category, 0.1)
+            weighted_score += score * weight
+            total_weight += weight
+        
+        return weighted_score / total_weight if total_weight > 0 else 0
+
+
+def generate_resume_suggestions(job_title: str, experience_level: str, 
+                              skills: List[str], industry: str = '') -> Dict[str, Any]:
+    """
+    Generate AI-powered resume content suggestions based on job requirements
+    
+    Args:
+        job_title: Target job title
+        experience_level: Experience level (entry, mid, senior, lead)
+        skills: List of relevant skills
+        industry: Target industry
+        
+    Returns:
+        Dictionary containing content suggestions
+    """
+    try:
+        analyzer = ResumeAnalysisEngine()
+        
+        # Generate suggestions based on job title and industry
+        suggestions = {
+            'professional_summary': _generate_summary_suggestions(job_title, experience_level, industry),
+            'skills_optimization': _generate_skills_suggestions(skills, job_title, industry),
+            'experience_bullets': _generate_experience_suggestions(job_title, experience_level),
+            'keywords_to_include': _generate_keyword_suggestions(job_title, industry),
+            'achievement_examples': _generate_achievement_examples(job_title, experience_level),
+            'industry_specific_tips': _generate_industry_tips(industry)
+        }
+        
+        return {
+            'success': True,
+            'suggestions': suggestions,
+            'job_title': job_title,
+            'experience_level': experience_level,
+            'industry': industry
+        }
+        
+    except Exception as e:
+        logger.error(f"Error generating resume suggestions: {str(e)}")
+        return {
+            'success': False,
+            'error': str(e)
+        }
+
+
+def analyze_resume_content(resume_content: str, target_job: str = '', 
+                         job_requirements: List[str] = None) -> Dict[str, Any]:
+    """
+    Analyze resume content and provide improvement suggestions
+    
+    Args:
+        resume_content: The resume text content
+        target_job: Target job description
+        job_requirements: List of specific job requirements
+        
+    Returns:
+        Dictionary containing analysis results and suggestions
+    """
+    try:
+        analyzer = ResumeAnalysisEngine()
+        
+        # Parse job requirements if target_job is provided
+        if target_job and not job_requirements:
+            job_requirements = _extract_requirements_from_job_description(target_job)
+        
+        analysis = analyzer.analyze_resume_content(
+            resume_content=resume_content,
+            target_job=target_job,
+            job_requirements=job_requirements or []
+        )
+        
+        return {
+            'success': True,
+            'analysis': analysis
+        }
+        
+    except Exception as e:
+        logger.error(f"Error analyzing resume content: {str(e)}")
+        return {
+            'success': False,
+            'error': str(e)
+        }
+
+
+def _generate_summary_suggestions(job_title: str, experience_level: str, industry: str) -> List[str]:
+    """Generate professional summary suggestions"""
+    level_descriptors = {
+        'entry': 'motivated and detail-oriented',
+        'mid': 'experienced and results-driven',
+        'senior': 'seasoned and strategic',
+        'lead': 'accomplished and visionary'
+    }
+    
+    descriptor = level_descriptors.get(experience_level, 'dedicated')
+    
+    suggestions = [
+        f"{descriptor.title()} {job_title} with proven track record in {industry}",
+        f"Results-oriented professional specializing in {job_title.lower()} with expertise in {industry}",
+        f"{descriptor.title()} {job_title} committed to delivering exceptional results and driving business growth"
+    ]
+    
+    return suggestions
+
+
+def _generate_skills_suggestions(skills: List[str], job_title: str, industry: str) -> Dict[str, List[str]]:
+    """Generate skills optimization suggestions"""
+    
+    # Industry-specific skill recommendations
+    industry_skills = {
+        'technology': ['Python', 'JavaScript', 'AWS', 'Docker', 'Kubernetes', 'React', 'Node.js'],
+        'marketing': ['Google Analytics', 'SEO/SEM', 'Social Media Marketing', 'Content Strategy', 'A/B Testing'],
+        'finance': ['Financial Modeling', 'Excel', 'SQL', 'Risk Analysis', 'Budgeting', 'Forecasting'],
+        'healthcare': ['Electronic Health Records', 'HIPAA Compliance', 'Patient Care', 'Medical Terminology'],
+        'sales': ['CRM Software', 'Lead Generation', 'Negotiation', 'Pipeline Management', 'Customer Retention']
+    }
+    
+    recommended_skills = industry_skills.get(industry, [])
+    
+    # Filter out skills already present
+    current_skills_lower = [skill.lower() for skill in skills]
+    missing_skills = [skill for skill in recommended_skills 
+                     if skill.lower() not in current_skills_lower]
+    
+    return {
+        'current_skills': skills,
+        'recommended_additions': missing_skills[:8],
+        'skill_organization_tips': [
+            'Group technical and soft skills separately',
+            'List skills in order of relevance to the target job',
+            'Include proficiency levels for technical skills'
+        ]
+    }
+
+
+def _generate_experience_suggestions(job_title: str, experience_level: str) -> List[str]:
+    """Generate experience bullet point suggestions"""
+    
+    action_verbs = ['Developed', 'Implemented', 'Managed', 'Led', 'Created', 'Optimized', 'Achieved', 'Delivered']
+    
+    suggestions = [
+        f"{action_verbs[0]} and implemented solutions that improved efficiency by X%",
+        f"{action_verbs[1]} strategic initiatives resulting in $X revenue increase",
+        f"{action_verbs[2]} cross-functional team of X members to deliver projects on time",
+        f"{action_verbs[3]} process improvements that reduced costs by X%",
+        f"{action_verbs[4]} comprehensive training programs for X+ team members"
+    ]
+    
+    return suggestions
+
+
+def _generate_keyword_suggestions(job_title: str, industry: str) -> List[str]:
+    """Generate keyword suggestions for ATS optimization"""
+    
+    # Common keywords by job title
+    title_keywords = {
+        'software engineer': ['software development', 'programming', 'coding', 'debugging', 'testing'],
+        'marketing manager': ['campaign management', 'digital marketing', 'brand strategy', 'market research'],
+        'data analyst': ['data analysis', 'statistical analysis', 'data visualization', 'reporting'],
+        'project manager': ['project management', 'agile', 'scrum', 'stakeholder management', 'risk management']
+    }
+    
+    keywords = title_keywords.get(job_title.lower(), [])
+    
+    # Add industry-specific keywords
+    industry_keywords = {
+        'technology': ['API', 'cloud computing', 'DevOps', 'microservices'],
+        'marketing': ['ROI', 'conversion optimization', 'customer acquisition', 'brand awareness'],
+        'finance': ['financial planning', 'compliance', 'audit', 'investment analysis']
+    }
+    
+    keywords.extend(industry_keywords.get(industry, []))
+    
+    return keywords[:10]
+
+
+def _generate_achievement_examples(job_title: str, experience_level: str) -> List[str]:
+    """Generate achievement examples with quantification"""
+    
+    examples = [
+        "Increased team productivity by 30% through implementation of new workflow processes",
+        "Reduced project delivery time by 25% while maintaining 99% quality standards",
+        "Generated $500K in additional revenue through strategic client relationship management",
+        "Led successful product launch that captured 15% market share within first quarter",
+        "Improved customer satisfaction scores from 3.2 to 4.7 out of 5.0"
+    ]
+    
+    return examples
+
+
+def _generate_industry_tips(industry: str) -> List[str]:
+    """Generate industry-specific resume tips"""
+    
+    tips = {
+        'technology': [
+            'Include links to your GitHub profile and portfolio projects',
+            'Mention specific programming languages and frameworks',
+            'Highlight contributions to open-source projects',
+            'Include technical certifications and continuous learning'
+        ],
+        'marketing': [
+            'Quantify campaign results with metrics like CTR, conversion rates, and ROI',
+            'Include examples of successful campaigns and their impact',
+            'Mention familiarity with marketing automation tools',
+            'Highlight cross-channel marketing experience'
+        ],
+        'finance': [
+            'Include relevant certifications (CPA, CFA, FRM)',
+            'Quantify financial impact of your work',
+            'Mention experience with financial software and tools',
+            'Highlight regulatory compliance experience'
+        ]
+    }
+    
+    return tips.get(industry, [
+        'Tailor your resume to each specific job application',
+        'Use industry-specific terminology and keywords',
+        'Quantify your achievements with specific numbers and percentages',
+        'Keep your resume concise and well-organized'
+    ])
+
+
+def _extract_requirements_from_job_description(job_description: str) -> List[str]:
+    """Extract requirements from job description text"""
+    
+    # Simple extraction based on common patterns
+    requirements = []
+    
+    # Look for bullet points or numbered lists
+    lines = job_description.split('\n')
+    for line in lines:
+        line = line.strip()
+        if line.startswith(('•', '-', '*')) or re.match(r'^\d+\.', line):
+            # Clean up the requirement
+            requirement = re.sub(r'^[•\-\*\d\.]\s*', '', line)
+            if len(requirement) > 10:  # Filter out very short items
+                requirements.append(requirement)
+    
+    # Look for "requirements" or "qualifications" sections
+    job_lower = job_description.lower()
+    req_patterns = [
+        r'requirements?:?\s*(.+?)(?=\n\n|\n[A-Z]|$)',
+        r'qualifications?:?\s*(.+?)(?=\n\n|\n[A-Z]|$)',
+        r'skills?:?\s*(.+?)(?=\n\n|\n[A-Z]|$)'
+    ]
+    
+    for pattern in req_patterns:
+        matches = re.findall(pattern, job_lower, re.DOTALL)
+        for match in matches:
+            # Split by common delimiters
+            items = re.split(r'[•\-\*\n]', match)
+            for item in items:
+                item = item.strip()
+                if len(item) > 10:
+                    requirements.append(item)
+    
+    return requirements[:20]  # Limit to top 20 requirements
+        

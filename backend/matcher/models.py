@@ -51,15 +51,85 @@ class JobSeekerProfile(models.Model):
     current_position = models.CharField(max_length=255, blank=True)
     current_company = models.CharField(max_length=255, blank=True)
     expected_salary = models.IntegerField(blank=True, null=True)
-    skills = models.TextField(blank=True, help_text="Comma-separated skills")
     bio = models.TextField(blank=True)
+    professional_summary = models.TextField(blank=True)
     linkedin_url = models.URLField(blank=True)
     github_url = models.URLField(blank=True)
     portfolio_url = models.URLField(blank=True)
-    availability = models.BooleanField(default=True)
+    personal_website = models.URLField(blank=True)
+    twitter = models.URLField(blank=True)
+    availability = models.CharField(max_length=50, blank=True)
+    notice_period = models.CharField(max_length=50, blank=True)
+    references = models.TextField(blank=True)
+    # Relationships to new profile sections
+    # (see below for models)
     
     def __str__(self):
         return f"{self.user.username}'s Profile"
+
+
+# --- New Profile Section Models ---
+class Education(models.Model):
+    profile = models.ForeignKey(JobSeekerProfile, on_delete=models.CASCADE, related_name='education')
+    degree = models.CharField(max_length=255)
+    institution = models.CharField(max_length=255)
+    year = models.CharField(max_length=50, blank=True)
+    description = models.TextField(blank=True)
+    def __str__(self):
+        return f"{self.degree} at {self.institution}"
+
+class WorkExperience(models.Model):
+    profile = models.ForeignKey(JobSeekerProfile, on_delete=models.CASCADE, related_name='work_experience')
+    job_title = models.CharField(max_length=255)
+    company = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, blank=True)
+    start_date = models.CharField(max_length=20, blank=True)
+    end_date = models.CharField(max_length=20, blank=True)
+    current = models.BooleanField(default=False)
+    description = models.TextField(blank=True)
+    def __str__(self):
+        return f"{self.job_title} at {self.company}"
+
+class Project(models.Model):
+    profile = models.ForeignKey(JobSeekerProfile, on_delete=models.CASCADE, related_name='projects')
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    technologies = models.CharField(max_length=255, blank=True)
+    link = models.URLField(blank=True)
+    start_date = models.CharField(max_length=20, blank=True)
+    end_date = models.CharField(max_length=20, blank=True)
+    def __str__(self):
+        return self.title
+
+class Certification(models.Model):
+    profile = models.ForeignKey(JobSeekerProfile, on_delete=models.CASCADE, related_name='certifications')
+    name = models.CharField(max_length=255)
+    organization = models.CharField(max_length=255, blank=True)
+    issue_date = models.CharField(max_length=20, blank=True)
+    expiry_date = models.CharField(max_length=20, blank=True)
+    credential_id = models.CharField(max_length=100, blank=True)
+    def __str__(self):
+        return self.name
+
+class Award(models.Model):
+    profile = models.ForeignKey(JobSeekerProfile, on_delete=models.CASCADE, related_name='awards')
+    title = models.CharField(max_length=255)
+    organization = models.CharField(max_length=255, blank=True)
+    date = models.CharField(max_length=20, blank=True)
+    description = models.TextField(blank=True)
+    def __str__(self):
+        return self.title
+
+class VolunteerExperience(models.Model):
+    profile = models.ForeignKey(JobSeekerProfile, on_delete=models.CASCADE, related_name='volunteer_experience')
+    role = models.CharField(max_length=255)
+    organization = models.CharField(max_length=255, blank=True)
+    location = models.CharField(max_length=255, blank=True)
+    start_date = models.CharField(max_length=20, blank=True)
+    end_date = models.CharField(max_length=20, blank=True)
+    description = models.TextField(blank=True)
+    def __str__(self):
+        return self.role
 
 
 class RecruiterProfile(models.Model):

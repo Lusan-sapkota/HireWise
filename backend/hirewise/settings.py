@@ -1,3 +1,4 @@
+
 """
 Django settings for hirewise project.
 
@@ -189,7 +190,10 @@ REST_FRAMEWORK = {
 
 
 # CORS settings
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:3000,http://127.0.0.1:3000').split(',')
+CORS_ALLOWED_ORIGINS = config(
+    'CORS_ALLOWED_ORIGINS',
+    default='http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173'
+).split(',')
 CORS_ALLOW_CREDENTIALS = True
 
 
@@ -331,6 +335,10 @@ SESSION_COOKIE_AGE = config('SESSION_COOKIE_AGE', default=3600, cast=int)  # 1 h
 SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
+
+# Google OAuth Client ID/Secret
+OAUTH_CLIENT_ID = config('OAUTH_CLIENT_ID', default='')
+OAUTH_CLIENT_SECRET = config('OAUTH_CLIENT_SECRET', default='')
 
 # CSRF Configuration
 CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=False, cast=bool)
@@ -480,8 +488,8 @@ SPECTACULAR_SETTINGS = {
         'email': 'api-support@hirewise.com',
     },
     'LICENSE': {
-        'name': 'MIT License',
-        'url': 'https://opensource.org/licenses/MIT',
+        'name': 'GNU Affero General Public License v3.0',
+        'url': 'https://www.gnu.org/licenses/agpl-3.0.html',
     },
     'SECURITY': [
         {

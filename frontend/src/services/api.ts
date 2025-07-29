@@ -1,3 +1,4 @@
+
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 // Types
@@ -228,6 +229,16 @@ class APIService {
       localStorage.removeItem('refresh_token');
       this.closeAllWebSockets();
     }
+  }
+
+  // Google OAuth Login
+  async googleLogin(id_token: string): Promise<AxiosResponse<{ user: User; tokens: AuthTokens }>> {
+    const response = await this.api.post('/auth/google/', { id_token });
+    if (response.data.tokens?.access) {
+      localStorage.setItem('access_token', response.data.tokens.access);
+      localStorage.setItem('refresh_token', response.data.tokens.refresh);
+    }
+    return response;
   }
 
   async requestEmailVerification(email: string): Promise<AxiosResponse> {
