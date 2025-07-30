@@ -196,6 +196,12 @@ CORS_ALLOWED_ORIGINS = config(
 ).split(',')
 CORS_ALLOW_CREDENTIALS = True
 
+# Allow x-request-id header for CORS
+from corsheaders.defaults import default_headers
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'x-request-id',
+]
+
 
 # Custom User Model
 AUTH_USER_MODEL = "matcher.User"

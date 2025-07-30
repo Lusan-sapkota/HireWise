@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { apiService } from '../services/api';
 import { Card, CardHeader, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { Modal } from '../components/ui/Modal';
-import { mockUser } from '../data/mockData';
 import { 
   Edit3, 
   MapPin, 
@@ -24,71 +25,180 @@ import {
   Star,
   Eye,
   MessageSquare,
-  Share2
+  Share2,
+  Loader2
 } from 'lucide-react';
 
 export const Profile: React.FC = () => {
+  const { user, userProfile, updateUser, updateProfile, refreshUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [editedUser, setEditedUser] = useState(mockUser);
+  const [editedUser, setEditedUser] = useState(user);
+  const [editedProfile, setEditedProfile] = useState(userProfile);
   const [newSkill, setNewSkill] = useState('');
   const [showAIResumeModal, setShowAIResumeModal] = useState(false);
   const [isGeneratingResume, setIsGeneratingResume] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [profileAnalytics, setProfileAnalytics] = useState({
+    profileViews: 0,
+    searchAppearances: 0,
+    postEngagements: 0,
+    profileStrength: 0
+  });
+  const [recentActivity, setRecentActivity] = useState([]);
+  const [aiSuggestions, setAiSuggestions] = useState([]);
 
-  const handleSave = () => {
-    setIsEditing(false);
+  // Load profile data and analytics
+  useEffect(() => {
+    if (user) {
+      loadProfileData();
+      
+      // Set up periodic refresh for profile data (fallback for WebSocket)
+      const profileInterval = setInterval(() => {
+        loadProfileData();
+      }, 120000); // Refresh every 2 minutes
+
+      return () => {
+        clearInterval(profileInterval);
+      };
+    }
+  }, [user]);
+
+  const loadProfileData = async () => {
+    setIsLoading(true);
+    try {
+      // Load profile analytics
+      const analyticsResponse = await apiService.getProfileAnalytics();
+      setProfileAnalytics(analyticsResponse.data);
+
+      // Load recent activity
+      const activityResponse = await apiService.getProfileActivity();
+      setRecentActivity(activityResponse.data.results || []);
+
+      // Load AI suggestions
+      const suggestionsResponse = await apiService.getProfileSuggestions();
+      setAiSuggestions(suggestionsResponse.data.suggestions || []);
+    } catch (error) {
+      console.error('Failed to load profile data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Update local state when auth context changes
+  useEffect(() => {
+    if (user) {
+      setEditedUser(user);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (userProfile) {
+      setEditedProfile(userProfile);
+    }
+  }, [userProfile]);
+
+  const handleSave = async () => {
+    setIsLoading(true);
+    try {
+      // Update user basic info
+      if (editedUser && user) {
+        await updateUser({
+          first_name: editedUser.first_name,
+          last_name: editedUser.last_name,
+          email: editedUser.email,
+          phone_number: editedUser.phone_number
+        });
+      }
+
+      // Update profile data
+      if (editedProfile) {
+        await updateProfile(editedProfile);
+      }
+
+      setIsEditing(false);
+      await refreshUser();
+    } catch (error) {
+      console.error('Failed to save profile:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
-    setEditedUser(mockUser);
+    setEditedUser(user);
+    setEditedProfile(userProfile);
     setIsEditing(false);
   };
 
   const addSkill = () => {
-    if (newSkill.trim() && !editedUser.skills.includes(newSkill.trim())) {
-      setEditedUser({
-        ...editedUser,
-        skills: [...editedUser.skills, newSkill.trim()]
+    if (newSkill.trim() && editedProfile && !editedProfile.skills?.includes(newSkill.trim())) {
+      setEditedProfile({
+        ...editedProfile,
+        skills: [...(editedProfile.skills || []), newSkill.trim()]
       });
       setNewSkill('');
     }
   };
 
   const removeSkill = (skillToRemove: string) => {
-    setEditedUser({
-      ...editedUser,
-      skills: editedUser.skills.filter(skill => skill !== skillToRemove)
-    });
+    if (editedProfile) {
+      setEditedProfile({
+        ...editedProfile,
+        skills: editedProfile.skills?.filter(skill => skill !== skillToRemove) || []
+      });
+    }
   };
 
   const generateAIResume = async () => {
     setIsGeneratingResume(true);
-    // Simulate AI processing
-    await new Promise(resolve => setTimeout(resolve, 3000));
-    setIsGeneratingResume(false);
-    setShowAIResumeModal(false);
-    // Show success message or download
+    try {
+      const response = await apiService.generateAIResume({
+        target_role: '', // Could be from form input
+        style: 'modern'
+      });
+      
+      // Handle the generated resume (download or display)
+      if (response.data.download_url) {
+        window.open(response.data.download_url, '_blank');
+      }
+      
+      setShowAIResumeModal(false);
+    } catch (error) {
+      console.error('Failed to generate AI resume:', error);
+    } finally {
+      setIsGeneratingResume(false);
+    }
   };
 
-  const aiSuggestions = [
-    {
-      type: 'skill',
-      title: 'Add "Machine Learning" skill',
-      description: 'Based on your React experience, ML skills are trending in your field',
-      confidence: 92
-    },
-    {
-      type: 'experience',
-      title: 'Quantify your achievements',
-      description: 'Add metrics like "Improved app performance by 40%" to your experience',
-      confidence: 88
-    },
-    {
-      type: 'summary',
-      title: 'Enhance your summary',
-      description: 'Include keywords like "scalable applications" and "cloud architecture"',
-      confidence: 85
+  const applyAISuggestion = async (suggestionId: string) => {
+    try {
+      await apiService.applyProfileSuggestion(suggestionId);
+      // Refresh suggestions and profile data
+      await loadProfileData();
+      await refreshUser();
+    } catch (error) {
+      console.error('Failed to apply AI suggestion:', error);
     }
-  ];
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    return `${Math.floor(diffInSeconds / 86400)}d ago`;
+  };
+
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -113,8 +223,8 @@ export const Profile: React.FC = () => {
                 {/* Avatar */}
                 <div className="relative -mt-12 sm:-mt-16 mb-4 lg:mb-0">
                   <img
-                    src={editedUser.avatar}
-                    alt={editedUser.name}
+                    src={editedUser?.profile_picture || `https://ui-avatars.io/api/?name=${encodeURIComponent((editedUser?.first_name || '') + ' ' + (editedUser?.last_name || ''))}&background=6366f1&color=fff`}
+                    alt={`${editedUser?.first_name} ${editedUser?.last_name}`}
                     className="w-24 sm:w-32 h-24 sm:h-32 rounded-full border-4 border-white dark:border-gray-800 shadow-xl"
                   />
                   {isEditing && (
@@ -128,43 +238,52 @@ export const Profile: React.FC = () => {
                 <div className="flex-1">
                   {isEditing ? (
                     <div className="space-y-3 sm:space-y-4">
+                      <div className="grid grid-cols-2 gap-3">
+                        <Input
+                          value={editedUser?.first_name || ''}
+                          onChange={(e) => setEditedUser({...editedUser, first_name: e.target.value})}
+                          placeholder="First Name"
+                        />
+                        <Input
+                          value={editedUser?.last_name || ''}
+                          onChange={(e) => setEditedUser({...editedUser, last_name: e.target.value})}
+                          placeholder="Last Name"
+                        />
+                      </div>
                       <Input
-                        value={editedUser.name}
-                        onChange={(e) => setEditedUser({...editedUser, name: e.target.value})}
-                        className="text-xl sm:text-2xl font-bold"
-                        placeholder="Full Name"
+                        value={editedUser?.email || ''}
+                        onChange={(e) => setEditedUser({...editedUser, email: e.target.value})}
+                        placeholder="Email"
+                        type="email"
                       />
                       <Input
-                        value={editedUser.title}
-                        onChange={(e) => setEditedUser({...editedUser, title: e.target.value})}
-                        placeholder="Professional Title"
-                      />
-                      <Input
-                        value={editedUser.location}
-                        onChange={(e) => setEditedUser({...editedUser, location: e.target.value})}
-                        placeholder="Location"
+                        value={editedUser?.phone_number || ''}
+                        onChange={(e) => setEditedUser({...editedUser, phone_number: e.target.value})}
+                        placeholder="Phone Number"
                       />
                     </div>
                   ) : (
                     <>
                       <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                        {editedUser.name}
+                        {editedUser?.first_name} {editedUser?.last_name}
                       </h1>
                       <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
-                        {editedUser.title}
+                        {editedProfile?.bio || `${editedUser?.user_type === 'job_seeker' ? 'Job Seeker' : 'Recruiter'}`}
                       </p>
                       <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-3 sm:mb-4">
-                        <div className="flex items-center space-x-1">
-                          <MapPin className="w-4 h-4" />
-                          <span>{editedUser.location}</span>
-                        </div>
+                        {editedProfile?.location && (
+                          <div className="flex items-center space-x-1">
+                            <MapPin className="w-4 h-4" />
+                            <span>{editedProfile.location}</span>
+                          </div>
+                        )}
                         <div className="flex items-center space-x-1">
                           <Mail className="w-4 h-4" />
-                          <span>{editedUser.email}</span>
+                          <span>{editedUser?.email}</span>
                         </div>
                         <div className="flex items-center space-x-1">
                           <Users className="w-4 h-4" />
-                          <span>{editedUser.connections} connections</span>
+                          <span>{profileAnalytics.searchAppearances} profile views</span>
                         </div>
                       </div>
                     </>
@@ -213,7 +332,7 @@ export const Profile: React.FC = () => {
           <div className="lg:col-span-2 space-y-4 sm:space-y-6">
             
             {/* AI Suggestions */}
-            {!isEditing && (
+            {!isEditing && aiSuggestions.length > 0 && (
               <Card className="border-2 border-violet-200 dark:border-violet-800">
                 <CardHeader>
                   <div className="flex items-center space-x-2">
@@ -224,7 +343,7 @@ export const Profile: React.FC = () => {
                 <CardContent>
                   <div className="space-y-3 sm:space-y-4">
                     {aiSuggestions.map((suggestion, index) => (
-                      <div key={index} className="p-3 sm:p-4 bg-violet-50 dark:bg-violet-900/20 rounded-lg border border-violet-200 dark:border-violet-800">
+                      <div key={suggestion.id || index} className="p-3 sm:p-4 bg-violet-50 dark:bg-violet-900/20 rounded-lg border border-violet-200 dark:border-violet-800">
                         <div className="flex flex-col sm:flex-row items-start justify-between space-y-2 sm:space-y-0">
                           <div className="flex-1">
                             <h3 className="text-sm sm:text-base font-medium text-violet-900 dark:text-violet-100 mb-1">
@@ -242,7 +361,12 @@ export const Profile: React.FC = () => {
                               </div>
                             </div>
                           </div>
-                          <Button size="sm" variant="outline" className="w-full sm:w-auto">
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="w-full sm:w-auto"
+                            onClick={() => applyAISuggestion(suggestion.id)}
+                          >
                             Apply
                           </Button>
                         </div>
@@ -261,15 +385,15 @@ export const Profile: React.FC = () => {
               <CardContent>
                 {isEditing ? (
                   <textarea
-                    value={editedUser.bio}
-                    onChange={(e) => setEditedUser({...editedUser, bio: e.target.value})}
+                    value={editedProfile?.bio || ''}
+                    onChange={(e) => setEditedProfile({...editedProfile, bio: e.target.value})}
                     rows={4}
                     className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     placeholder="Tell your professional story..."
                   />
                 ) : (
                   <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {editedUser.bio}
+                    {editedProfile?.bio || 'No bio added yet. Click edit to add your professional story.'}
                   </p>
                 )}
               </CardContent>
@@ -291,41 +415,54 @@ export const Profile: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4 sm:space-y-6">
-                  {editedUser.experience.map((exp) => (
-                    <div key={exp.id} className="flex space-x-3 sm:space-x-4">
-                      <div className="flex-shrink-0">
-                        <div className="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-lg flex items-center justify-center">
-                          <Building className="w-6 h-6 text-white" />
-                        </div>
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-2 sm:space-y-0">
-                          <div>
-                            <h3 className="font-semibold text-gray-900 dark:text-white text-base sm:text-lg">
-                              {exp.position}
-                            </h3>
-                            <p className="text-sm sm:text-base text-indigo-600 dark:text-indigo-400 font-medium">
-                              {exp.company}
-                            </p>
-                            <div className="flex items-center space-x-2 mt-1">
-                              <Calendar className="w-4 h-4 text-gray-400" />
-                              <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                                {exp.duration}
-                              </span>
-                            </div>
+                  {editedProfile?.work_experience && editedProfile.work_experience.length > 0 ? (
+                    editedProfile.work_experience.map((exp, index) => (
+                      <div key={index} className="flex space-x-3 sm:space-x-4">
+                        <div className="flex-shrink-0">
+                          <div className="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-r from-indigo-500 to-violet-500 rounded-lg flex items-center justify-center">
+                            <Building className="w-6 h-6 text-white" />
                           </div>
-                          {isEditing && (
-                            <Button size="sm" variant="ghost">
-                              <Edit3 className="w-4 h-4" />
-                            </Button>
-                          )}
                         </div>
-                        <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 mt-3 leading-relaxed">
-                          {exp.description}
-                        </p>
+                        <div className="flex-1">
+                          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between space-y-2 sm:space-y-0">
+                            <div>
+                              <h3 className="font-semibold text-gray-900 dark:text-white text-base sm:text-lg">
+                                {exp.position}
+                              </h3>
+                              <p className="text-sm sm:text-base text-indigo-600 dark:text-indigo-400 font-medium">
+                                {exp.company}
+                              </p>
+                              <div className="flex items-center space-x-2 mt-1">
+                                <Calendar className="w-4 h-4 text-gray-400" />
+                                <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                                  {exp.start_date} - {exp.end_date || 'Present'}
+                                </span>
+                              </div>
+                            </div>
+                            {isEditing && (
+                              <Button size="sm" variant="ghost">
+                                <Edit3 className="w-4 h-4" />
+                              </Button>
+                            )}
+                          </div>
+                          <p className="text-sm sm:text-base text-gray-700 dark:text-gray-300 mt-3 leading-relaxed">
+                            {exp.description}
+                          </p>
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <Briefcase className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-600 dark:text-gray-400">No work experience added yet.</p>
+                      {isEditing && (
+                        <Button className="mt-4" size="sm">
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add Experience
+                        </Button>
+                      )}
                     </div>
-                  ))}
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -353,23 +490,43 @@ export const Profile: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-3">
-                  {editedUser.skills.map((skill, index) => (
-                    <div
-                      key={index}
-                      className="inline-flex items-center px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 border border-indigo-200 dark:border-indigo-800"
-                    >
-                      <Award className="w-3 h-3 mr-2" />
-                      <span className="font-medium">{skill}</span>
+                  {editedProfile?.skills && editedProfile.skills.length > 0 ? (
+                    editedProfile.skills.map((skill, index) => (
+                      <div
+                        key={index}
+                        className="inline-flex items-center px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 border border-indigo-200 dark:border-indigo-800"
+                      >
+                        <Award className="w-3 h-3 mr-2" />
+                        <span className="font-medium">{skill}</span>
+                        {isEditing && (
+                          <button
+                            onClick={() => removeSkill(skill)}
+                            className="ml-2 text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-4 w-full">
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">No skills added yet.</p>
                       {isEditing && (
-                        <button
-                          onClick={() => removeSkill(skill)}
-                          className="ml-2 text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
+                        <div className="flex items-center space-x-2 justify-center">
+                          <Input
+                            placeholder="Add your first skill"
+                            value={newSkill}
+                            onChange={(e) => setNewSkill(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && addSkill()}
+                            className="w-48"
+                          />
+                          <Button onClick={addSkill} size="sm">
+                            <Plus className="w-4 h-4" />
+                          </Button>
+                        </div>
                       )}
                     </div>
-                  ))}
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -390,7 +547,7 @@ export const Profile: React.FC = () => {
                       <Eye className="w-4 h-4 text-gray-500" />
                       <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Profile views</span>
                     </div>
-                    <span className="text-base sm:text-lg font-semibold text-indigo-600">142</span>
+                    <span className="text-base sm:text-lg font-semibold text-indigo-600">{profileAnalytics.profileViews}</span>
                   </div>
                   
                   <div className="flex items-center justify-between">
@@ -398,7 +555,7 @@ export const Profile: React.FC = () => {
                       <Users className="w-4 h-4 text-gray-500" />
                       <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Search appearances</span>
                     </div>
-                    <span className="text-base sm:text-lg font-semibold text-emerald-600">89</span>
+                    <span className="text-base sm:text-lg font-semibold text-emerald-600">{profileAnalytics.searchAppearances}</span>
                   </div>
                   
                   <div className="flex items-center justify-between">
@@ -406,16 +563,19 @@ export const Profile: React.FC = () => {
                       <MessageSquare className="w-4 h-4 text-gray-500" />
                       <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Post engagements</span>
                     </div>
-                    <span className="text-base sm:text-lg font-semibold text-violet-600">234</span>
+                    <span className="text-base sm:text-lg font-semibold text-violet-600">{profileAnalytics.postEngagements}</span>
                   </div>
 
                   <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
                     <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2">Profile Strength</div>
                     <div className="flex items-center space-x-2">
                       <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <div className="bg-emerald-500 h-2 rounded-full w-4/5"></div>
+                        <div 
+                          className="bg-emerald-500 h-2 rounded-full transition-all duration-300" 
+                          style={{ width: `${profileAnalytics.profileStrength}%` }}
+                        ></div>
                       </div>
-                      <span className="text-xs sm:text-sm font-medium text-emerald-600">85%</span>
+                      <span className="text-xs sm:text-sm font-medium text-emerald-600">{profileAnalytics.profileStrength}%</span>
                     </div>
                   </div>
                 </div>
@@ -469,35 +629,32 @@ export const Profile: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3 sm:space-y-4">
-                  <div className="flex items-center space-x-3 p-2 sm:p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                    <div className="flex-1">
-                      <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
-                        Completed AI interview with 85% confidence
-                      </span>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">2 days ago</p>
+                  {recentActivity.length > 0 ? (
+                    recentActivity.map((activity, index) => (
+                      <div key={index} className="flex items-center space-x-3 p-2 sm:p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div className={`w-2 h-2 rounded-full ${
+                          activity.type === 'interview' ? 'bg-emerald-500' :
+                          activity.type === 'profile_update' ? 'bg-indigo-500' :
+                          activity.type === 'application' ? 'bg-violet-500' :
+                          'bg-gray-500'
+                        }`}></div>
+                        <div className="flex-1">
+                          <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                            {activity.description}
+                          </span>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {formatTimeAgo(activity.created_at)}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-4">
+                      <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                        No recent activity
+                      </p>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-3 p-2 sm:p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
-                    <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
-                    <div className="flex-1">
-                      <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
-                        Updated skills section
-                      </span>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">1 week ago</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center space-x-3 p-2 sm:p-3 bg-violet-50 dark:bg-violet-900/20 rounded-lg">
-                    <div className="w-2 h-2 bg-violet-500 rounded-full"></div>
-                    <div className="flex-1">
-                      <span className="text-xs sm:text-sm text-gray-700 dark:text-gray-300">
-                        Applied to 3 positions
-                      </span>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">2 weeks ago</p>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </CardContent>
             </Card>

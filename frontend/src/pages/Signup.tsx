@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { GoogleLogin, googleLogout, GoogleOAuthProvider } from '@react-oauth/google';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, AlertCircle, CheckCircle, User, Mail, Phone, Lock } from 'lucide-react';
+import { Eye, EyeOff, AlertCircle, CheckCircle, User, Mail, Phone, Lock, Briefcase, UserCheck } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import { apiService } from '../services/api';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -10,6 +11,7 @@ const logo = '/logo.png';
 
 export const Signup: React.FC = () => {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -93,13 +95,33 @@ export const Signup: React.FC = () => {
 
     try {
       const { confirmPassword, ...registrationData } = formData;
-      await apiService.register(registrationData);
-      setSuccess('Account created successfully! Please complete your profile.');
-      setTimeout(() => {
-        navigate('/complete-profile');
-      }, 1200);
+      
+      // If phone number is provided, use OTP verification flow
+      if (formData.phone_number.trim()) {
+        // Send OTP first
+        await apiService.sendOTP(formData.phone_number, 'signup');
+        
+        // Navigate to OTP verification with user data
+        navigate('/verify-otp', {
+          state: {
+            phoneNumber: formData.phone_number,
+            purpose: 'signup',
+            userData: registrationData
+          }
+        });
+        
+        setSuccess('OTP sent to your phone! Please verify to complete registration.');
+      } else {
+        // Traditional email registration
+        await register(registrationData);
+        setSuccess('Account created successfully! Please complete your profile.');
+        setTimeout(() => {
+          navigate('/complete-profile');
+        }, 1200);
+      }
     } catch (err: any) {
-      const errorMessage = err.response?.data?.error?.message || 
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error?.message || 
                           err.response?.data?.detail ||
                           err.response?.data?.username?.[0] ||
                           err.response?.data?.email?.[0] ||
@@ -169,11 +191,9 @@ export const Signup: React.FC = () => {
                       onSuccess={async (credentialResponse) => {
                         if (credentialResponse.credential) {
                           try {
-                            const res = await apiService.googleLogin(credentialResponse.credential);
-                            setSuccess('Google sign-in successful!');
-                            setTimeout(() => {
-                              navigate('/complete-profile');
-                            }, 1200);
+                            // Note: Google OAuth will need to be handled separately for role selection
+                            // For now, we'll redirect to complete profile where role can be set
+                            setError('Please use the form below to select your role during registration.');
                           } catch (err: any) {
                             setError(err.response?.data?.error || 'Google sign-in failed.');
                           }
@@ -323,6 +343,102 @@ export const Signup: React.FC = () => {
                     {fieldErrors.phone_number && (
                       <p className="text-xs text-red-600 dark:text-red-400 mt-1">{fieldErrors.phone_number}</p>
                     )}
+                  </div>
+
+                  {/* Role Selection */}
+                  <div className="space-y-3 sm:space-y-4">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+                      I am a
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                      <div 
+                        className={`relative cursor-pointer rounded-lg lg:rounded-xl border-2 p-4 sm:p-5 transition-all duration-200 ${
+                          formData.user_type === 'job_seeker' 
+                            ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' 
+                            : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+                        }`}
+                        onClick={() => setFormData(prev => ({ ...prev, user_type: 'job_seeker' }))}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
+                            formData.user_type === 'job_seeker' 
+                              ? 'bg-indigo-500 text-white' 
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-400'
+                          }`}>
+                            <UserCheck className="w-4 h-4 sm:w-5 sm:h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className={`text-sm sm:text-base font-medium ${
+                              formData.user_type === 'job_seeker' 
+                                ? 'text-indigo-900 dark:text-indigo-100' 
+                                : 'text-gray-900 dark:text-gray-100'
+                            }`}>
+                              Job Seeker
+                            </h3>
+                            <p className={`text-xs sm:text-sm ${
+                              formData.user_type === 'job_seeker' 
+                                ? 'text-indigo-600 dark:text-indigo-300' 
+                                : 'text-gray-500 dark:text-gray-400'
+                            }`}>
+                              Looking for opportunities
+                            </p>
+                          </div>
+                          <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center ${
+                            formData.user_type === 'job_seeker' 
+                              ? 'border-indigo-500 bg-indigo-500' 
+                              : 'border-gray-300 dark:border-gray-600'
+                          }`}>
+                            {formData.user_type === 'job_seeker' && (
+                              <div className="w-2 h-2 rounded-full bg-white"></div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div 
+                        className={`relative cursor-pointer rounded-lg lg:rounded-xl border-2 p-4 sm:p-5 transition-all duration-200 ${
+                          formData.user_type === 'recruiter' 
+                            ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20' 
+                            : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+                        }`}
+                        onClick={() => setFormData(prev => ({ ...prev, user_type: 'recruiter' }))}
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className={`flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center ${
+                            formData.user_type === 'recruiter' 
+                              ? 'bg-indigo-500 text-white' 
+                              : 'bg-gray-100 dark:bg-gray-700 text-gray-400'
+                          }`}>
+                            <Briefcase className="w-4 h-4 sm:w-5 sm:h-5" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className={`text-sm sm:text-base font-medium ${
+                              formData.user_type === 'recruiter' 
+                                ? 'text-indigo-900 dark:text-indigo-100' 
+                                : 'text-gray-900 dark:text-gray-100'
+                            }`}>
+                              Recruiter
+                            </h3>
+                            <p className={`text-xs sm:text-sm ${
+                              formData.user_type === 'recruiter' 
+                                ? 'text-indigo-600 dark:text-indigo-300' 
+                                : 'text-gray-500 dark:text-gray-400'
+                            }`}>
+                              Hiring talent
+                            </p>
+                          </div>
+                          <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full border-2 flex items-center justify-center ${
+                            formData.user_type === 'recruiter' 
+                              ? 'border-indigo-500 bg-indigo-500' 
+                              : 'border-gray-300 dark:border-gray-600'
+                          }`}>
+                            {formData.user_type === 'recruiter' && (
+                              <div className="w-2 h-2 rounded-full bg-white"></div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   {/* Password Fields */}

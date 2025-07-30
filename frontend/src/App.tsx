@@ -23,6 +23,9 @@ import Contact from './pages/Contact';
 import CompleteProfile from './pages/CompleteProfile';
 import EmailSignup from './pages/EmailSignup';
 import VerifyOtp from './pages/VerifyOtp';
+import { ForgotPassword } from './pages/ForgotPassword';
+import { EmailNotificationSettings } from './pages/EmailNotificationSettings';
+import SettingsPage from './pages/SettingsPage';
 import RequireAuth from './components/auth/RequireAuth';
 
 function ScrollToTop({ lenis }: { lenis: Lenis | null }) {
@@ -51,19 +54,24 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/email-signup" element={<EmailSignup />} />
               <Route path="/verify-otp" element={<VerifyOtp />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/about" element={<About />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/contact" element={<Contact />} />
 
+              {/* AI Interview - accessible to both logged in and logged out users */}
+              <Route path="/ai-interview" element={<AIInterview />} />
+
               {/* Protected routes */}
               <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
-              <Route path="/ai-interview" element={<RequireAuth><AIInterview /></RequireAuth>} />
               <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
               <Route path="/jobs" element={<RequireAuth><JobListings /></RequireAuth>} />
               <Route path="/messages" element={<RequireAuth><Messages /></RequireAuth>} />
               <Route path="/notifications" element={<RequireAuth><Notifications /></RequireAuth>} />
+              <Route path="/email-settings" element={<RequireAuth><EmailNotificationSettings /></RequireAuth>} />
               <Route path="/resume-builder" element={<RequireAuth><ResumeBuilder /></RequireAuth>} />
+              <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
               <Route path="/complete-profile" element={<RequireAuth><CompleteProfile /></RequireAuth>} />
             </Routes>
           </Layout>

@@ -167,12 +167,57 @@ export const Messages: React.FC = () => {
   ];
 
   useEffect(() => {
-    // Load conversations
-    setConversations(mockConversations);
-    setActiveConversation(mockConversations[0]);
-    setMessages(mockMessages);
-    setIsLoading(false);
+    loadConversations();
+    
+    // Set up periodic refresh for messages
+    const messageInterval = setInterval(() => {
+      if (activeConversation) {
+        loadMessages(activeConversation.id);
+      }
+    }, 10000); // Refresh every 10 seconds
+
+    return () => {
+      clearInterval(messageInterval);
+    };
   }, []);
+
+  useEffect(() => {
+    if (activeConversation) {
+      loadMessages(activeConversation.id);
+    }
+  }, [activeConversation]);
+
+  const loadConversations = async () => {
+    setIsLoading(true);
+    try {
+      const response = await apiService.getConversations();
+      const conversationsData = response.data.results || mockConversations;
+      setConversations(conversationsData);
+      
+      if (conversationsData.length > 0 && !activeConversation) {
+        setActiveConversation(conversationsData[0]);
+      }
+    } catch (error) {
+      console.error('Failed to load conversations:', error);
+      // Use mock data as fallback
+      setConversations(mockConversations);
+      setActiveConversation(mockConversations[0]);
+      setMessages(mockMessages);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadMessages = async (conversationId: string) => {
+    try {
+      const response = await apiService.getMessages(conversationId);
+      setMessages(response.data.results || []);
+    } catch (error) {
+      console.error('Failed to load messages:', error);
+      // Use mock data as fallback
+      setMessages(mockMessages);
+    }
+  };
 
   useEffect(() => {
     scrollToBottom();
@@ -202,20 +247,21 @@ export const Messages: React.FC = () => {
     setMessages(prev => [...prev, tempMessage]);
 
     try {
-      // TODO: Send message via API
-      // await apiService.sendMessage(activeConversation?.id, messageContent);
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Update message status
-      setMessages(prev => 
-        prev.map(msg => 
-          msg.id === tempMessage.id 
-            ? { ...msg, is_read: true }
-            : msg
-        )
-      );
+      if (activeConversation) {
+        await apiService.sendMessage(activeConversation.id, messageContent);
+        
+        // Update message status
+        setMessages(prev => 
+          prev.map(msg => 
+            msg.id === tempMessage.id 
+              ? { ...msg, is_read: true }
+              : msg
+          )
+        );
+        
+        // Refresh conversations to update last message
+        loadConversations();
+      }
     } catch (error) {
       console.error('Failed to send message:', error);
       // Remove failed message
@@ -230,9 +276,20 @@ export const Messages: React.FC = () => {
     if (!file) return;
 
     try {
-      // TODO: Upload file and send message
-      // const response = await apiService.uploadFile(file, 'message_attachment');
-      console.log('File upload:', file.name);
+      if (activeConversation) {
+        // Upload file first
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_type', 'message_attachment');
+        
+        const uploadResponse = await apiService.uploadFile(formData);
+        
+        // Send message with file attachment
+        await apiService.sendMessage(activeConversation.id, `Shared a file: ${file.name}`, 'file');
+        
+        // Refresh messages
+        loadMessages(activeConversation.id);
+      }
     } catch (error) {
       console.error('File upload failed:', error);
     }

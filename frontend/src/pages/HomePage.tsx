@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { apiService } from '../services/api';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
 import Footer from '../components/layout/Footer';
-import { 
-  Bot, 
-  Users, 
-  Briefcase, 
-  TrendingUp, 
-  Star, 
+import {
+  Bot,
+  Users,
+  Briefcase,
+  TrendingUp,
+  Star,
   CheckCircle,
   Plus,
   MessageSquare,
@@ -17,60 +19,28 @@ import {
   Clock,
   ThumbsUp,
   Calendar,
-  Target
+  Target,
+  Loader2
 } from 'lucide-react';
 
 interface HomePageProps {
   isLoggedIn?: boolean;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
-  // Mock data for logged-in users
-  const recentPosts = [
-    {
-      id: 1,
-      author: {
-        name: 'Alex Rodriguez',
-        avatar: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
-        title: 'Senior Software Engineer at Google',
-        verified: true
-      },
-      content: 'Just completed an amazing AI interview practice session on HireWise! The feedback was incredibly detailed and helped me identify areas for improvement. Highly recommend it to anyone preparing for tech interviews.',
-      timestamp: '2 hours ago',
-      likes: 24,
-      comments: 8,
-      shares: 3,
-      image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=600&h=300&fit=crop'
-    },
-    {
-      id: 2,
-      author: {
-        name: 'Sarah Chen',
-        avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
-        title: 'Product Manager at Microsoft',
-        verified: true
-      },
-      content: 'Networking tip: Don\'t just connect with people in your field. Some of my best opportunities came from connections in adjacent industries. Diversity in your network leads to diverse opportunities! 🚀',
-      timestamp: '4 hours ago',
-      likes: 47,
-      comments: 15,
-      shares: 12
-    },
-    {
-      id: 3,
-      author: {
-        name: 'David Kim',
-        avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop',
-        title: 'UX Designer at Adobe',
-        verified: false
-      },
-      content: 'Just got my dream job offer! The AI interview practice on HireWise was a game-changer. It helped me build confidence and refine my answers. Thank you to this amazing community for all the support! 🎉',
-      timestamp: '6 hours ago',
-      likes: 89,
-      comments: 23,
-      shares: 18
-    }
-  ];
+export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn: propIsLoggedIn }) => {
+  const { user, isAuthenticated, userProfile } = useAuth();
+  const [recentPosts, setRecentPosts] = useState([]);
+  const [todayStats, setTodayStats] = useState({
+    profileViews: 0,
+    newConnections: 0,
+    jobMatches: 0,
+    interviewScore: 0
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [jobRecommendations, setJobRecommendations] = useState([]);
+
+  // Use auth context state or prop fallback
+  const isLoggedIn = propIsLoggedIn !== undefined ? propIsLoggedIn : isAuthenticated;
 
   const quickActions = [
     { icon: Bot, label: 'Practice Interview', href: '/ai-interview', color: 'bg-violet-500' },
@@ -79,11 +49,54 @@ export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
     { icon: MessageSquare, label: 'Messages', href: '/messages', color: 'bg-orange-500' }
   ];
 
-  const todayStats = {
-    profileViews: 12,
-    newConnections: 3,
-    jobMatches: 5,
-    interviewScore: 85
+  // Load real-time data for logged-in users
+  useEffect(() => {
+    if (isLoggedIn && user) {
+      loadDashboardData();
+
+      // Set up periodic refresh for dashboard data (fallback for WebSocket)
+      const dashboardInterval = setInterval(() => {
+        loadDashboardData();
+      }, 60000); // Refresh every minute
+
+      return () => {
+        clearInterval(dashboardInterval);
+      };
+    }
+  }, [isLoggedIn, user]);
+
+  const loadDashboardData = async () => {
+    setIsLoading(true);
+    try {
+      // Load dashboard stats
+      const statsResponse = await apiService.getDashboardStats();
+      setTodayStats(statsResponse.data);
+
+      // Load recent posts/activity feed
+      const postsResponse = await apiService.getActivityFeed();
+      setRecentPosts(postsResponse.data.results || []);
+
+      // Load job recommendations for job seekers
+      if (user?.user_type === 'job_seeker') {
+        const jobsResponse = await apiService.getJobRecommendations();
+        setJobRecommendations(jobsResponse.data.results || []);
+      }
+    } catch (error) {
+      console.error('Failed to load dashboard data:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    return `${Math.floor(diffInSeconds / 86400)}d ago`;
   };
 
   if (isLoggedIn) {
@@ -95,15 +108,18 @@ export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold mb-2">
-                  Welcome back! 👋
+                  Welcome back, {user?.first_name}! 👋
                 </h1>
                 <p className="text-indigo-100 text-lg">
-                  Ready to advance your career today?
+                  {user?.user_type === 'job_seeker'
+                    ? 'Ready to find your next opportunity?'
+                    : 'Ready to find great talent today?'
+                  }
                 </p>
               </div>
               <div className="mt-4 md:mt-0 flex space-x-3">
                 <Link to="/ai-interview">
-                  <Button className="bg-white text-indigo-600 hover:bg-gray-100">
+                  <Button variant='secondary' size='lg'>
                     <Bot className="w-4 h-4 mr-2" />
                     Practice Interview
                   </Button>
@@ -184,12 +200,12 @@ export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
                       <img
-                        src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
+                        src={user?.profile_picture || `https://ui-avatars.io/api/?name=${encodeURIComponent(user?.first_name + ' ' + user?.last_name)}&background=6366f1&color=fff`}
                         alt="Your avatar"
                         className="w-12 h-12 rounded-full"
                       />
                       <button className="flex-1 text-left px-4 py-3 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
-                        Share your professional insights...
+                        Share your professional insights, {user?.first_name}...
                       </button>
                       <Button>
                         <Plus className="w-4 h-4 mr-2" />
@@ -199,32 +215,42 @@ export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
                   </CardContent>
                 </Card>
 
+                {/* Loading State */}
+                {isLoading && (
+                  <Card>
+                    <CardContent className="p-6 text-center">
+                      <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-indigo-600" />
+                      <p className="text-gray-600 dark:text-gray-400">Loading your feed...</p>
+                    </CardContent>
+                  </Card>
+                )}
+
                 {/* Recent Posts */}
-                {recentPosts.map((post) => (
+                {!isLoading && recentPosts.length > 0 && recentPosts.map((post) => (
                   <Card key={post.id}>
                     <CardContent className="p-6">
                       {/* Post Header */}
                       <div className="flex items-start space-x-3 mb-4">
                         <img
-                          src={post.author.avatar}
-                          alt={post.author.name}
+                          src={post.author?.profile_picture || `https://ui-avatars.io/api/?name=${encodeURIComponent(post.author?.name || 'User')}&background=6366f1&color=fff`}
+                          alt={post.author?.name || 'User'}
                           className="w-12 h-12 rounded-full"
                         />
                         <div className="flex-1">
                           <div className="flex items-center space-x-2">
                             <h4 className="font-semibold text-gray-900 dark:text-white">
-                              {post.author.name}
+                              {post.author?.name || 'Anonymous User'}
                             </h4>
-                            {post.author.verified && (
+                            {post.author?.is_verified && (
                               <CheckCircle className="w-4 h-4 text-blue-500" />
                             )}
                           </div>
                           <p className="text-sm text-gray-600 dark:text-gray-400">
-                            {post.author.title}
+                            {post.author?.title || 'Professional'}
                           </p>
                           <div className="flex items-center space-x-1 mt-1">
                             <Clock className="w-3 h-3 text-gray-400" />
-                            <span className="text-xs text-gray-400">{post.timestamp}</span>
+                            <span className="text-xs text-gray-400">{formatTimeAgo(post.created_at)}</span>
                           </div>
                         </div>
                       </div>
@@ -248,15 +274,15 @@ export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
                         <div className="flex items-center space-x-6">
                           <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                             <ThumbsUp className="w-4 h-4" />
-                            <span className="text-sm">{post.likes}</span>
+                            <span className="text-sm">{post.likes_count || 0}</span>
                           </button>
                           <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors">
                             <MessageSquare className="w-4 h-4" />
-                            <span className="text-sm">{post.comments}</span>
+                            <span className="text-sm">{post.comments_count || 0}</span>
                           </button>
                           <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors">
                             <Share2 className="w-4 h-4" />
-                            <span className="text-sm">{post.shares}</span>
+                            <span className="text-sm">{post.shares_count || 0}</span>
                           </button>
                         </div>
                         <button className="text-gray-600 dark:text-gray-400 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors">
@@ -266,6 +292,25 @@ export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
                     </CardContent>
                   </Card>
                 ))}
+
+                {/* Empty State */}
+                {!isLoading && recentPosts.length === 0 && (
+                  <Card>
+                    <CardContent className="p-8 text-center">
+                      <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                        No posts yet
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">
+                        Start following professionals or create your first post to see content here.
+                      </p>
+                      <Button>
+                        <Plus className="w-4 h-4 mr-2" />
+                        Create Your First Post
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )}
 
                 {/* Load More */}
                 <div className="text-center">
@@ -333,7 +378,7 @@ export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
               </span>
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl mb-6 sm:mb-8 text-indigo-100 max-w-3xl mx-auto px-4">
-              HireWise combines professional networking with advanced AI interview preparation 
+              HireWise combines professional networking with advanced AI interview preparation
               to accelerate your career growth and land your dream job.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-4">
@@ -363,7 +408,7 @@ export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
               Everything you need to advance your career, powered by cutting-edge AI technology
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {features.map((feature, index) => (
               <Card key={index} hover className="text-center">
@@ -393,7 +438,7 @@ export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
                 Meet Your AI Interview Coach
               </h2>
               <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-6 sm:mb-8">
-                Our advanced AI assistant provides personalized interview practice with real-time 
+                Our advanced AI assistant provides personalized interview practice with real-time
                 feedback, confidence scoring, and detailed performance analytics.
               </p>
               <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
@@ -452,7 +497,7 @@ export const HomePage: React.FC<HomePageProps> = ({ isLoggedIn = false }) => {
               See how HireWise helped professionals achieve their career goals
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="p-6 sm:p-8">

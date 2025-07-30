@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { mockAIQuestions } from '../data/mockData';
+import { useAuth } from '../contexts/AuthContext';
+import { apiService } from '../services/api';
 import { Setup } from '../components/ai-interview/Setup';
 import { PreInterview } from '../components/ai-interview/PreInterview';
 import { Interview } from '../components/ai-interview/Interview';
@@ -14,13 +15,16 @@ interface InterviewSetup {
 }
 
 export const AIInterview: React.FC = () => {
-  // Simulate authentication state
-  const isLoggedIn = false; // Set to true if user is logged in
-  const userName = isLoggedIn ? 'John Doe' : undefined;
+  const { user, isAuthenticated, userProfile } = useAuth();
+  const isLoggedIn = isAuthenticated;
+  const userName = user ? `${user.first_name} ${user.last_name}` : undefined;
 
   const [currentStep, setCurrentStep] = useState<'setup' | 'pre-interview' | 'interview' | 'results'>('setup');
-  // Validation state for setup
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [interviewSession, setInterviewSession] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [responses, setResponses] = useState([]);
 
   const [interviewSetup, setInterviewSetup] = useState<InterviewSetup>({
     resumeSource: isLoggedIn ? 'profile' : 'upload',
@@ -31,7 +35,6 @@ export const AIInterview: React.FC = () => {
   });
   
   const [isInterviewActive, setIsInterviewActive] = useState(false);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [timer, setTimer] = useState(0);
   const [confidence, setConfidence] = useState(75);
@@ -39,6 +42,7 @@ export const AIInterview: React.FC = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisComplete, setAnalysisComplete] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Real-time metrics
   const [metrics, setMetrics] = useState({
@@ -87,25 +91,65 @@ export const AIInterview: React.FC = () => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       setUploadedFile(file);
       setIsAnalyzing(true);
-      // Simulate AI analysis
-      setTimeout(() => {
-        setIsAnalyzing(false);
+      
+      try {
+        // Upload and analyze resume
+        const formData = new FormData();
+        formData.append('resume', file);
+        
+        const response = await apiService.uploadResume(formData);
         setAnalysisComplete(true);
-      }, 3000);
+      } catch (error) {
+        console.error('Failed to upload resume:', error);
+        setAnalysisComplete(false);
+      } finally {
+        setIsAnalyzing(false);
+      }
     }
   };
 
-  const startInterview = () => {
-    setCurrentStep('interview');
-    setIsInterviewActive(true);
-    setCurrentQuestionIndex(0);
-    setTimer(0);
-    setConfidence(75);
+  const startInterview = async () => {
+    setIsLoading(true);
+    try {
+      // Create interview session
+      const sessionResponse = await apiService.createInterviewSession({
+        interview_type: interviewSetup.interviewType,
+        difficulty: interviewSetup.difficulty,
+        duration: interviewSetup.duration,
+        focus_areas: interviewSetup.focusAreas,
+        resume_source: interviewSetup.resumeSource
+      });
+      
+      setInterviewSession(sessionResponse.data);
+      
+      // Get interview questions
+      const questionsResponse = await apiService.getInterviewQuestions(sessionResponse.data.id);
+      setQuestions(questionsResponse.data.questions || []);
+      
+      // Set up WebSocket for real-time feedback
+      const wsConnection = apiService.connectWebSocket(`interview_${sessionResponse.data.id}`, (data) => {
+        if (data.type === 'confidence_update') {
+          setConfidence(data.confidence);
+        } else if (data.type === 'metrics_update') {
+          setMetrics(data.metrics);
+        }
+      });
+      
+      setCurrentStep('interview');
+      setIsInterviewActive(true);
+      setCurrentQuestionIndex(0);
+      setTimer(0);
+      setConfidence(75);
+    } catch (error) {
+      console.error('Failed to start interview:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Validation for setup step
@@ -125,18 +169,59 @@ export const AIInterview: React.FC = () => {
     }
   };
 
-  const endInterview = () => {
-    setIsInterviewActive(false);
-    setIsRecording(false);
-    setIsPaused(false);
-    setCurrentStep('results');
+  const endInterview = async () => {
+    setIsLoading(true);
+    try {
+      if (interviewSession) {
+        // Submit final interview results
+        await apiService.submitInterviewResults(interviewSession.id, {
+          responses: responses,
+          final_confidence: confidence,
+          final_metrics: metrics,
+          duration: timer
+        });
+        
+        // Disconnect WebSocket
+        apiService.disconnectWebSocket(`interview_${interviewSession.id}`);
+      }
+      
+      setIsInterviewActive(false);
+      setIsRecording(false);
+      setIsPaused(false);
+      setCurrentStep('results');
+    } catch (error) {
+      console.error('Failed to end interview:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const nextQuestion = () => {
-    if (currentQuestionIndex < mockAIQuestions.length - 1) {
+  const nextQuestion = async () => {
+    // Save current response
+    if (questions[currentQuestionIndex]) {
+      const currentResponse = {
+        question_id: questions[currentQuestionIndex].id,
+        response_text: '', // This would come from the response input
+        confidence_score: confidence,
+        timestamp: new Date().toISOString()
+      };
+      
+      setResponses(prev => [...prev, currentResponse]);
+      
+      // Submit response to backend for real-time analysis
+      if (interviewSession) {
+        try {
+          await apiService.submitInterviewResponse(interviewSession.id, currentResponse);
+        } catch (error) {
+          console.error('Failed to submit response:', error);
+        }
+      }
+    }
+    
+    if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     } else {
-      endInterview();
+      await endInterview();
     }
   };
 
@@ -190,6 +275,7 @@ export const AIInterview: React.FC = () => {
         interviewTypes={interviewTypes}
         onBack={() => setCurrentStep('setup')}
         onStart={startInterview}
+        isLoading={isLoading}
       />
     );
   }
@@ -212,7 +298,7 @@ export const AIInterview: React.FC = () => {
         setIsPaused={setIsPaused}
         metrics={metrics}
         setMetrics={setMetrics}
-        mockAIQuestions={mockAIQuestions}
+        questions={questions}
         formatTime={formatTime}
         endInterview={endInterview}
         nextQuestion={nextQuestion}
@@ -230,7 +316,8 @@ export const AIInterview: React.FC = () => {
       metrics={metrics}
       confidence={confidence}
       timer={timer}
-      mockAIQuestions={mockAIQuestions}
+      questions={questions}
+      interviewSession={interviewSession}
       formatTime={formatTime}
       setCurrentStep={setCurrentStep}
       setTimer={setTimer}

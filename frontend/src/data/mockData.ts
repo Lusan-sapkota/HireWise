@@ -36,7 +36,15 @@ export const mockJobs = [
     type: 'Full-time',
     aiMatch: 95,
     posted: '2 days ago',
-    logo: 'https://images.pexels.com/photos/3747463/pexels-photo-3747463.jpeg?auto=compress&cs=tinysrgb&w=60&h=60&fit=crop'
+    logo: 'https://images.pexels.com/photos/3747463/pexels-photo-3747463.jpeg?auto=compress&cs=tinysrgb&w=60&h=60&fit=crop',
+    description: 'Lead the development of cutting-edge React applications for enterprise clients. Collaborate with cross-functional teams to deliver scalable solutions.',
+    requirements: [
+      '5+ years experience with React and TypeScript',
+      'Experience with Redux or similar state management',
+      'Strong understanding of RESTful APIs',
+      'Excellent communication skills'
+    ],
+    aiInterview: true
   },
   {
     id: 2,
@@ -47,7 +55,15 @@ export const mockJobs = [
     type: 'Full-time',
     aiMatch: 87,
     posted: '1 week ago',
-    logo: 'https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=60&h=60&fit=crop'
+    logo: 'https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=60&h=60&fit=crop',
+    description: 'Work on modern frontend projects using React, Tailwind CSS, and TypeScript. Build reusable UI components and optimize performance.',
+    requirements: [
+      '3+ years experience in frontend development',
+      'Proficiency in React and CSS frameworks',
+      'Familiarity with TypeScript',
+      'Remote work experience is a plus'
+    ],
+    aiInterview: false
   },
   {
     id: 3,
@@ -58,7 +74,15 @@ export const mockJobs = [
     type: 'Full-time',
     aiMatch: 82,
     posted: '3 days ago',
-    logo: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=60&h=60&fit=crop'
+    logo: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=60&h=60&fit=crop',
+    description: 'Join a fast-growing startup to build scalable web applications. Work across the stack with Node.js, React, and cloud services.',
+    requirements: [
+      '2+ years experience with Node.js and React',
+      'Experience with cloud platforms (AWS, GCP, or Azure)',
+      'Understanding of CI/CD pipelines',
+      'Startup experience preferred'
+    ],
+    aiInterview: true
   }
 ];
 

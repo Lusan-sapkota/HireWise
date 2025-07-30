@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardHeader, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { mockJobs } from '../data/mockData';
+import JobDetail from '../components/JobDetail';
 import { 
   Search, 
   MapPin, 
@@ -16,11 +18,14 @@ import {
   Users
 } from 'lucide-react';
 
+
 export const JobListings: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [savedJobs, setSavedJobs] = useState<number[]>([]);
+  const [selectedJob, setSelectedJob] = useState<any | null>(null);
+  const navigate = useNavigate();
 
   const toggleSaveJob = (jobId: number) => {
     setSavedJobs(prev => 
@@ -151,18 +156,21 @@ export const JobListings: React.FC = () => {
                     alt={job.company}
                     className="w-12 sm:w-16 h-12 sm:h-16 rounded-lg object-cover flex-shrink-0"
                   />
-                  
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-2 space-y-2 sm:space-y-0">
                       <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 cursor-pointer">
                         {job.title}
+                        {job.aiInterview && (
+                          <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 text-xs font-medium">
+                            🤖 AI Interview
+                          </span>
+                        )}
                       </h3>
                       <div className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium self-start ${getMatchColor(job.aiMatch)}`}>
                         <Star className="w-3 h-3 inline mr-1" />
                         {job.aiMatch}% match
                       </div>
                     </div>
-                    
                     <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3">
                       <div className="flex items-center space-x-1">
                         <Building className="w-4 h-4" />
@@ -181,7 +189,6 @@ export const JobListings: React.FC = () => {
                         <span>{job.posted}</span>
                       </div>
                     </div>
-                    
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                       <div className="flex items-center space-x-2">
                         <span className="inline-flex items-center px-2 sm:px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200">
@@ -194,7 +201,6 @@ export const JobListings: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
                 <div className="flex flex-row lg:flex-col space-x-2 lg:space-x-0 lg:space-y-2 lg:ml-4">
                   <Button
                     onClick={() => toggleSaveJob(job.id)}
@@ -209,19 +215,32 @@ export const JobListings: React.FC = () => {
                       }`} 
                     />
                   </Button>
-                  
-                  <Button size="sm" className="whitespace-nowrap flex-1 lg:flex-none">
+                  <Button 
+                    size="sm" 
+                    className="whitespace-nowrap flex-1 lg:flex-none"
+                    onClick={() => {
+                      if (job.aiInterview) {
+                        navigate('/ai-interview', { state: { job } });
+                      } else {
+                        // TODO: Open standard application form/modal
+                        alert('Standard application form coming soon!');
+                      }
+                    }}
+                  >
                     Apply Now
                   </Button>
-                  
-                  <Button variant="outline" size="sm" className="whitespace-nowrap flex-1 lg:flex-none">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="whitespace-nowrap flex-1 lg:flex-none"
+                    onClick={() => setSelectedJob(job)}
+                  >
                     <ExternalLink className="w-3 h-3 mr-1" />
                     <span className="hidden sm:inline">View Details</span>
                     <span className="sm:hidden">Details</span>
                   </Button>
                 </div>
               </div>
-              
               {/* AI Match Explanation */}
               <div className="mt-4 p-2 sm:p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
@@ -234,6 +253,10 @@ export const JobListings: React.FC = () => {
           </Card>
         ))}
       </div>
+      {/* Job Detail Modal */}
+      {selectedJob && (
+        <JobDetail job={selectedJob} onClose={() => setSelectedJob(null)} />
+      )}
 
       {/* Load More */}
       <div className="text-center mt-6 sm:mt-8">
